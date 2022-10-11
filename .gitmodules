@@ -2,3 +2,6 @@
 	path = dependencies/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
 	branch = 9a36242
+[submodule "dependencies/sockpp"]
+	path = dependencies/sockpp
+	url = https://github.com/theionSami/sockpp.git
