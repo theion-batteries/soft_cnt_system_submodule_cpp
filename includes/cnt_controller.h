@@ -11,6 +11,7 @@ public:
     cnt_controller(/* args */);
     ~cnt_controller();
     void cnt_controller_connect();
+    void cnt_dispenser_activate();
 };
 
 

@@ -5,7 +5,7 @@
 		"commands" : [],
 		"files" : 
 		[
-			"dependencies/yaml-cpp/CMakeLists.txt"
+			"CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -17,10 +17,16 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "yaml-cpp::@bbf290e3af8838e0ff35"
+			"id" : "sockpp-static::@e6949179b2bb01c085fb"
 		},
 		{
-			"id" : "yaml-cpp-sandbox::@0c96d07569f4c0de5997"
+			"id" : "sockpp-objs::@1ccc5558e4b94d79f986"
+		},
+		{
+			"id" : "cnt_system::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "yaml-cpp::@bbf290e3af8838e0ff35"
 		},
 		{
 			"id" : "yaml-cpp-parse::@0c96d07569f4c0de5997"
@@ -29,16 +35,19 @@
 			"id" : "yaml-cpp-read::@0c96d07569f4c0de5997"
 		},
 		{
+			"id" : "yaml-cpp-sandbox::@0c96d07569f4c0de5997"
+		},
+		{
 			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		}
 	],
-	"id" : "ALL_BUILD::@bbf290e3af8838e0ff35",
+	"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
 	"isGeneratorProvided" : true,
 	"name" : "ALL_BUILD",
 	"paths" : 
 	{
-		"build" : "dependencies/yaml-cpp",
-		"source" : "dependencies/yaml-cpp"
+		"build" : ".",
+		"source" : "."
 	},
 	"sources" : [],
 	"type" : "UTILITY"

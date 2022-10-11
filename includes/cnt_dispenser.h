@@ -31,7 +31,7 @@ class cnt_dispenser
 private:
     cnt_dispenser_server _dispenser_server;
     sockpp::socket_initializer sockInit;
-    sockpp::tcp_connector* _dispenser_client;
+
     std::map<u_int, std::string> dispenser_cmds = {
         {1,"turn_on"}, {2,"turn_off"},
         {3,"vibrate"}, {4,"set_duration"}
@@ -46,11 +46,13 @@ private:
     bool cntReady = false;
 
 public:
+    sockpp::tcp_connector* _dispenser_client;
     cnt_dispenser(/* args */);
     ~cnt_dispenser();
-   /******* client controller methods ***/
+    /******* client controller methods ***/
     void close_all_sockets();
     void dispenser_client_connect();
-    void sendCmd(std::string cmd, sockpp::tcp_connector* client, std::string args = std::string()); 
-
+    void sendCmd(std::string cmd, sockpp::tcp_connector* client, std::string args = std::string());
+    void waitForResponse();
+    void activate();
 };

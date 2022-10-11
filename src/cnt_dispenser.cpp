@@ -16,6 +16,7 @@ void cnt_dispenser::sendCmd(std::string cmd, sockpp::tcp_connector* client, std:
             << client->last_error_str() << std::endl;
     }
     std::cout << "command " << cmd + args << " sent" << std::endl;
+    waitForResponse();
 }
 
 void cnt_dispenser::dispenser_client_connect()
@@ -28,7 +29,7 @@ void cnt_dispenser::dispenser_client_connect()
         std::cerr << "Error connecting to server at "
             << sockpp::inet_address(_dispenser_server.ip, _dispenser_server.port)
             << "\n\t" << _dispenser_client->last_error_str() << std::endl;
-        return ;
+        return;
     }
     std::cout << "Created a connection from " << _dispenser_client->address() << std::endl;
     std::cout << "Created a connection to " << _dispenser_client->peer_address() << std::endl;
@@ -43,3 +44,30 @@ void cnt_dispenser::close_all_sockets()
 {
     if (!_dispenser_client) _dispenser_client->close();
 }
+
+void cnt_dispenser::waitForResponse()
+{
+    std::cout << "awaiting server response" << std::endl;
+
+    while (_dispenser_client->is_connected())
+    {
+        // Read_n data from keyence
+        ssize_t n = _dispenser_client->read(&dispenser_incoming_data[0], dispenser_data_length);
+        if (n > 0)
+        {
+            std::cout << "server replied : " << dispenser_incoming_data.c_str() << std::endl;
+            break;
+        }
+    }
+}
+
+void cnt_dispenser::activate()
+{
+    auto command = dispenser_cmds.find(1);
+    if (command != dispenser_cmds.end()) {
+        std::cout << "sending command: " << command->second << '\n';
+        sendCmd(command->second, _dispenser_client);
+    }
+
+}
+
