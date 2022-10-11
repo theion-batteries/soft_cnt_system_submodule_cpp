@@ -38,4 +38,3 @@ target_link_libraries(cnt_system ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-c
 )
 target_link_libraries(cnt_system ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
 )
-#target_link_libraries(Main PUBLIC YourLibs)
