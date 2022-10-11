@@ -13,12 +13,26 @@ cnt_controller::~cnt_controller()
 
 void cnt_controller::cnt_controller_connect()
 {
-   dispenser.dispenser_client_connect();
+      dispenser.dispenser_client_connect();
 }
 
 void cnt_controller::cnt_dispenser_activate()
 {
-
       dispenser.activate();
+}
 
+void cnt_controller::cnt_dispenser_deactivate()
+
+{
+      dispenser.deactivate();
+}
+void cnt_controller::cnt_dispenser_vibrate()
+
+{
+      dispenser.vibrate();
+}
+void cnt_controller::cnt_dispenser_setVibrateDuration(u_int durationSecond)
+
+{
+      dispenser.setVibrateDuration(durationSecond);
 }

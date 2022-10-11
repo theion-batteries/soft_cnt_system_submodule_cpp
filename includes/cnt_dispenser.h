@@ -55,4 +55,7 @@ public:
     void sendCmd(std::string cmd, sockpp::tcp_connector* client, std::string args = std::string());
     void waitForResponse();
     void activate();
+    void deactivate();
+    void vibrate();
+    void setVibrateDuration(u_int durationSecond);
 };

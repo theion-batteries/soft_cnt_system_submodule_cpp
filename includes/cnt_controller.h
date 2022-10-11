@@ -12,6 +12,9 @@ public:
     ~cnt_controller();
     void cnt_controller_connect();
     void cnt_dispenser_activate();
+    void cnt_dispenser_deactivate();
+    void cnt_dispenser_vibrate();
+    void cnt_dispenser_setVibrateDuration(u_int durationSecond);
 };
 
 

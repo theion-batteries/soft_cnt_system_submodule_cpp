@@ -70,4 +70,28 @@ void cnt_dispenser::activate()
     }
 
 }
-
+void cnt_dispenser::deactivate()
+{
+    auto command = dispenser_cmds.find(2);
+    if (command != dispenser_cmds.end()) {
+        std::cout << "sending command: " << command->second << '\n';
+        sendCmd(command->second, _dispenser_client);
+    }
+}
+void cnt_dispenser::vibrate()
+{
+    auto command = dispenser_cmds.find(3);
+    if (command != dispenser_cmds.end()) {
+        std::cout << "sending command: " << command->second << '\n';
+        sendCmd(command->second, _dispenser_client);
+    }
+}
+void cnt_dispenser::setVibrateDuration(u_int durationSecond)
+{
+    auto command = dispenser_cmds.find(4);
+    if (command != dispenser_cmds.end()) {
+        std::cout << "sending command: " << command->second << " args: " << durationSecond << '\n';
+        std::string args = "=" + std::to_string(durationSecond);
+        sendCmd(command->second, _dispenser_client, args);
+    }
+}
