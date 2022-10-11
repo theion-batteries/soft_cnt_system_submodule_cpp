@@ -5,8 +5,6 @@
 # author: sami dhiab
 # email: sami@theion.de
 
-
-
 cmake_minimum_required(VERSION 3.5.0)
 
 # project name and version: change project name
@@ -35,7 +33,9 @@ file(GLOB all_SRCS
 # make the exec: change project name
 add_executable(cnt_system ${all_SRCS})
 
-# link againt static lib
-#target_link_libraries(cnt_system ${PROJECT_SOURCE_DIR}/dependencies/<repo_name>/<static_name>.lib
-#)
+# link againt static libs
+target_link_libraries(cnt_system ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib
+)
+target_link_libraries(cnt_system ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
+)
 #target_link_libraries(Main PUBLIC YourLibs)

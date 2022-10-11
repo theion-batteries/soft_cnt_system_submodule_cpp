@@ -8,3 +8,38 @@ cnt_dispenser::cnt_dispenser(/* args */)
 cnt_dispenser::~cnt_dispenser()
 {
 }
+
+void cnt_dispenser::sendCmd(std::string cmd, sockpp::tcp_connector* client, std::string args)
+{
+    if (client->write(cmd + args) != ssize_t(std::string(cmd + args).length())) {
+        std::cerr << "Error writing to the TCP stream: "
+            << client->last_error_str() << std::endl;
+    }
+    std::cout << "command " << cmd + args << " sent" << std::endl;
+}
+
+void cnt_dispenser::dispenser_client_connect()
+{
+    std::cout << "connecting to dispenser server" << std::endl;
+    _dispenser_client = new sockpp::tcp_connector({ _dispenser_server.ip, _dispenser_server.port });
+    // Implicitly creates an inet_address from {host,port}
+    // and then tries the connection.
+    if (!_dispenser_client) {
+        std::cerr << "Error connecting to server at "
+            << sockpp::inet_address(_dispenser_server.ip, _dispenser_server.port)
+            << "\n\t" << _dispenser_client->last_error_str() << std::endl;
+        return ;
+    }
+    std::cout << "Created a connection from " << _dispenser_client->address() << std::endl;
+    std::cout << "Created a connection to " << _dispenser_client->peer_address() << std::endl;
+    // Set a timeout for the responses
+    if (!_dispenser_client->read_timeout(std::chrono::seconds(5))) {
+        std::cerr << "Error setting timeout on TCP stream: "
+            << _dispenser_client->last_error_str() << std::endl;
+    }
+}
+
+void cnt_dispenser::close_all_sockets()
+{
+    if (!_dispenser_client) _dispenser_client->close();
+}

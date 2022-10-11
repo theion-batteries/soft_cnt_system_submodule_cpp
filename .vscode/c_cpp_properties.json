@@ -8,7 +8,9 @@
                 "${vcpkgRoot}/x86-windows/include",
                 "${workspaceFolder}/includes",
                 "${workspaceFolder}/dependencies/sockpp/include",
-                "${workspaceFolder}/dependencies/sockpp/include"
+                "${workspaceFolder}/dependencies/sockpp/include",
+                "${workspaceFolder}/includes",
+                "${workspaceFolder}/includes"
             ],
             "defines": [
                 "_DEBUG",

@@ -1,7 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\SamiDhiab\Theion_Repos\soft_cnt_system_submodule_cpp\src\cnt_alignment_system.cpp">
+    <ClCompile Include="C:\Users\SamiDhiab\Theion_Repos\soft_cnt_system_submodule_cpp\src\cnt_controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SamiDhiab\Theion_Repos\soft_cnt_system_submodule_cpp\src\cnt_dispenser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SamiDhiab\Theion_Repos\soft_cnt_system_submodule_cpp\src\cnt_high_voltage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SamiDhiab\Theion_Repos\soft_cnt_system_submodule_cpp\src\cnt_motion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SamiDhiab\Theion_Repos\soft_cnt_system_submodule_cpp\src\cnt_system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\SamiDhiab\Theion_Repos\soft_cnt_system_submodule_cpp\src\main.cpp">
