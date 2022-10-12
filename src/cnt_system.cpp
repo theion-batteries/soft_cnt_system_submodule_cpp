@@ -24,10 +24,12 @@ cnt_alignment_system::Icnt_dispensing::~Icnt_dispensing()
 void cnt_alignment_system::cnt_dispensing::start_vibrating()
 {
   std::cout << "starting vibration" << std::endl;
+  dispenser.vibrate();
 }
 void cnt_alignment_system::cnt_dispensing::stop_vibrating()
 {
   std::cout << "stopping vibration" << std::endl;
+  dispenser.deactivate();
 }
 /****************** cnt motion ******************/
 cnt_alignment_system::Icnt_sys_motion::Icnt_sys_motion()
@@ -42,10 +44,12 @@ cnt_alignment_system::Icnt_sys_motion::~Icnt_sys_motion()
 void cnt_alignment_system::cnt_sys_motion::move_down_to_center()
 {
   std::cout << "cnt moving down to centre" << std::endl;
+  motion.move_center();
 }
 void cnt_alignment_system::cnt_sys_motion::move_back_to_reference()
 {
   std::cout << "cnt moving back to refrence" << std::endl;
+  motion.move_home();
 }
 /****************** hv controller ******************/
 cnt_alignment_system::Ihv_controller::Ihv_controller()
