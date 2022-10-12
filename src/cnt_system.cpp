@@ -64,10 +64,12 @@ cnt_alignment_system::Ihv_controller:: ~Ihv_controller()
 void cnt_alignment_system::hv_controller::start_hv()
 {
   std::cout << "starting hv controller" << std::endl;
+  hv.start();
 }
 void cnt_alignment_system::hv_controller::stop_hv()
 {
   std::cout << "stopping hv controller" << std::endl;
+  hv.stop();
 }
 // external system calls
 double cnt_alignment_system::hv_controller::get_input_voltage()

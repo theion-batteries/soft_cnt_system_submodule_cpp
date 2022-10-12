@@ -79,6 +79,8 @@ namespace cnt_alignment_system
     double output_voltage;
     double input_current;
     double output_current;
+
+    cnt_hv hv;
   };
   /*********** voltage struct *************/
   struct voltage
