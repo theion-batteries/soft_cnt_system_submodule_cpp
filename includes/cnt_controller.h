@@ -15,6 +15,8 @@ public:
     void cnt_dispenser_deactivate();
     void cnt_dispenser_vibrate();
     void cnt_dispenser_setVibrateDuration(u_int durationSecond);
+    void cnt_motion_move_home();
+    void cnt_motion_move_to_center();
 };
 
 

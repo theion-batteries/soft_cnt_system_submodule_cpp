@@ -36,3 +36,15 @@ void cnt_controller::cnt_dispenser_setVibrateDuration(u_int durationSecond)
 {
       dispenser.setVibrateDuration(durationSecond);
 }
+
+void cnt_controller::cnt_motion_move_home()
+{
+dispenser.move_home();
+
+}
+void cnt_controller::cnt_motion_move_to_center()
+{
+
+dispenser.move_center();
+
+}

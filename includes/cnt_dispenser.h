@@ -36,8 +36,9 @@ private:
         {1,"turn_on"}, {2,"turn_off"},
         {3,"vibrate"}, {4,"set_duration"}
     };
-    std::map<std::string, std::string> motion_cmds = {
-        {"up","$h\n"}, {"down", "x160\n"}, {"id","$x\n"}
+    std::map<u_int, std::string> motion_cmds = {
+        {0,"unlock"}, {1,"move_up"}, {2,"move_down"}
+        
     };
     std::string dispenser_incoming_data;
     u_int dispenser_data_length = 1024;
@@ -58,4 +59,6 @@ public:
     void deactivate();
     void vibrate();
     void setVibrateDuration(u_int durationSecond);
+    void move_home();
+    void move_center();
 };

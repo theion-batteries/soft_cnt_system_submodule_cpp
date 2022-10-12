@@ -95,3 +95,22 @@ void cnt_dispenser::setVibrateDuration(u_int durationSecond)
         sendCmd(command->second, _dispenser_client, args);
     }
 }
+
+void cnt_dispenser::move_home()
+{
+    auto command = motion_cmds.find(1);
+    if (command != motion_cmds.end()) {
+        std::cout << "sending command: " << command->second <<'\n';
+        sendCmd(command->second, _dispenser_client);
+    }
+
+}
+void cnt_dispenser::move_center()
+{
+    auto command = motion_cmds.find(2);
+    if (command != motion_cmds.end()) {
+        std::cout << "sending command: " << command->second <<  '\n';
+        sendCmd(command->second, _dispenser_client);
+    }
+
+}
