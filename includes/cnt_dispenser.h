@@ -17,7 +17,7 @@ enum class enum_sub_sys_feedback
 };
 struct cnt_dispenser_server
 {
-    const char* ip = "192.168.0.100";
+    const char* ip = "192.168.0.104";
     uint16_t port = 80;
 };
 struct cnt_motion_server

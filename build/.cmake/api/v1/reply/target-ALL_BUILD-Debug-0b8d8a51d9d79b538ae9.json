@@ -17,16 +17,16 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "yaml-cpp-sandbox::@0c96d07569f4c0de5997"
-		},
-		{
-			"id" : "yaml-cpp-parse::@0c96d07569f4c0de5997"
+			"id" : "yaml-cpp::@bbf290e3af8838e0ff35"
 		},
 		{
 			"id" : "yaml-cpp-read::@0c96d07569f4c0de5997"
 		},
 		{
-			"id" : "yaml-cpp::@bbf290e3af8838e0ff35"
+			"id" : "yaml-cpp-sandbox::@0c96d07569f4c0de5997"
+		},
+		{
+			"id" : "yaml-cpp-parse::@0c96d07569f4c0de5997"
 		},
 		{
 			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
