@@ -17,10 +17,10 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "sockpp-static::@e6949179b2bb01c085fb"
+			"id" : "sockpp-objs::@1ccc5558e4b94d79f986"
 		},
 		{
-			"id" : "sockpp-objs::@1ccc5558e4b94d79f986"
+			"id" : "sockpp-static::@e6949179b2bb01c085fb"
 		},
 		{
 			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"

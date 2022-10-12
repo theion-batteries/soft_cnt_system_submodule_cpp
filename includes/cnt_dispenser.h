@@ -20,11 +20,7 @@ struct cnt_dispenser_server
     const char* ip = "192.168.0.104";
     uint16_t port = 80;
 };
-struct cnt_motion_server
-{
-    const char* ip = "192.168.0.100";
-    uint16_t port = 80;
-};
+
 
 class cnt_dispenser
 {

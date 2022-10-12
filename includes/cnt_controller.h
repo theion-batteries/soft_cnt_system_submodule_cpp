@@ -6,7 +6,8 @@ class cnt_controller
 {
 private:
     cnt_dispenser dispenser;
-
+    cnt_motion motion;
+    
 public:
     cnt_controller(/* args */);
     ~cnt_controller();
