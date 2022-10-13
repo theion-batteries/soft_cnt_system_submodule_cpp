@@ -17,7 +17,7 @@ enum class enum_sub_sys_feedback
 };
 struct cnt_dispenser_server
 {
-    const char* ip = "192.168.0.104";
+    const char* ip = "192.168.0.151";
     uint16_t port = 80;
 };
 
@@ -57,4 +57,5 @@ public:
     void setVibrateDuration(u_int durationSecond);
     void move_home();
     void move_center();
+    void unlock();
 };

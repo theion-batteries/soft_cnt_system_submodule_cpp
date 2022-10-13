@@ -114,3 +114,13 @@ void cnt_dispenser::move_center()
     }
 
 }
+
+void cnt_dispenser::unlock()
+{
+    auto command = motion_cmds.find(0);
+    if (command != motion_cmds.end()) {
+        std::cout << "sending command: " << command->second <<  '\n';
+        sendCmd(command->second, _dispenser_client);
+    }
+
+}

@@ -53,4 +53,5 @@ public:
     void waitForResponse();
     void move_home();
     void move_center();
+    void unlock();
 };

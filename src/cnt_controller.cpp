@@ -48,3 +48,10 @@ void cnt_controller::cnt_motion_move_to_center()
 dispenser.move_center();
 
 }
+
+void cnt_controller::cnt_motion_unlock()
+{
+
+dispenser.unlock();
+
+}

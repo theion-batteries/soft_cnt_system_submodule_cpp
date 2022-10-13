@@ -79,3 +79,13 @@ void cnt_motion::move_center()
         sendCmd(command->second, _motion_client);
     }
 }
+
+void cnt_motion::unlock()
+{
+    auto command = motion_cmds.find(0);
+    if (command != motion_cmds.end()) {
+        std::cout << "sending command: " << command->second <<  '\n';
+        sendCmd(command->second, _motion_client);
+    }
+
+}
