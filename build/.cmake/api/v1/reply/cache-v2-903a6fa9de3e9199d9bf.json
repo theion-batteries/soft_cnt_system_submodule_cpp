@@ -1574,6 +1574,18 @@
 			"value" : "C:/Users/SamiDhiab/Theion_Repos/soft_cnt_system_submodule_cpp"
 		},
 		{
+			"name" : "cnt_system_static_LIB_DEPENDS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Dependencies for the target"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "general;C:/Users/SamiDhiab/Theion_Repos/soft_cnt_system_submodule_cpp/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib;general;C:/Users/SamiDhiab/Theion_Repos/soft_cnt_system_submodule_cpp/build/dependencies/sockpp/Debug/sockpp-static.lib;"
+		},
+		{
 			"name" : "sockpp-static_LIB_DEPENDS",
 			"properties" : 
 			[

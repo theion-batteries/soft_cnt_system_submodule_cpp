@@ -39,12 +39,6 @@
 				"parent" : 0
 			},
 			{
-				"command" : 1,
-				"file" : 0,
-				"line" : 49,
-				"parent" : 0
-			},
-			{
 				"command" : 2,
 				"file" : 0,
 				"line" : 27,
@@ -79,15 +73,15 @@
 			"includes" : 
 			[
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"path" : "C:/Users/SamiDhiab/Theion_Repos/soft_cnt_system_submodule_cpp/includes"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 4,
 					"path" : "C:/Users/SamiDhiab/Theion_Repos/soft_cnt_system_submodule_cpp/dependencies/sockpp/include"
 				},
 				{
-					"backtrace" : 6,
+					"backtrace" : 5,
 					"path" : "C:/Users/SamiDhiab/Theion_Repos/soft_cnt_system_submodule_cpp/dependencies/yaml-cpp/include"
 				}
 			],
@@ -136,7 +130,7 @@
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 3,
+				"backtrace" : 2,
 				"fragment" : "dependencies\\sockpp\\Debug\\sockpp-static.lib",
 				"role" : "libraries"
 			},

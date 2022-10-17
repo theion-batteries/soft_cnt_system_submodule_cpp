@@ -45,7 +45,9 @@ add_executable(cnt_system ${all_SRCS})
 
 # link againt static libs
 target_link_libraries(cnt_system ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib
+                                 ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
 )
-target_link_libraries(cnt_system ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
+target_link_libraries(cnt_system_static  ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib
+                                         ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
 )
 

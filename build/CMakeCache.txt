@@ -309,6 +309,9 @@ cnt_system_LIB_DEPENDS:STATIC=general;C:/Users/SamiDhiab/Theion_Repos/soft_cnt_s
 cnt_system_SOURCE_DIR:STATIC=C:/Users/SamiDhiab/Theion_Repos/soft_cnt_system_submodule_cpp
 
 //Dependencies for the target
+cnt_system_static_LIB_DEPENDS:STATIC=general;C:/Users/SamiDhiab/Theion_Repos/soft_cnt_system_submodule_cpp/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib;general;C:/Users/SamiDhiab/Theion_Repos/soft_cnt_system_submodule_cpp/build/dependencies/sockpp/Debug/sockpp-static.lib;
+
+//Dependencies for the target
 sockpp-static_LIB_DEPENDS:STATIC=general;ws2_32;
 
 //Value Computed by CMake
