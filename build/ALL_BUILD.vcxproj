@@ -177,6 +177,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{BA836F6A-FB4E-33B8-8C25-0B9EB38248C2}</Project>
       <Name>cnt_system</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\SamiDhiab\Theion_Repos\soft_cnt_system_submodule_cpp\build\cnt_system_static.vcxproj">
+      <Project>{38D60A10-5EE0-3CB7-BECF-DBECAE308E4F}</Project>
+      <Name>cnt_system_static</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\Users\SamiDhiab\Theion_Repos\soft_cnt_system_submodule_cpp\build\dependencies\sockpp\src\sockpp-objs.vcxproj">
       <Project>{DD0CBA5C-D056-3243-A260-E6E971E42658}</Project>
       <Name>sockpp-objs</Name>

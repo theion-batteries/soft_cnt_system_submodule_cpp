@@ -15,6 +15,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+#This is necessary for MSVC to create a symbol file, .lib, besides a shared library, .dll
+if (MSVC)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
 # add dependencies cmake
 add_subdirectory(dependencies/sockpp)
 add_subdirectory(dependencies/yaml-cpp)
@@ -25,11 +29,17 @@ include_directories(${PROJECT_SOURCE_DIR}/includes/)
 include_directories(${PROJECT_SOURCE_DIR}/dependencies/sockpp/include/)
 include_directories(${PROJECT_SOURCE_DIR}/dependencies/yaml-cpp/include/)
 
+
+
 # add all source *.cpp : change repo name
 file(GLOB all_SRCS
     "${PROJECT_SOURCE_DIR}/src/*.cpp"
     )
 
+    # to create a static lib
+add_library(cnt_system_static STATIC ${all_SRCS}) # SHARED
+    # to create a dynamic lib
+#add_library(cnt_system_shared SHARED ${all_SRCS}) # SHARED
 # make the exec: change project name
 add_executable(cnt_system ${all_SRCS})
 
@@ -38,3 +48,4 @@ target_link_libraries(cnt_system ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-c
 )
 target_link_libraries(cnt_system ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
 )
+
