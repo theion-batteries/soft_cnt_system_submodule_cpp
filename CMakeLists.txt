@@ -19,9 +19,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 if (MSVC)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
+
 # add dependencies cmake
-add_subdirectory(dependencies/sockpp)
-add_subdirectory(dependencies/yaml-cpp)
+#add_subdirectory(dependencies/sockpp)
+#add_subdirectory(dependencies/yaml-cpp)
 
 # includes
 include_directories(${PROJECT_SOURCE_DIR}/includes/)
@@ -29,17 +30,14 @@ include_directories(${PROJECT_SOURCE_DIR}/includes/)
 include_directories(${PROJECT_SOURCE_DIR}/dependencies/sockpp/include/)
 include_directories(${PROJECT_SOURCE_DIR}/dependencies/yaml-cpp/include/)
 
-
-
 # add all source *.cpp : change repo name
 file(GLOB all_SRCS
     "${PROJECT_SOURCE_DIR}/src/*.cpp"
     )
 
-    # to create a static lib
-add_library(cnt_system_static STATIC ${all_SRCS}) # SHARED
-    # to create a dynamic lib
-#add_library(cnt_system_shared SHARED ${all_SRCS}) # SHARED
+# to create a static lib
+add_library(cnt_system_static STATIC ${all_SRCS}) 
+
 # make the exec: change project name
 add_executable(cnt_system ${all_SRCS})
 
