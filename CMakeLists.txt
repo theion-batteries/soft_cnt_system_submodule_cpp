@@ -31,18 +31,24 @@ include_directories(${PROJECT_SOURCE_DIR}/dependencies/sockpp/include/)
 include_directories(${PROJECT_SOURCE_DIR}/dependencies/yaml-cpp/include/)
 
 # add all source *.cpp : change repo name
-file(GLOB all_SRCS
+file(GLOB exe_SRCS
     "${PROJECT_SOURCE_DIR}/src/*.cpp"
     )
-
+# add all source *.cpp : change repo name
+file(GLOB lib_SRCS
+"${PROJECT_SOURCE_DIR}/src/cnt_controller.cpp"
+"${PROJECT_SOURCE_DIR}/src/cnt_high_voltage.cpp"
+"${PROJECT_SOURCE_DIR}/src/cnt_motion.cpp"
+"${PROJECT_SOURCE_DIR}/src/cnt_dispenser.cpp"
+)
 # to create a static lib
-add_library(cnt_system_static STATIC ${all_SRCS}) 
+add_library(cnt_system_static STATIC ${lib_SRCS}) 
 
 # make the exec: change project name
-add_executable(cnt_system ${all_SRCS})
+add_executable(cnt_system_exe ${exe_SRCS})
 
 # link againt static libs
-target_link_libraries(cnt_system ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib
+target_link_libraries(cnt_system_exe ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib
                                  ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
 )
 target_link_libraries(cnt_system_static  ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib

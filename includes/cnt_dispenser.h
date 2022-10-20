@@ -10,11 +10,7 @@
 #include <thread>
 #include <atomic>
 
-enum class enum_sub_sys_feedback
-{
-    sub_success = 3,
-    sub_error = -2
-};
+
 struct cnt_dispenser_server
 {
     const char* ip = "192.168.0.151";

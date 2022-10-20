@@ -1,4 +1,4 @@
-#include "cnt_system.h"
+#include "cnt_controller.h"
 cnt_controller controller;
 int main()
 {

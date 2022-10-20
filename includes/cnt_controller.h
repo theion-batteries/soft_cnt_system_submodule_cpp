@@ -2,6 +2,8 @@
 #include "cnt_dispenser.h"
 #include "cnt_motion.h"
 #include "cnt_high_voltage.h"
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+
 class cnt_controller
 {
 private:
