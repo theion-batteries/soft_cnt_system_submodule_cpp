@@ -1,1 +1,0 @@
-C:\Users\SamiDhiab\Theion_Repos\soft_cnt_system_submodule_cpp\build\dependencies\sockpp\src\sockpp-objs.dir\Debug\sockpp-objs.lib

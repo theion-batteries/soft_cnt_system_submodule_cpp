@@ -21,19 +21,14 @@ if (MSVC)
 endif()
 
 # add dependencies cmake
-#add_subdirectory(dependencies/sockpp)
-#add_subdirectory(dependencies/yaml-cpp)
+#add_subdirectory(dependencies/sockpp EXCLUDE_FROM_ALL)
+#add_subdirectory(dependencies/yaml-cpp EXCLUDE_FROM_ALL)
+set(CMAKE_PREFIX_PATH "C:/Users/SamiDhiab/vcpkg/installed/x86-windows/share")
 
-# includes
-include_directories(${PROJECT_SOURCE_DIR}/includes/)
-# dependencies manual includes: change repo name
-include_directories(${PROJECT_SOURCE_DIR}/dependencies/sockpp/include/)
-include_directories(${PROJECT_SOURCE_DIR}/dependencies/yaml-cpp/include/)
+find_package(yaml-cpp CONFIG REQUIRED)
+find_package(sockpp CONFIG REQUIRED)
 
-# add all source *.cpp : change repo name
-file(GLOB exe_SRCS
-    "${PROJECT_SOURCE_DIR}/src/*.cpp"
-    )
+###################### Build Library ############################
 # add all source *.cpp : change repo name
 file(GLOB lib_SRCS
 "${PROJECT_SOURCE_DIR}/src/cnt_controller.cpp"
@@ -43,15 +38,28 @@ file(GLOB lib_SRCS
 )
 # to create a static lib
 add_library(cnt_system_static STATIC ${lib_SRCS}) 
-
-# make the exec: change project name
-add_executable(cnt_system_exe ${exe_SRCS})
-
-# link againt static libs
-target_link_libraries(cnt_system_exe ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib
-                                 ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
+target_link_libraries(cnt_system_static  
+PRIVATE yaml-cpp
+PRIVATE ${SOCKPP_LIBRARIES}
 )
-target_link_libraries(cnt_system_static  ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib
-                                         ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
+
+# includes
+target_include_directories(cnt_system_static
+PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
+PUBLIC ${SOCKPP_INCLUDE_DIRS}
+
 )
+############################# build executable  ###################################
+
+# add all source *.cpp : change repo name
+#file(GLOB exe_SRCS
+#    "${PROJECT_SOURCE_DIR}/src/*.cpp"
+#    )
+## make the exec: change project name
+#add_executable(cnt_system_exe ${exe_SRCS})
+#
+## link againt static libs
+#target_link_libraries(cnt_system_exe ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib
+#                                 ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
+#)
 
