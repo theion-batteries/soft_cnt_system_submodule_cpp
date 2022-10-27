@@ -39,27 +39,31 @@ file(GLOB lib_SRCS
 # to create a static lib
 add_library(cnt_system_static STATIC ${lib_SRCS}) 
 target_link_libraries(cnt_system_static  
-PRIVATE yaml-cpp
-PRIVATE ${SOCKPP_LIBRARIES}
+PUBLIC yaml-cpp
+PUBLIC ${SOCKPP_LIBRARIES}
 )
 
 # includes
 target_include_directories(cnt_system_static
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
 PUBLIC ${SOCKPP_INCLUDE_DIRS}
-
 )
 ############################# build executable  ###################################
 
 # add all source *.cpp : change repo name
-#file(GLOB exe_SRCS
-#    "${PROJECT_SOURCE_DIR}/src/*.cpp"
-#    )
-## make the exec: change project name
-#add_executable(cnt_system_exe ${exe_SRCS})
-#
-## link againt static libs
-#target_link_libraries(cnt_system_exe ${PROJECT_SOURCE_DIR}/build/dependencies/yaml-cpp/Debug/yaml-cppd.lib
-#                                 ${PROJECT_SOURCE_DIR}/build/dependencies/sockpp/Debug/sockpp-static.lib
-#)
+file(GLOB exe_SRCS
+    "${PROJECT_SOURCE_DIR}/src/*.cpp"
+    )
+# make the exec: change project name
+add_executable(cnt_system_exe ${exe_SRCS})
 
+target_link_libraries(cnt_system_exe  
+PUBLIC yaml-cpp
+PUBLIC ${SOCKPP_LIBRARIES}
+)
+
+# includes
+target_include_directories(cnt_system_exe
+PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
+PUBLIC ${SOCKPP_INCLUDE_DIRS}
+)
