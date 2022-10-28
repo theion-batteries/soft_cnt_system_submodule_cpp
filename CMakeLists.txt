@@ -7,6 +7,8 @@
 
 cmake_minimum_required(VERSION 3.5.0)
 
+set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+
 # project name and version: change project name
 project(cnt_system VERSION "1.0")
 
@@ -14,19 +16,29 @@ project(cnt_system VERSION "1.0")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
+# toolchain vcpkg
 #This is necessary for MSVC to create a symbol file, .lib, besides a shared library, .dll
 if (MSVC)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
-# add dependencies cmake
-#add_subdirectory(dependencies/sockpp EXCLUDE_FROM_ALL)
-#add_subdirectory(dependencies/yaml-cpp EXCLUDE_FROM_ALL)
-set(CMAKE_PREFIX_PATH "C:/Users/SamiDhiab/vcpkg/installed/x64-windows/share")
+########################## add subdirectory##################
 
-find_package(yaml-cpp CONFIG REQUIRED)
+set(CMAKE_PREFIX_PATH "C:/vcpkg/installed/x64-windows/share")
+#find_package(yaml-cpp CONFIG REQUIRED)
 find_package(sockpp CONFIG REQUIRED)
+
+
+#add_subdirectory(dependencies/sockpp)
+if(NOT TARGET yaml-cpp)
+        add_subdirectory(dependencies/yaml-cpp)
+        install(TARGETS yaml-cpp)  
+endif()
+
+add_definitions(-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)  
+
+###################### find library #############################
+
 
 ###################### Build Library ############################
 # add all source *.cpp : change repo name
@@ -47,6 +59,7 @@ PUBLIC ${SOCKPP_LIBRARIES}
 target_include_directories(cnt_system_static
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
 PUBLIC ${SOCKPP_INCLUDE_DIRS}
+
 )
 ############################# build executable  ###################################
 
@@ -66,4 +79,6 @@ PUBLIC ${SOCKPP_LIBRARIES}
 target_include_directories(cnt_system_exe
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
 PUBLIC ${SOCKPP_INCLUDE_DIRS}
+
 )
+
