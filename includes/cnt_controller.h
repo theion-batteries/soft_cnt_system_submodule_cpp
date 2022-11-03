@@ -9,6 +9,7 @@ class cnt_controller
 private:
     cnt_dispenser dispenser;
     cnt_motion motion;
+    cnt_hv hv_dev;
     
 public:
     cnt_controller(/* args */);
