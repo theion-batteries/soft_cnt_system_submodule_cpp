@@ -11,7 +11,7 @@ set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRIN
 
 # project name and version: change project name
 project(cnt_system VERSION "1.0")
-
+ 
 # set the C++ standard: 20 is set
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
