@@ -119,11 +119,11 @@ return cntReady;
 /*     helper getter */
 double cnt_controller::get_dispenser_frequency()
 {
-    dispenser->getFrequency();
+    return dispenser->getFrequency();
 }
 double cnt_controller::get_axis_position()
 {
-    motion->get_position();
+    return motion->get_position();
 }
 Icnt_axis_motion* cnt_controller::get_axis_ptr()
 {
