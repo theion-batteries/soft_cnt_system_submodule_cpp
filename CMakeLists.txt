@@ -6,7 +6,7 @@
 # email: sami@theion.de
 
 cmake_minimum_required(VERSION 3.5.0)
-
+# to discard errro fetch content
 set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 
 # project name and version: change project name
@@ -44,9 +44,13 @@ add_definitions(-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
 # add all source *.cpp : change repo name
 file(GLOB lib_SRCS
 "${PROJECT_SOURCE_DIR}/src/cnt_controller.cpp"
-"${PROJECT_SOURCE_DIR}/src/cnt_high_voltage.cpp"
-"${PROJECT_SOURCE_DIR}/src/cnt_motion.cpp"
-"${PROJECT_SOURCE_DIR}/src/cnt_dispenser.cpp"
+"${PROJECT_SOURCE_DIR}/src/Icnt_high_voltage.cpp"
+"${PROJECT_SOURCE_DIR}/src/Icnt_axis_motion.cpp"
+"${PROJECT_SOURCE_DIR}/src/Icnt_dispensing.cpp"
+"${PROJECT_SOURCE_DIR}/src/cnt_high_voltage_gbs.cpp"
+"${PROJECT_SOURCE_DIR}/src/cnt_linear_motion.cpp"
+"${PROJECT_SOURCE_DIR}/src/cnt_dispenser_vibration.cpp"
+
 )
 # to create a static lib
 add_library(cnt_system_static STATIC ${lib_SRCS}) 
