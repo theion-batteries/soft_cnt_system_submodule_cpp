@@ -21,7 +21,7 @@ struct cnt_high_voltage_gbs_server
 
 struct cnt_high_voltage_gbs_paramteres
 {
-    std::map<std::string,int> parameters= {{"current", 0}, {"voltage", 0},{"frequency", 0},{"amplitude", 0}};
+    std::map<std::string, int> parameters = { {"current", 0}, {"voltage", 0},{"frequency", 0},{"amplitude", 0} };
 };
 class cnt_high_voltage_gbs : public Icnt_high_voltage
 {
@@ -50,5 +50,12 @@ public:
     void stop() override;
     void tune_param(std::pair<std::string, int> new_param_val) override; // tune param
     bool getStatus() override;
-
+    void pulse() override;
+    void modulate() override;
+    double get_input_current()override;
+    double get_input_frequency()override;
+    double get_input_voltage()override;
+    double get_output_voltage()override;
+    double get_output_frequency()override;
+    double get_output_current()override;
 };

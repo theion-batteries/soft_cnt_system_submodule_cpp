@@ -23,6 +23,16 @@ public:
     virtual void waitForResponse()=0;
     virtual void start()=0;
     virtual void stop()=0;
+    virtual void pulse() = 0;
+    virtual void modulate() = 0;    
     virtual void tune_param(std::pair<std::string, int> new_param_val)=0; // tune param
     virtual bool getStatus() =0;
+    virtual double get_input_current()=0;
+    virtual double get_input_frequency()=0;
+    virtual double get_input_voltage()=0;
+    virtual double get_output_voltage()=0;
+    virtual double get_output_frequency()=0;
+    virtual double get_output_current()=0;
+
+
 };

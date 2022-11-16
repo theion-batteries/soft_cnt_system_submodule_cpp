@@ -39,3 +39,43 @@ bool cnt_high_voltage_gbs::getStatus()
 {
 return hvReady;
 }
+
+void cnt_high_voltage_gbs::pulse()
+{
+    std::cout<<"sending pulse.."<<std::endl;
+}
+
+void cnt_high_voltage_gbs::modulate()
+{
+    std::cout<<"sending pulse.."<<std::endl;
+}
+
+ double cnt_high_voltage_gbs::get_input_current()
+ {
+    return 0;
+ }
+ double cnt_high_voltage_gbs::get_input_frequency()
+ {
+    return 0;
+
+ }
+ double cnt_high_voltage_gbs::get_input_voltage()
+ {
+    return 0;
+
+ }
+ double cnt_high_voltage_gbs::get_output_voltage()
+ {
+    return 0;
+
+ }
+ double cnt_high_voltage_gbs::get_output_frequency()
+ {
+    return 0;
+
+ }
+ double cnt_high_voltage_gbs::get_output_current()
+ {
+    return 0;
+
+ }
