@@ -19,7 +19,7 @@ public:
 
     virtual void disconnect()=0;
     virtual void connect()=0;
-    virtual void sendCmd(std::string cmd, sockpp::tcp_connector* client, std::string args = std::string());
+    virtual void sendCmd(std::string& cmd, sockpp::tcp_connector* client, std::string args = std::string());
     virtual void waitForResponse()=0;
     virtual void start()=0;
     virtual void stop()=0;

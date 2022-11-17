@@ -31,12 +31,12 @@ private:
     std::string dispenser_incoming_data;
     u_int dispenser_data_length = 1024;
     bool dispenserReady = false;
-    double frequency=0;
+    double frequency = 0;
 
 public:
     sockpp::tcp_connector* _dispenser_client;
     cnt_dispenser_vibration(/* args */);
-    ~cnt_dispenser_vibration();
+    virtual ~cnt_dispenser_vibration();
     wgm_feedbacks::enum_sub_sys_feedback connect() override;
     bool getStatus() override;
     void disconnect() override;
@@ -45,6 +45,7 @@ public:
     void vibrate() override;
     void setVibrateDuration(u_int durationSecond) override;
     void waitForResponse() override;
-     double getFrequency() override;
+    double getFrequency() override;
+    void sendCmd(std::string& cmd, sockpp::tcp_connector* client, std::string args  = std::string());
 
 };

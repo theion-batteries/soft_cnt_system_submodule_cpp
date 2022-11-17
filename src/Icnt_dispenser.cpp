@@ -1,16 +1,6 @@
 
 #include "Icnt_dispenser.h"
 
-
-Icnt_dispenser::Icnt_dispenser(/* args */)
-{
-}
-
-Icnt_dispenser::~Icnt_dispenser()
-{
-}
-
-
 /**
  * @brief
  *
@@ -26,6 +16,3 @@ void Icnt_dispenser::sendCmd(std::string& cmd, sockpp::tcp_connector* client, st
     }
     std::cout << "command " << cmd + args << " sent" << std::endl;
 }
-
- void Icnt_dispenser::vibrate(){};
- void Icnt_dispenser::setVibrateDuration(u_int durationSecond){};
