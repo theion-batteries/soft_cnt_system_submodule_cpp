@@ -7,7 +7,7 @@
 
 cmake_minimum_required(VERSION 3.5.0)
 # to discard errro fetch content
-set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+#set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 
 # project name and version: change project name
 project(cnt_system VERSION "1.0")
@@ -16,6 +16,7 @@ project(cnt_system VERSION "1.0")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+enable_testing()
 # toolchain vcpkg
 #This is necessary for MSVC to create a symbol file, .lib, besides a shared library, .dll
 if (MSVC)
@@ -25,18 +26,24 @@ endif()
 ########################## add subdirectory##################
 
 set(CMAKE_PREFIX_PATH "C:/vcpkg/installed/x64-windows/share")
-#find_package(yaml-cpp CONFIG REQUIRED)
 find_package(sockpp CONFIG REQUIRED)
 
+find_package(yaml-cpp CONFIG REQUIRED)
 
 #add_subdirectory(dependencies/sockpp)
-if(NOT TARGET yaml-cpp)
-        add_subdirectory(dependencies/yaml-cpp)
-        install(TARGETS yaml-cpp)  
-endif()
 
-#add_definitions(-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)  
+#if(NOT TARGET sockpp-objs ${SOCKPP} ${SOCKPP_STATIC})
+#        add_subdirectory(dependencies/sockpp)
+#        install(TARGETS ${SOCKPP_STATIC})  
+#endif()
 
+#if(NOT TARGET yaml-cpp)
+#        add_subdirectory(dependencies/yaml-cpp)
+#        install(TARGETS yaml-cpp)  
+#endif()
+
+add_definitions(-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)  
+add_definitions(-D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS)  
 ###################### find library #############################
 
 

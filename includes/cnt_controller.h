@@ -2,7 +2,6 @@
 #include "cnt_dispenser_vibration.h"
 #include "cnt_linear_motion.h"
 #include "cnt_high_voltage_gbs.h"
-#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 
 class cnt_controller
 {
