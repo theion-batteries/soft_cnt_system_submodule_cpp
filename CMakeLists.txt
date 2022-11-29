@@ -72,6 +72,14 @@ PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
 PUBLIC ${SOCKPP_INCLUDE_DIRS}
 
 )
+
+
+############################# install target lib ########################################
+install(TARGETS cnt_system_static DESTINATION lib)
+FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/includes/*.h" 
+ 
+)
+INSTALL(FILES ${files} DESTINATION include)
 ############################# build executable  ###################################
 
 # add all source *.cpp : change repo name
