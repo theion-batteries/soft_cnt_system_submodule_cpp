@@ -5,7 +5,7 @@
 # author: sami dhiab
 # email: sami@theion.de
 
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.1.0)
 # to discard errro fetch content
 #set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 
@@ -79,7 +79,7 @@ install(TARGETS cnt_system_static DESTINATION lib)
 FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/includes/*.h" 
  
 )
-INSTALL(FILES ${files} DESTINATION include)
+INSTALL(FILES ${files} DESTINATION include/cnt_system_static/)
 ############################# build executable  ###################################
 
 # add all source *.cpp : change repo name
