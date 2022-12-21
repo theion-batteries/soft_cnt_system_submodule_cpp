@@ -44,10 +44,10 @@ private:
     bool axisReady = false;
 protected:
     std::map<u_int, std::string> axis_cmds = {
-        {0,"$x"}, {1,"?"}, {2,"x160"},
+        {0,"$X"}, {1,"?"}, {2,"x160"},
         {3,"x"}, {4,"x"},
         {5,"x"}, {6,"x"},
-        {7,"$h"}
+        {7,"$H"}
     };
     std::deque<double> axis_last_position; // FIFO last 10 values
     std::string axis_incoming_data;
