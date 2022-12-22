@@ -13,8 +13,8 @@
 
 struct cnt_dispenser_vibration_server
 {
-    const char* ip = "192.168.0.151";
-    uint16_t port = 80;
+    const char* ip = "192.168.0.203";
+    uint16_t port = 8881;
 };
 
 

@@ -26,8 +26,8 @@
 
 struct cnt_axis_motion_server
 {
-    const char* ip = "192.168.0.100";
-    uint16_t port = 80;
+    const char* ip = "192.168.0.203";
+    uint16_t port = 8882;
 };
 
 class cnt_linear_motion: public Icnt_axis_motion
@@ -68,8 +68,8 @@ public:
     void move_up_by(double_t steps) override;
     void move_down_by(double_t steps) override;
     virtual bool getStatus() override;
-    virtual std::string sendDirectCmd(std::string& cmd) override;
-    void waitForResponse();
+    virtual std::string sendDirectCmd(std::string cmd) override;
+    std::string waitForResponse();
     void move_center() override;
     void unlock() override;
 };
