@@ -2,7 +2,16 @@
 #include "cnt_dispenser_vibration.h"
 #include "cnt_linear_motion.h"
 #include "cnt_high_voltage_gbs.h"
+#include <fstream>
+#include "yaml-cpp/yaml.h"
+struct cnt_config_yaml_params
+{
+  
+    double distance_to_center=50;
+    double dispenser_frequency =10;
+    double dispenser_duration = 100;
 
+};
 class cnt_controller
 {
 private:
@@ -10,6 +19,8 @@ private:
     std::shared_ptr <Icnt_axis_motion> motion;
     std::shared_ptr <Icnt_high_voltage> hv_Dev;
     bool cntReady = false;
+    YAML::Node config;
+    cnt_config_yaml_params _cnt_params;
 public:
     cnt_controller(/* args */);
     ~cnt_controller();
@@ -46,7 +57,7 @@ public:
     // direct call
     void sendDirectCmd(std::string& cmd);
     std::string sendDirectCmdAxis(std::string& cmd);
-     void reload_config_file();
+    void reload_config_file();
 };
 
 

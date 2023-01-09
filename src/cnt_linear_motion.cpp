@@ -9,7 +9,8 @@
  */
 
 #include "cnt_linear_motion.h"
-#include <string.h>
+
+
 cnt_linear_motion::cnt_linear_motion(/* args */)
 {
     std::cout << "creating linear axis  client" << std::endl;

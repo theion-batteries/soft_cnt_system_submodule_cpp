@@ -1,10 +1,23 @@
 #include "cnt_controller.h"
+#include <string.h>
 
 
 cnt_controller::cnt_controller(/* args */)
 {
     std::cout << "creating subsystem cnt aligning controller " << std::endl;
+#ifdef CNT_CONFIG
+    std::cout << "loading config file: "<< CNT_CONFIG<< std::endl;
+    std::ifstream filein(CNT_CONFIG);
+    for (std::string line; std::getline(filein, line); )
+    {
+        std::cout << line << std::endl;
+    }
+    config = YAML::LoadFile(CNT_CONFIG);
+    _cnt_params.distance_to_center = config["distance_to_center"].as<double>();
+    _cnt_params.dispenser_frequency = config["dispenser_frequency"].as<double>();
+    _cnt_params.dispenser_duration = config["dispenser_duration"].as<double>();
 
+#endif 
 #ifdef CNT_DISPENSER_MOCK
     dispenser = std::make_shared< cntDispenserMock>();
 #else
@@ -33,7 +46,6 @@ void cnt_controller::cnt_controller_connect()
     motion->connect();
     dispenser->connect();
     hv_Dev->connect();
-
 }
 
 
@@ -151,5 +163,16 @@ return motion->sendDirectCmd(cmd);
 }
 void cnt_controller::reload_config_file()
 {
+
+    std::cout << "reloading config file: "<< CNT_CONFIG<< std::endl;
+    std::ifstream filein(CNT_CONFIG);
+    for (std::string line; std::getline(filein, line); )
+    {
+        std::cout << line << std::endl;
+    }
+    config = YAML::LoadFile(CNT_CONFIG);
+    _cnt_params.distance_to_center = config["distance_to_center"].as<double>();
+    _cnt_params.dispenser_frequency = config["dispenser_frequency"].as<double>();
+    _cnt_params.dispenser_duration = config["dispenser_duration"].as<double>();
 
 }

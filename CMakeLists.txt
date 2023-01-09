@@ -45,7 +45,23 @@ find_package(yaml-cpp CONFIG REQUIRED)
 add_definitions(-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)  
 add_definitions(-D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS)  
 ###################### find library #############################
+find_file(cnt_config 
+        NAMES cnt_config.yaml
+        PATHS ${CMAKE_CURRENT_SOURCE_DIR}/config
+        REQUIRED
+)
+message("found whs config file: ${cnt_config}")        
+set ( CNT_CONFIG_BUILD  "${cnt_config}" CACHE FILEPATH "${cnt_config}")
+set ( CNT_CONFIG  "${CMAKE_INSTALL_PREFIX}/config/cnt_config.yaml" CACHE FILEPATH "${CMAKE_INSTALL_PREFIX}/config/cnt_config.yaml")
+add_definitions(-DCNT_CONFIG="${CNT_CONFIG}")
 
+# copy config one by one 
+function(copy_config target_exe config_file)
+add_custom_command(TARGET ${target_exe} POST_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${config_file} "${CMAKE_INSTALL_PREFIX}/config/" 
+COMMENT "copy config from ${config_file} to ${CMAKE_INSTALL_PREFIX}/config/"
+    )
+endfunction()
 
 ###################### Build Library ############################
 # add all source *.cpp : change repo name
@@ -75,6 +91,12 @@ PUBLIC ${SOCKPP_INCLUDE_DIRS}
 
 
 ############################# install target lib ########################################
+INSTALL(FILES ${CNT_CONFIG_BUILD} DESTINATION config/)
+message("config file CNT copied from ${CNT_CONFIG_BUILD} to: ${CMAKE_INSTALL_PREFIX}/config/")
+set(CNT_CONFIG "${CMAKE_INSTALL_PREFIX}/config/cnt_config.yaml")
+add_definitions(-DCNT_CONFIG="${CNT_CONFIG}") 
+message("config file is copied to ${CNT_CONFIG}")
+
 install(TARGETS cnt_system_static DESTINATION lib)
 FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/includes/*.h" 
  
