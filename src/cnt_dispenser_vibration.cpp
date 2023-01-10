@@ -29,9 +29,10 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::connect()
     if (!_dispenser_client->read_timeout(std::chrono::seconds(5))) {
         std::cerr << "Error setting timeout on TCP stream: "
             << _dispenser_client->last_error_str() << std::endl;
-                return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
+        return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
-            return wgm_feedbacks::enum_sub_sys_feedback::sub_success;
+    dispenserReady = true;
+    return wgm_feedbacks::enum_sub_sys_feedback::sub_success;
 
 }
 
@@ -39,20 +40,46 @@ void cnt_dispenser_vibration::disconnect()
 {
     if (!_dispenser_client) _dispenser_client->close();
 }
-
-void cnt_dispenser_vibration::waitForResponse()
+std::string cnt_dispenser_vibration::sendDirectCmd(std::string cmd)
 {
-    std::cout << "awaiting server response" << std::endl;
-
-    while (_dispenser_client->is_connected())
+    if (_dispenser_client == nullptr) return "not connected";
+    std::cout << "sending linear axis command " << cmd << std::endl;
+    cmd = cmd + "\r\n";
+    if (_dispenser_client->write(cmd) != ssize_t(std::string(cmd).length())) {
+        std::cout << "Error writing to the TCP stream: "
+            << _dispenser_client->last_error_str() << std::endl;
+    }
+    return waitForResponse();
+}
+std::string cnt_dispenser_vibration::waitForResponse()
+{
+    static int attempts = 0;
+    if (attempts == 10)
     {
-        // Read_n data from keyence
-        ssize_t n = _dispenser_client->read(&dispenser_incoming_data[0], dispenser_data_length);
+        std::cout << "attempts: " << attempts << std::endl;
+        attempts = 0;
+        return "NA";
+    }
+    std::cout << "awaiting server response" << std::endl;
+    if (_dispenser_client->is_connected())
+    {
+        char Strholder[1024];
+        ssize_t n = _dispenser_client->read_n(&Strholder, 1024);
         if (n > 0)
         {
-            std::cout << "server replied : " << dispenser_incoming_data.c_str() << std::endl;
-            break;
+            std::cout << "n bytes received: " << n << std::endl;
+            dispenser_incoming_data = Strholder;
+            dispenser_incoming_data.resize(n);
+            std::cout << "server replied : " << dispenser_incoming_data << std::endl;
+            return dispenser_incoming_data;
         }
+        else
+        {
+            std::cout << "no server response " << n << std::endl;
+            attempts++;
+            return waitForResponse();
+        }
+
     }
 }
 
@@ -75,7 +102,7 @@ void cnt_dispenser_vibration::deactivate()
 }
 void cnt_dispenser_vibration::vibrate()
 {
-    auto command = dispenser_cmds.find(3);
+    auto command = dispenser_cmds.find(1);
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << '\n';
         sendCmd(command->second, _dispenser_client);
@@ -91,15 +118,46 @@ void cnt_dispenser_vibration::setVibrateDuration(u_int durationSecond)
     }
 }
 
+void cnt_dispenser_vibration::setVibrateFreq(u_int new_freq)
+{
+    auto command = dispenser_cmds.find(7);
+    if (command != dispenser_cmds.end()) {
+        std::cout << "sending command: " << command->second << " args: " << new_freq << '\n';
+        std::string args = "=" + std::to_string(new_freq);
+        sendCmd(command->second, _dispenser_client, args);
+    }
+}
+double cnt_dispenser_vibration::getDuration()
+{
+   double duration = 0;
+    std::cout << "get axis curent position" << std::endl;
+    auto command = dispenser_cmds.find(4);
+    std::cout << "sending command: " << command->second << '\n';
+    auto resp =sendDirectCmd(command->second);
+    duration = std::stod(resp); // to double
+    return duration;
+}
+
+
+double cnt_dispenser_vibration::getFrequency()
+{
+    std::cout << "get axis curent position" << std::endl;
+    auto command = dispenser_cmds.find(6);
+    std::cout << "sending command: " << command->second << '\n';
+    auto resp =sendDirectCmd(command->second);
+    frequency = std::stod(resp); // to double
+    return frequency;
+}
+
+
+
+
 
 bool cnt_dispenser_vibration::getStatus()
 {
-return dispenserReady;
+    return dispenserReady;
 }
-double cnt_dispenser_vibration::getFrequency()
-{
-    return frequency;
-}
+
 
 void cnt_dispenser_vibration::sendCmd(std::string& cmd, sockpp::tcp_connector* client, std::string args)
 {

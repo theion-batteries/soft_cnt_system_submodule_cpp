@@ -25,8 +25,9 @@ private:
     sockpp::socket_initializer sockInit;
 
     std::map<u_int, std::string> dispenser_cmds = {
-        {1,"turn_on"}, {2,"turn_off"},
-        {3,"vibrate"}, {4,"set_duration"}
+         {0,"help"}, {1,"on"}, {2,"off"},
+        {3,"vibrate"}, {4,"dur?"},
+        {5,"dur"}, {6,"freq?"}, {7,"freq"}
     };
     std::string dispenser_incoming_data;
     u_int dispenser_data_length = 1024;
@@ -44,8 +45,11 @@ public:
     void deactivate() override;
     void vibrate() override;
     void setVibrateDuration(u_int durationSecond) override;
-    void waitForResponse() override;
+    std::string waitForResponse() override;
     double getFrequency() override;
     void sendCmd(std::string& cmd, sockpp::tcp_connector* client, std::string args  = std::string());
-
+    void setVibrateFreq(u_int new_freq) override;
+    double getDuration() override;
+     std::string sendDirectCmd(std::string cmd) override;
+    
 };
