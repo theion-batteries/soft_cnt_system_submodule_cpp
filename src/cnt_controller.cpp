@@ -87,10 +87,10 @@ void cnt_controller::cnt_motion_move_home()
     motion->move_home();
 
 }
-void cnt_controller::cnt_motion_move_to_center()
+void cnt_controller::cnt_motion_move_to_center(double new_pos)
 {
 
-    motion->move_center();
+    motion->move_down_to(new_pos);
 
 }
 
@@ -152,6 +152,12 @@ Icnt_high_voltage* cnt_controller::get_hv_ptr()
     return dynamic_cast<Icnt_high_voltage*>(hv_Dev.get());
 
 }
+
+double cnt_controller::get_center_target_distance()
+{
+    return _cnt_params.distance_to_center;
+}
+
 // direct call
 void cnt_controller::sendDirectCmd(std::string& cmd)
 {

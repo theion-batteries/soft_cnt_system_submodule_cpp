@@ -6,9 +6,9 @@
 #include "yaml-cpp/yaml.h"
 struct cnt_config_yaml_params
 {
-  
-    double distance_to_center=50;
-    double dispenser_frequency =10;
+
+    double distance_to_center = 50;
+    double dispenser_frequency = 10;
     double dispenser_duration = 100;
 
 };
@@ -30,7 +30,7 @@ public:
     // motion
     void cnt_motion_connect();
     void cnt_motion_move_home();
-    void cnt_motion_move_to_center();
+    void cnt_motion_move_to_center(double new_pos);
     void cnt_motion_unlock();
 
     // dispenser
@@ -48,6 +48,7 @@ public:
     bool get_dispenser_status();
     bool get_hv_status();
     bool get_cnt_controller_status();
+    double get_center_target_distance();
     /*     helper getter */
     double get_dispenser_frequency();
     double get_axis_position();

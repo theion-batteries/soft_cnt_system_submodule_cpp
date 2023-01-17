@@ -12,7 +12,7 @@ int main()
     controller.cnt_motion_move_home();
 
     Sleep(5000); // debug sleep
-    controller.cnt_motion_move_to_center();
+    controller.cnt_motion_move_to_center(100);
 
     Sleep(5000); // debug sleep
     controller.cnt_dispenser_activate();
