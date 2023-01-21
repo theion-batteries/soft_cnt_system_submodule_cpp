@@ -44,7 +44,12 @@ COMMAND ${CMAKE_COMMAND} -E copy ${config_file} ${CNT_CONFIG_DIR}
 COMMENT "copy config from ${config_file} to ${CNT_CONFIG_DIR}"
     )
 endfunction()
-
+# copy dlls one by one 
+function(copy_dlls_yaml_target_destination target_exe)
+add_custom_command(TARGET ${target_exe} POST_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy_if_different  $<TARGET_FILE:yaml-cpp> $<TARGET_FILE_DIR:${target_exe}>
+COMMAND_EXPAND_LISTS)
+endfunction()
 ###################### Build Library ############################
 # add all source *.cpp : change repo name
 file(GLOB lib_SRCS
@@ -85,6 +90,7 @@ target_include_directories(cnt_system_exe
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
 PUBLIC ${SOCKPP_INCLUDE_DIRS})
 copy_cnt_config(cnt_system_exe ${CNT_CONFIG})
+copy_dlls_yaml_target_destination(cnt_system_exe)
 
 ############################ install targets ########################################
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/includes/*.h")
