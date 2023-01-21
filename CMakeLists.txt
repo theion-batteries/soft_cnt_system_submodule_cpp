@@ -34,7 +34,7 @@ find_file(cnt_config
 )
 message("found cnt config file: ${cnt_config}")        
 set ( CNT_CONFIG "${cnt_config}" CACHE FILEPATH "${cnt_config}")
-set(CNT_CONFIG_DIR ${CMAKE_INSTALL_PREFIX}/config/cnt_config.yaml) 
+set(CNT_CONFIG_DIR ${CMAKE_INSTALL_PREFIX}/config/cnt_config.yaml CACHE FILEPATH "${CMAKE_INSTALL_PREFIX}/config/cnt_config.yaml}") 
 add_definitions(-DCNT_CONFIG="${CNT_CONFIG_DIR}")
 
 # copy config one by one 
