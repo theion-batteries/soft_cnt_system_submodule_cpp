@@ -21,7 +21,7 @@ if (MSVC)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 ########################## add subdirectory##################
-set(CMAKE_PREFIX_PATH "${VCPKG_ROOT}/installed/x64-windows/share")
+#set(CMAKE_PREFIX_PATH "${VCPKG_ROOT}/installed/x64-windows/share")
 find_package(sockpp CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
 add_definitions(-D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)  
@@ -65,6 +65,8 @@ file(GLOB lib_SRCS
 # to create a static lib
 add_library(cnt_system_static STATIC ${lib_SRCS}) 
 target_link_libraries(cnt_system_static  
+PUBLIC wsock32 
+PUBLIC ws2_32
 PUBLIC yaml-cpp
 PUBLIC ${SOCKPP_LIBRARIES}
 )
@@ -83,12 +85,15 @@ file(GLOB exe_SRCS
 add_executable(cnt_system_exe ${exe_SRCS})
 target_link_libraries(cnt_system_exe  
 PUBLIC yaml-cpp
+PUBLIC wsock32 
+PUBLIC ws2_32
 PUBLIC ${SOCKPP_LIBRARIES}
 )
 # includes
 target_include_directories(cnt_system_exe
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
-PUBLIC ${SOCKPP_INCLUDE_DIRS})
+PUBLIC ${SOCKPP_INCLUDE_DIRS}
+)
 copy_cnt_config(cnt_system_exe ${CNT_CONFIG})
 copy_dlls_yaml_target_destination(cnt_system_exe)
 
