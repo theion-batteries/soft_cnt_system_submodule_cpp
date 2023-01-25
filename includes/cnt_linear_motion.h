@@ -21,6 +21,7 @@
 #include <thread>
 #include <atomic>
 #include <queue>
+#include <memory>
 
 #include "Icnt_axis_motion.h"
 
