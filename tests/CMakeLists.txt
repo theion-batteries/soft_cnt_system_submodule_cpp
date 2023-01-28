@@ -14,6 +14,7 @@ add_executable(cntTests
 )
 target_link_libraries(cntTests
   GTest::gtest_main
+  GTest::gmock_main
   cnt_system_static
 )
 target_include_directories(cntTests

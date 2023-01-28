@@ -43,7 +43,7 @@ private:
     std::string motion_incoming_data;
     u_int motion_data_length = 1024;
     bool axisReady = false;
-protected:
+private:
     std::map<u_int, std::string> axis_cmds = {
         {0,"$X"}, {1,"?"}, {2,"x160"},
         {3,"x"}, {4,"x"},
@@ -54,9 +54,9 @@ protected:
     std::string axis_incoming_data;
     u_int axis_data_length = 1024;
 public:
-    sockpp::tcp_connector* axis_client_sock;
+    sockpp::tcp_connector* axis_client_sock=nullptr;
     cnt_linear_motion(/* args */);
-    ~cnt_linear_motion();
+    virtual ~cnt_linear_motion();
     virtual void move_home() override;
     virtual void move_to(int new_position) override;
     virtual wgm_feedbacks::enum_sub_sys_feedback connect()override;
