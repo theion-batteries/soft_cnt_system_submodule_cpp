@@ -16,6 +16,8 @@ cnt_controller::cnt_controller(/* args */)
     _cnt_params.distance_to_center = config["distance_to_center"].as<double>();
     _cnt_params.dispenser_frequency = config["dispenser_frequency"].as<double>();
     _cnt_params.dispenser_duration = config["dispenser_duration"].as<double>();
+    _cnt_params.cnt_max_travel = config["cnt_max_travel"].as<double>();
+    _cnt_params.cnt_max_speed = config["cnt_max_speed"].as<double>();
 
 #endif 
 #ifdef CNT_DISPENSER_MOCK
@@ -180,5 +182,6 @@ void cnt_controller::reload_config_file()
     _cnt_params.distance_to_center = config["distance_to_center"].as<double>();
     _cnt_params.dispenser_frequency = config["dispenser_frequency"].as<double>();
     _cnt_params.dispenser_duration = config["dispenser_duration"].as<double>();
-
+    _cnt_params.cnt_max_travel = config["cnt_max_travel"].as<double>();
+    _cnt_params.cnt_max_speed = config["cnt_max_speed"].as<double>();
 }

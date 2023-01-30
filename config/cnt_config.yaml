@@ -1,5 +1,6 @@
 ## config file: default and user defined parameters 
-distance_to_center: 50 # after homing: go to center position where cnt dispenser will vibrate
-dispenser_frequency: 10 # frequency for dispensing
-dispenser_duration: 200 # duration of vibration 100 ms
-
+distance_to_center: 200 # after homing: go to center position where cnt dispenser will vibrate
+dispenser_frequency: 80 # frequency for dispensing
+dispenser_duration: 2 # duration of vibration 2s
+cnt_max_travel : 300                                        # used # DO NOT CHANGE IF YOU DONT KNOW WHAT YOU#RE DOING
+cnt_max_speed : 800                                         # used

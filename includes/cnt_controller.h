@@ -7,10 +7,11 @@
 struct cnt_config_yaml_params
 {
 
-    double distance_to_center = 50;
-    double dispenser_frequency = 10;
-    double dispenser_duration = 100;
-
+    double distance_to_center = 200;
+    double dispenser_frequency = 80;
+    double dispenser_duration = 2;
+    double cnt_max_travel = 300;
+    double cnt_max_speed = 800;
 };
 class cnt_controller
 {
@@ -21,6 +22,7 @@ private:
     bool cntReady = false;
     YAML::Node config;
     cnt_config_yaml_params _cnt_params;
+    cnt_config_yaml_params _cnt_params_default;
 public:
     cnt_controller(/* args */);
     ~cnt_controller();
