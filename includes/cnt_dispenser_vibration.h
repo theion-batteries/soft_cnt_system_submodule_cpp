@@ -35,7 +35,7 @@ private:
     double frequency = 0;
 
 public:
-    sockpp::tcp_connector* _dispenser_client;
+    sockpp::tcp_connector* _dispenser_client=nullptr;
     cnt_dispenser_vibration(/* args */);
     virtual ~cnt_dispenser_vibration();
     wgm_feedbacks::enum_sub_sys_feedback connect() override;

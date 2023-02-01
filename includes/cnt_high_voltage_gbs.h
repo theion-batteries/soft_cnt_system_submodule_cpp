@@ -39,7 +39,7 @@ private:
     cnt_high_voltage_gbs_paramteres params;
 
 public:
-    sockpp::tcp_connector* _hv_client;
+    sockpp::tcp_connector* _hv_client=nullptr;
     cnt_high_voltage_gbs(/* args */);
     ~cnt_high_voltage_gbs();
 

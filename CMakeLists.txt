@@ -102,7 +102,7 @@ copy_dlls_yaml_target_destination(cnt_system_exe)
 ############################ install targets ########################################
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/includes/*.h")
     INSTALL(FILES ${files} DESTINATION include/cnt_system_static/)
-    install(TARGETS cnt_system_static cnt_system_exe
+    install(TARGETS cnt_system_static #cnt_system_exe
     CONFIGURATIONS Debug
     RUNTIME DESTINATION bin/Debug/
     LIBRARY DESTINATION lib)
