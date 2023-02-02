@@ -3,6 +3,8 @@
 
 cnt_dispenser_vibration::cnt_dispenser_vibration(/* args */)
 {
+        std::cout << "creating dispenser  client" << std::endl;
+
 }
 
 cnt_dispenser_vibration::~cnt_dispenser_vibration()
