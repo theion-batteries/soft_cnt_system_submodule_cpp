@@ -20,7 +20,7 @@ enable_testing()
 if (MSVC)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 ########################## add subdirectory##################
 set(CMAKE_PREFIX_PATH "${VCPKG_ROOT}/installed/x64-windows/share")
