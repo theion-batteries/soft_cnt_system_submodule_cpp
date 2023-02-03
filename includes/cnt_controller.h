@@ -4,6 +4,7 @@
 #include "cnt_high_voltage_gbs.h"
 #include <fstream>
 #include "yaml-cpp/yaml.h"
+using enum wgm_feedbacks::enum_sub_sys_feedback;
 struct cnt_config_yaml_params
 {
 
@@ -27,24 +28,26 @@ public:
     cnt_controller(/* args */);
     ~cnt_controller();
     // controller
-    void cnt_controller_connect();
+    wgm_feedbacks::enum_sub_sys_feedback cnt_controller_connect();
 
     // motion
     void cnt_motion_connect();
-    void cnt_motion_move_home();
-    void cnt_motion_move_to_center(double new_pos);
+    wgm_feedbacks::enum_sub_sys_feedback cnt_motion_move_home();
+    wgm_feedbacks::enum_sub_sys_feedback cnt_motion_move_to_center(double new_pos);
+    wgm_feedbacks::enum_sub_sys_feedback cnt_motion_move_target_position();
     void cnt_motion_unlock();
 
     // dispenser
     void cnt_dispenser_connect();
-    void cnt_dispenser_activate();
-    void cnt_dispenser_deactivate();
+    wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_activate();
+    wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_deactivate();
     void cnt_dispenser_vibrate();
     void cnt_dispenser_setVibrateDuration(u_int durationSecond);
 
     // hv
     void cnt_hv_connect();
-
+    wgm_feedbacks::enum_sub_sys_feedback hv_activate();
+    wgm_feedbacks::enum_sub_sys_feedback hv_deactivate();
     /********* helper functions */
     bool get_motion_status();
     bool get_dispenser_status();

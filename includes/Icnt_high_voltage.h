@@ -10,7 +10,7 @@
 #include <map>
 #include <thread>
 #include <atomic>
-
+#include "subsystem_feedback.h"
 class Icnt_high_voltage
 {
 public:
@@ -18,7 +18,7 @@ public:
     ~Icnt_high_voltage();
 
     virtual void disconnect()=0;
-    virtual void connect()=0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback connect()=0;
     virtual void sendCmd(std::string& cmd, sockpp::tcp_connector* client, std::string args = std::string());
     virtual void waitForResponse()=0;
     virtual void start()=0;

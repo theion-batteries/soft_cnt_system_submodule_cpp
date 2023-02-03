@@ -14,9 +14,9 @@ void  cnt_high_voltage_gbs::disconnect()
 {
 
 }
-void cnt_high_voltage_gbs::connect()
+wgm_feedbacks::enum_sub_sys_feedback cnt_high_voltage_gbs::connect()
 {
-
+return wgm_feedbacks::enum_sub_sys_feedback::sub_success;
 }
 void cnt_high_voltage_gbs::waitForResponse()
 {

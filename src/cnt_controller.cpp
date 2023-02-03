@@ -6,7 +6,7 @@ cnt_controller::cnt_controller(/* args */)
 {
     std::cout << "creating subsystem cnt aligning controller " << std::endl;
 #ifdef CNT_CONFIG
-    std::cout << "loading config file: "<< CNT_CONFIG<< std::endl;
+    std::cout << "loading config file: " << CNT_CONFIG << std::endl;
     std::ifstream filein(CNT_CONFIG);
     for (std::string line; std::getline(filein, line); )
     {
@@ -43,11 +43,10 @@ cnt_controller::~cnt_controller()
 
 // controller
 
-void cnt_controller::cnt_controller_connect()
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_controller_connect()
 {
-    motion->connect();
-    dispenser->connect();
-    hv_Dev->connect();
+    if (motion->connect() == sub_error || dispenser->connect() == sub_error || hv_Dev->connect() == sub_error) return sub_error;
+    return sub_success;
 }
 
 
@@ -56,15 +55,19 @@ void cnt_controller::cnt_dispenser_connect()
 {
     dispenser->connect();
 }
-void cnt_controller::cnt_dispenser_activate()
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_activate()
 {
     dispenser->activate();
+    return sub_success;
+
 }
 
-void cnt_controller::cnt_dispenser_deactivate()
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_deactivate()
 
 {
     dispenser->deactivate();
+    return sub_success;
+
 }
 void cnt_controller::cnt_dispenser_vibrate()
 
@@ -84,16 +87,21 @@ void cnt_controller::cnt_motion_connect()
     motion->connect();
 
 }
-void cnt_controller::cnt_motion_move_home()
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_home()
 {
     motion->move_home();
+    return sub_success;
 
 }
-void cnt_controller::cnt_motion_move_to_center(double new_pos)
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_to_center(double new_pos)
 {
-
     motion->move_down_to(new_pos);
-
+    return sub_success;
+}
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_target_position()
+{
+    motion->move_down_to(_cnt_params.distance_to_center);
+    return sub_success;
 }
 
 void cnt_controller::cnt_motion_unlock()
@@ -107,11 +115,16 @@ void cnt_controller::cnt_motion_unlock()
 
 void cnt_controller::cnt_hv_connect()
 {
-
     hv_Dev->connect();
-
 }
-
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::hv_activate()
+{
+    return sub_success;
+}
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::hv_deactivate()
+{
+    return sub_success;
+}
 /********* helper functions */
 bool cnt_controller::get_motion_status()
 {
@@ -119,16 +132,16 @@ bool cnt_controller::get_motion_status()
 }
 bool cnt_controller::get_dispenser_status()
 {
-return dispenser->getStatus();
+    return dispenser->getStatus();
 }
 bool cnt_controller::get_hv_status()
 {
-return hv_Dev->getStatus();
+    return hv_Dev->getStatus();
 
 }
 bool cnt_controller::get_cnt_controller_status()
 {
-return cntReady;
+    return cntReady;
 }
 /*     helper getter */
 double cnt_controller::get_dispenser_frequency()
@@ -167,12 +180,12 @@ void cnt_controller::sendDirectCmd(std::string& cmd)
 }
 std::string cnt_controller::sendDirectCmdAxis(std::string& cmd)
 {
-return motion->sendDirectCmd(cmd);
+    return motion->sendDirectCmd(cmd);
 }
 void cnt_controller::reload_config_file()
 {
 
-    std::cout << "reloading config file: "<< CNT_CONFIG<< std::endl;
+    std::cout << "reloading config file: " << CNT_CONFIG << std::endl;
     std::ifstream filein(CNT_CONFIG);
     for (std::string line; std::getline(filein, line); )
     {

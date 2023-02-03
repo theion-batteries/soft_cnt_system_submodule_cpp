@@ -44,7 +44,7 @@ public:
     ~cnt_high_voltage_gbs();
 
     void disconnect() override;
-    void connect() override;
+    wgm_feedbacks::enum_sub_sys_feedback connect() override;
     void waitForResponse() override;
     void start() override;
     void stop() override;
