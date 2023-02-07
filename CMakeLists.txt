@@ -65,44 +65,44 @@ file(GLOB lib_SRCS
 
 )
 # to create a static lib
-add_library(cnt_system_static STATIC ${lib_SRCS}) 
-target_link_libraries(cnt_system_static  
+add_library(cntLib STATIC ${lib_SRCS}) 
+target_link_libraries(cntLib  
 PUBLIC wsock32 
 PUBLIC ws2_32
 PUBLIC yaml-cpp
 PUBLIC ${SOCKPP_LIBRARIES}
 )
 # includes
-target_include_directories(cnt_system_static
+target_include_directories(cntLib
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
 PUBLIC ${SOCKPP_INCLUDE_DIRS}
 )
-copy_cnt_config(cnt_system_static ${CNT_CONFIG})
+copy_cnt_config(cntLib ${CNT_CONFIG})
 ############################# build executable  ###################################
 # add all source *.cpp : change repo name
 file(GLOB exe_SRCS
     "${PROJECT_SOURCE_DIR}/src/*.cpp"
     )
 # make the exec: change project name
-add_executable(cnt_system_exe ${exe_SRCS})
-target_link_libraries(cnt_system_exe  
+add_executable(cntBin ${exe_SRCS})
+target_link_libraries(cntBin  
 PUBLIC yaml-cpp
 PUBLIC wsock32 
 PUBLIC ws2_32
 PUBLIC ${SOCKPP_LIBRARIES}
 )
 # includes
-target_include_directories(cnt_system_exe
+target_include_directories(cntBin
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
 PUBLIC ${SOCKPP_INCLUDE_DIRS}
 )
-copy_cnt_config(cnt_system_exe ${CNT_CONFIG})
-copy_dlls_yaml_target_destination(cnt_system_exe)
+copy_cnt_config(cntBin ${CNT_CONFIG})
+copy_dlls_yaml_target_destination(cntBin)
 
 ############################ install targets ########################################
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/includes/*.h")
-    INSTALL(FILES ${files} DESTINATION include/cnt_system_static/)
-    install(TARGETS cnt_system_static #cnt_system_exe
+    INSTALL(FILES ${files} DESTINATION include/cntLib/)
+    install(TARGETS cntLib #cntBin
     CONFIGURATIONS Debug
     RUNTIME DESTINATION bin/Debug/
     LIBRARY DESTINATION lib)

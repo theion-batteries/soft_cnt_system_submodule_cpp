@@ -15,7 +15,7 @@ add_executable(cntTests
 target_link_libraries(cntTests
   GTest::gtest_main
   GTest::gmock_main
-  cnt_system_static
+  cntLib
 )
 target_include_directories(cntTests
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../includes/
