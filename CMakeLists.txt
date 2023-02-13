@@ -102,6 +102,7 @@ copy_dlls_yaml_target_destination(cntBin)
 ############################ install targets ########################################
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/includes/*.h")
     INSTALL(FILES ${files} DESTINATION include/cntLib/)
+    INSTALL(FILES ${CNT_CONFIG} DESTINATION config/)
     install(TARGETS cntLib #cntBin
     CONFIGURATIONS Debug
     RUNTIME DESTINATION bin/Debug/
