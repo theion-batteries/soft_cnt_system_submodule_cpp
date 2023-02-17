@@ -18,12 +18,17 @@ cnt_controller::cnt_controller(/* args */)
     _cnt_params.dispenser_duration = config["dispenser_duration"].as<double>();
     _cnt_params.cnt_max_travel = config["cnt_max_travel"].as<double>();
     _cnt_params.cnt_max_speed = config["cnt_max_speed"].as<double>();
-
+    _cnt_params.cnt_dispenser_server_ip=config["cnt_dispenser_server_ip"].as<std::string>();
+    _cnt_params.cnt_dispenser_server_port=config["cnt_dispenser_server_port"].as<uint16_t>();
+    _cnt_params.cnt_hv_server_ip=config["cnt_dispenser_server_ip"].as<std::string>();
+    _cnt_params.cnt_hv_server_port=config["cnt_dispenser_server_port"].as<uint16_t>();
+    _cnt_params.cnt_motion_server_ip=config["cnt_dispenser_server_ip"].as<std::string>();
+    _cnt_params.cnt_motion_server_port=config["cnt_dispenser_server_port"].as<uint16_t>();
 #endif 
 #ifdef CNT_DISPENSER_MOCK
     dispenser = std::make_shared< cntDispenserMock>();
 #else
-    dispenser = std::make_shared< cnt_dispenser_vibration>();
+    dispenser = std::make_shared< cnt_dispenser_vibration>(_cnt_params.cnt_dispenser_server_ip, _cnt_params.cnt_dispenser_server_port);
 #endif
 #ifdef CNT_AXIS_MOCK
     motion = std::make_shared< cntAxisMock>();

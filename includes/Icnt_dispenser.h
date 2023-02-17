@@ -15,6 +15,8 @@
 #include "sockpp/tcp_connector.h"
 #include <iostream>
 #include "subsystem_feedback.h"
+using enum wgm_feedbacks::enum_hw_feedback;
+using enum wgm_feedbacks::enum_sub_sys_feedback;
 
 class Icnt_dispenser
 {
@@ -23,18 +25,17 @@ private:
 public:
     virtual  ~Icnt_dispenser() {};
     virtual wgm_feedbacks::enum_sub_sys_feedback connect() = 0;
-    void sendCmd(std::string& cmd, sockpp::tcp_connector* client, std::string args = std::string());
+    wgm_feedbacks::enum_sub_sys_feedback sendCmd(std::string& cmd, sockpp::tcp_connector* client, std::string args = std::string());
     virtual bool getStatus() = 0;
-    virtual void disconnect() = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback disconnect() = 0;
     virtual std::string waitForResponse() = 0;
-    virtual void activate() = 0;
-    virtual void deactivate() = 0;
-    virtual void vibrate() = 0;
-    virtual void setVibrateDuration(u_int durationSecond) = 0;
-    virtual void setVibrateFreq(u_int new_freq) = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback activate() = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback deactivate() = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback vibrate() = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback setVibrateDuration(u_int durationSecond) = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback setVibrateFreq(u_int new_freq) = 0;
     virtual double getFrequency() = 0;
     virtual double getDuration() = 0;
     virtual std::string sendDirectCmd(std::string cmd)=0;
-
 };
 
