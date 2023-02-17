@@ -11,14 +11,16 @@
 #include "cnt_linear_motion.h"
 
 
-cnt_linear_motion::cnt_linear_motion(/* args */)
+cnt_linear_motion::cnt_linear_motion(const std::string &ip, const uint16_t port)
 {
-    std::cout << "creating linear axis  client" << std::endl;
+        std::cout << "creating dispenser  client" << std::endl;
+        
+        _motion_axis_struct.ip=ip;
+        _motion_axis_struct.port=port;
 }
 
 cnt_linear_motion::~cnt_linear_motion()
 {
-    if (axis_client_sock != nullptr) delete axis_client_sock;
 }
 
 std::string cnt_linear_motion::sendDirectCmd(std::string cmd)
@@ -96,7 +98,9 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_to(int new_position
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::connect()
 {
     std::cout << "connecting controller to axis server" << std::endl;
-    axis_client_sock = new sockpp::tcp_connector({ _motion_axis_struct.ip, _motion_axis_struct.port });
+    auto axis_server_addr = sockpp::tcp_connector::addr_t{_motion_axis_struct.ip,_motion_axis_struct.port};
+
+    axis_client_sock =std::make_unique<sockpp::tcp_connector>(axis_server_addr);
 
     // Implicitly creates an inet_address from {host,port}
     // and then tries the connection.

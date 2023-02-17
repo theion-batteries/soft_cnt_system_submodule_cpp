@@ -23,7 +23,7 @@ class Icnt_axis_motion
 private:
     /* data */
 public:
-    Icnt_axis_motion(/* args */);
+    Icnt_axis_motion();
     virtual ~Icnt_axis_motion();
     virtual wgm_feedbacks::enum_sub_sys_feedback connect() = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback disconnect() = 0;

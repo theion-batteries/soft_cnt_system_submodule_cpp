@@ -27,7 +27,7 @@
 
 struct cnt_axis_motion_server
 {
-    const char* ip = "192.168.0.203";
+    std::string ip = "192.168.0.203";
     uint16_t port = 8882;
     double cnt_max_travel = 300; 
     double cnt_max_speed = 800; 
@@ -56,8 +56,8 @@ private:
     std::string axis_incoming_data;
     u_int axis_data_length = 5012;
 public:
-    sockpp::tcp_connector* axis_client_sock=nullptr;
-    cnt_linear_motion(/* args */);
+    std::unique_ptr<sockpp::tcp_connector> axis_client_sock=nullptr;
+    cnt_linear_motion(const std::string &ip, const uint16_t port);
     virtual ~cnt_linear_motion();
     virtual wgm_feedbacks::enum_sub_sys_feedback move_home() override;
     virtual wgm_feedbacks::enum_sub_sys_feedback move_to(int new_position) override;

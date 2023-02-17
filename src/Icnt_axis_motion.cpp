@@ -9,7 +9,7 @@
  */
 
 #include "Icnt_axis_motion.h"
-Icnt_axis_motion::Icnt_axis_motion(/* args */)
+Icnt_axis_motion::Icnt_axis_motion()
 {
 }
 

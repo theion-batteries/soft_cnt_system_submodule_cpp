@@ -33,7 +33,7 @@ cnt_controller::cnt_controller(/* args */)
 #ifdef CNT_AXIS_MOCK
     motion = std::make_shared< cntAxisMock>();
 #else
-    motion = std::make_shared< cnt_linear_motion>();
+    motion = std::make_shared< cnt_linear_motion>(_cnt_params.cnt_motion_server_ip, _cnt_params.cnt_motion_server_port);
 #endif
 #ifdef CNT_HV_MOCK
     hv_Dev = std::make_shared< cntHvMock>();
