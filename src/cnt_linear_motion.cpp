@@ -209,8 +209,19 @@ double cnt_linear_motion::get_speed()
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::set_speed(double_t new_val)
 {
-
-return sub_error;
+    std::cout << "set  axis curent spped" << std::endl;
+    auto command = axis_cmds.find("set_speed");
+    if (command != axis_cmds.end()) {
+        std::cout << "sending command: " << command->second << " args: " << new_val << '\n';
+        std::string args = std::to_string(new_val);
+        auto cmd = (command->second) + args;
+        // X-new_val
+        auto reply = sendDirectCmd(cmd);
+        if (reply == "ok") return sub_success;
+        std::cout << "move down reply received " << reply << '\n';
+        return sub_error;
+    }
+    return sub_error;
 }
 
 
@@ -299,11 +310,11 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_center()
 {
     auto command = axis_cmds.find("move");
     if (command != axis_cmds.end()) {
-        std::cout << "sending command: " << command->second << '\n';
-        auto reply = sendDirectCmd(command->second);
-        std::cout << "move center reply received " << reply << '\n';
         std::string args = std::to_string(-_motion_axis_struct.cnt_max_travel);
-        auto cmd = (command->second) + args;
+        std::cout << "sending command: " << command->second << " args: "<<args<< '\n';
+        auto cmd = command->second + args;       
+        auto reply = sendDirectCmd(cmd);
+        std::cout << "move center reply received " << reply << '\n';
         if (reply == "ok") return sub_success;
         return sub_error;
     }
