@@ -40,7 +40,7 @@ def run_server():
                 ok".encode('utf-8')
     positions = "<Idle|MPos:-100.000,0.000,0.000|FS:0,0|WCO:0.000,0.000,0.000>\
                 ok".encode('utf-8')
-    port = 8882
+    port = 8881
     s.bind(('', port))
     print("socket binded to %s" % (port))
     s.listen(5)

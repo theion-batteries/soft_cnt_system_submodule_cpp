@@ -89,10 +89,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_to(int new_position
         if(move_up_to(abs(new_position)) == sub_success) return sub_success;
                 return sub_error;
 
-    }
-    
+    }    
     return sub_error;
-
 }
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::connect()

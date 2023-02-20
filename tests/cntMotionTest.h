@@ -10,7 +10,7 @@ class CntLinearMotionTest: public ::testing::Test {
   std::unique_ptr<Icnt_axis_motion> mover_;
 
   void SetUp() override  {
-    mover_ = std::make_unique<cnt_linear_motion>("127.0.0.1",8882);
+    mover_ = std::make_unique<cnt_linear_motion>("127.0.0.1",8881);
     mover_->connect();
   }
 

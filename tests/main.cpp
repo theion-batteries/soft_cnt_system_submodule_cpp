@@ -1,4 +1,5 @@
 #include "cntMotionTest.h"
+#include "cntDispenserTest.h"
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
