@@ -21,8 +21,9 @@ target_include_directories(cntTests
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../includes/
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/
 )
+enable_testing()
+
 include(GoogleTest)
 gtest_discover_tests(cntTests)
 
 #add_test(NAME cntTests COMMAND cntTests)
-enable_testing()

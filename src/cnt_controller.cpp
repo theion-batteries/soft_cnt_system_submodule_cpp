@@ -38,7 +38,7 @@ cnt_controller::cnt_controller(/* args */)
 #ifdef CNT_HV_MOCK
     hv_Dev = std::make_shared< cntHvMock>();
 #else
-    hv_Dev = std::make_shared< cnt_high_voltage_gbs>();
+    hv_Dev = std::make_shared< cnt_high_voltage_gbs>(_cnt_params.cnt_hv_server_ip, _cnt_params.cnt_hv_server_port);
 #endif
 }
 

@@ -8,8 +8,9 @@ using ::testing::Return;
 // mocking
 class cntMotionMock: public cnt_linear_motion {
 public:
+cntMotionMock():cnt_linear_motion("192.168.0.203",8882){}
 MOCK_METHOD( wgm_feedbacks::enum_sub_sys_feedback, connect, (), (override));
-MOCK_METHOD( void, move_home, (), (override));
+MOCK_METHOD( wgm_feedbacks::enum_sub_sys_feedback, move_home, (), (override));
 MOCK_METHOD( double, get_position, (), (override));
 };
 
@@ -20,8 +21,9 @@ TEST(cntLinearMotionMock, connectSuccess) {
   // expect connect
   EXPECT_CALL(mock_obj, connect()) .WillOnce (Return(wgm_feedbacks::enum_sub_sys_feedback::sub_success));
   auto res =mock_obj.connect();
-  EXPECT_EQ( wgm_feedbacks::enum_sub_sys_feedback::sub_success, res );
+  EXPECT_EQ( wgm_feedbacks::enum_sub_sys_feedback::sub_success, res);
 }
+
 
 // Demonstrate some basic mocking.
 TEST(cntLinearMotionMock, moveHome) {
@@ -44,33 +46,23 @@ TEST(cntLinearMotionMock, getPosition) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 // Demonstrate some basic assertions.
 TEST(cntLinearMotionOBj, connect) {
   // expect connect
-  cnt_linear_motion mover;
+  cnt_linear_motion mover("192.168.0.203",8882);
   EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_error, mover.connect());
 }
 // Demonstrate some basic assertions.
 TEST(cntLinearMotionPtr, connect) {
   // expect connect
-  cnt_linear_motion mover;
+  cnt_linear_motion mover("192.168.0.203",8882);
   EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_error, mover.connect());
-  Icnt_axis_motion* moverPtr = new cnt_linear_motion();
+  Icnt_axis_motion* moverPtr = new cnt_linear_motion("192.168.0.203",8882);
   EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_error, moverPtr->connect());
   delete moverPtr;
 }
+
+
 //// Demonstrate some basic assertions.
 //TEST(cntLinearMotionPtr, deletePtr) {
 //  // expect connect

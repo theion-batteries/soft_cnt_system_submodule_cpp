@@ -37,7 +37,7 @@ private:
 
 public:
     std::unique_ptr<sockpp::tcp_connector> _dispenser_client;
-    cnt_dispenser_vibration(const std::string &ip, uint16_t port);
+    cnt_dispenser_vibration(const std::string &ip, const uint16_t port);
     virtual ~cnt_dispenser_vibration();
     wgm_feedbacks::enum_sub_sys_feedback connect() override;
     bool getStatus() override;
