@@ -2,8 +2,12 @@
 
 
 
-cnt_high_voltage_gbs::cnt_high_voltage_gbs(/* args */)
+cnt_high_voltage_gbs::cnt_high_voltage_gbs(const std::string &ip, const uint16_t port)
 {
+        std::cout << "creating CNT high voltage client" << std::endl;
+        
+        _hv_server.ip=ip;
+        _hv_server.port=port;
 }
 
 cnt_high_voltage_gbs::~cnt_high_voltage_gbs()
@@ -30,6 +34,8 @@ void cnt_high_voltage_gbs::stop()
 {
 
 }
+
+
 void cnt_high_voltage_gbs::tune_param(std::pair<std::string, int> new_param_val)
 {
 

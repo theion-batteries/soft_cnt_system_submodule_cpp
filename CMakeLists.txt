@@ -65,6 +65,7 @@ file(GLOB lib_SRCS
 
 )
 # to create a static lib
+add_subdirectory(tests)
 add_library(cntLib STATIC ${lib_SRCS}) 
 target_link_libraries(cntLib  
 PUBLIC wsock32 
@@ -75,6 +76,7 @@ PUBLIC ${SOCKPP_LIBRARIES}
 # includes
 target_include_directories(cntLib
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
+PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/tests/
 PUBLIC ${SOCKPP_INCLUDE_DIRS}
 )
 copy_cnt_config(cntLib ${CNT_CONFIG})
@@ -94,6 +96,7 @@ PUBLIC ${SOCKPP_LIBRARIES}
 # includes
 target_include_directories(cntBin
 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes/
+PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/tests/
 PUBLIC ${SOCKPP_INCLUDE_DIRS}
 )
 copy_cnt_config(cntBin ${CNT_CONFIG})

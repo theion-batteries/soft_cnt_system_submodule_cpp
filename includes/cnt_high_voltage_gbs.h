@@ -15,7 +15,7 @@
 
 struct cnt_high_voltage_gbs_server
 {
-    const char* ip = "192.168.0.100";
+    std::string ip = "192.168.0.100";
     uint16_t port = 80;
 };
 
@@ -40,7 +40,7 @@ private:
 
 public:
     sockpp::tcp_connector* _hv_client=nullptr;
-    cnt_high_voltage_gbs(/* args */);
+    cnt_high_voltage_gbs(const std::string &ip, const uint16_t port);
     ~cnt_high_voltage_gbs();
 
     void disconnect() override;

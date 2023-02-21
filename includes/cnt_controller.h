@@ -7,12 +7,17 @@
 using enum wgm_feedbacks::enum_sub_sys_feedback;
 struct cnt_config_yaml_params
 {
-
     double distance_to_center = 200;
     double dispenser_frequency = 80;
     double dispenser_duration = 2;
     double cnt_max_travel = 300;
     double cnt_max_speed = 800;
+    std::string cnt_motion_server_ip = "192.168.0.203";
+    uint16_t cnt_motion_server_port = 8881;
+    std::string cnt_dispenser_server_ip = "192.168.0.203";
+    uint16_t cnt_dispenser_server_port = 8882;
+    std::string cnt_hv_server_ip = "192.168.0.203";
+    uint16_t cnt_hv_server_port = 8882;    
 };
 class cnt_controller
 {

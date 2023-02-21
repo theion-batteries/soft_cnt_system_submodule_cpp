@@ -1,10 +1,11 @@
 #include "cnt_dispenser_vibration.h"
 
 
-cnt_dispenser_vibration::cnt_dispenser_vibration(/* args */)
+cnt_dispenser_vibration::cnt_dispenser_vibration(const std::string &ip, uint16_t port)
 {
         std::cout << "creating dispenser  client" << std::endl;
-
+        _dispenser_server.ip=ip;
+        _dispenser_server.port=port;
 }
 
 cnt_dispenser_vibration::~cnt_dispenser_vibration()
@@ -16,7 +17,8 @@ cnt_dispenser_vibration::~cnt_dispenser_vibration()
 wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::connect()
 {
     std::cout << "connecting to dispenser server" << std::endl;
-    _dispenser_client = new sockpp::tcp_connector({ _dispenser_server.ip, _dispenser_server.port });
+    auto dispenser_server_addr = sockpp::tcp_connector::addr_t{_dispenser_server.ip, _dispenser_server.port};
+    _dispenser_client = std::make_unique<sockpp::tcp_connector>(dispenser_server_addr);
     // Implicitly creates an inet_address from {host,port}
     // and then tries the connection.
     if (!_dispenser_client) {
@@ -35,16 +37,18 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::connect()
     }
     dispenserReady = true;
     return wgm_feedbacks::enum_sub_sys_feedback::sub_success;
-
 }
 
-void cnt_dispenser_vibration::disconnect()
+wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::disconnect()
 {
-    if (!_dispenser_client) _dispenser_client->close();
+     dispenserReady = false;
+    if (_dispenser_client->close()) return sub_success;
+    return sub_error;
 }
+
 std::string cnt_dispenser_vibration::sendDirectCmd(std::string cmd)
 {
-    if (_dispenser_client == nullptr) return "not connected";
+    if (_dispenser_client.get() == nullptr) return "not connected";
     std::cout << "sending linear axis command " << cmd << std::endl;
     cmd = cmd + "\r\n";
     if (_dispenser_client->write(cmd) != ssize_t(std::string(cmd).length())) {
@@ -53,10 +57,12 @@ std::string cnt_dispenser_vibration::sendDirectCmd(std::string cmd)
     }
     return waitForResponse();
 }
+
+
 std::string cnt_dispenser_vibration::waitForResponse()
 {
     static int attempts = 0;
-    if (attempts == 10)
+    if (attempts == cnt_dispenser_vibration::max_attempts)
     {
         std::cout << "attempts: " << attempts << std::endl;
         attempts = 0;
@@ -65,12 +71,12 @@ std::string cnt_dispenser_vibration::waitForResponse()
     std::cout << "awaiting server response" << std::endl;
     if (_dispenser_client->is_connected())
     {
-        char Strholder[1024];
-        ssize_t n = _dispenser_client->read_n(&Strholder, 1024);
+        char str_holder[5012];
+        ssize_t n = _dispenser_client->read_n(&str_holder, 1024);
         if (n > 0)
         {
             std::cout << "n bytes received: " << n << std::endl;
-            dispenser_incoming_data = Strholder;
+            dispenser_incoming_data = str_holder;
             dispenser_incoming_data.resize(n);
             std::cout << "server replied : " << dispenser_incoming_data << std::endl;
             return dispenser_incoming_data;
@@ -81,59 +87,75 @@ std::string cnt_dispenser_vibration::waitForResponse()
             attempts++;
             return waitForResponse();
         }
-
-    }
+    } 
 }
 
-void cnt_dispenser_vibration::activate()
+wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::activate()
 {
-    auto command = dispenser_cmds.find(1);
+    auto command = dispenser_cmds.find("ON");
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << '\n';
-        sendCmd(command->second, _dispenser_client);
+        auto response=sendDirectCmd(command->second);
+        if(response=="ok") return sub_success;
+        return sub_error;   
     }
+    return sub_error;
+}
+wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::deactivate()
+{
+    auto command = dispenser_cmds.find("OFF");
+    if (command != dispenser_cmds.end()) {
+        std::cout << "sending command: " << command->second << '\n';
+       auto response= sendDirectCmd(command->second);
+       if(response=="ok") return sub_success;
+        return sub_error;   
+    }
+    return sub_error;
+}
 
-}
-void cnt_dispenser_vibration::deactivate()
+wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::vibrate()
 {
-    auto command = dispenser_cmds.find(2);
+    auto command = dispenser_cmds.find("VIBRATE");
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << '\n';
-        sendCmd(command->second, _dispenser_client);
+       auto response= sendDirectCmd(command->second);
+       if(response=="ok") return sub_success;
+        return sub_error;   
     }
+    return sub_error;
 }
-void cnt_dispenser_vibration::vibrate()
+
+wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::setVibrateDuration(u_int durationSecond)
 {
-    auto command = dispenser_cmds.find(1);
-    if (command != dispenser_cmds.end()) {
-        std::cout << "sending command: " << command->second << '\n';
-        sendCmd(command->second, _dispenser_client);
-    }
-}
-void cnt_dispenser_vibration::setVibrateDuration(u_int durationSecond)
-{
-    auto command = dispenser_cmds.find(4);
+    auto command = dispenser_cmds.find("SETDUR");
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << " args: " << durationSecond << '\n';
         std::string args = "=" + std::to_string(durationSecond);
-        sendCmd(command->second, _dispenser_client, args);
+       auto response= sendDirectCmd(command->second);
+       if(response=="ok") return sub_success;
+        return sub_error;   
     }
+    return sub_error;
 }
 
-void cnt_dispenser_vibration::setVibrateFreq(u_int new_freq)
+wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::setVibrateFreq(u_int new_freq)
 {
-    auto command = dispenser_cmds.find(7);
+    auto command = dispenser_cmds.find("SETFREQ");
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << " args: " << new_freq << '\n';
         std::string args = "=" + std::to_string(new_freq);
-        sendCmd(command->second, _dispenser_client, args);
+       auto response= sendDirectCmd(command->second+args);
+       if(response=="ok") return sub_success;
+        return sub_error;   
     }
+    return sub_error;
 }
+
 double cnt_dispenser_vibration::getDuration()
 {
-   double duration = 0;
+    double duration = 0;
     std::cout << "get axis curent position" << std::endl;
-    auto command = dispenser_cmds.find(4);
+    auto command = dispenser_cmds.find("GETDUR");
     std::cout << "sending command: " << command->second << '\n';
     auto resp =sendDirectCmd(command->second);
     duration = std::stod(resp); // to double
@@ -144,7 +166,7 @@ double cnt_dispenser_vibration::getDuration()
 double cnt_dispenser_vibration::getFrequency()
 {
     std::cout << "get axis curent position" << std::endl;
-    auto command = dispenser_cmds.find(6);
+    auto command = dispenser_cmds.find("GETFREQ");
     std::cout << "sending command: " << command->second << '\n';
     auto resp =sendDirectCmd(command->second);
     frequency = std::stod(resp); // to double
@@ -161,11 +183,3 @@ bool cnt_dispenser_vibration::getStatus()
 }
 
 
-void cnt_dispenser_vibration::sendCmd(std::string& cmd, sockpp::tcp_connector* client, std::string args)
-{
-    if (client->write(cmd + args) != ssize_t(std::string(cmd + args).length())) {
-        std::cerr << "Error writing to the TCP stream: "
-            << client->last_error_str() << std::endl;
-    }
-    std::cout << "command " << cmd + args << " sent" << std::endl;
-}
