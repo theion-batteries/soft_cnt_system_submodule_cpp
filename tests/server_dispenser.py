@@ -21,7 +21,6 @@ def run_server():
                     print("Connection lost, reconnecting...")
                     c.close()
                     break
-                print("dataaaaa",data)
                 
 
                 if data == b'on\r\n':
