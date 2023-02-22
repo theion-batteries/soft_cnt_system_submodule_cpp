@@ -87,6 +87,10 @@ def run_server():
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
+                elif data == b'X-200.000000\r\n':         
+                    print(f"received: {data}")
+                    print(f"sent: ok")
+                    c.send(b'ok')    
                 elif data == b'X-300.000000\r\n':         
                     print(f"received: {data}")
                     print(f"sent: ok")

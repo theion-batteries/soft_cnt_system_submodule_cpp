@@ -53,23 +53,23 @@ private:
         {"pause","!"}, {"resume","~"}
     };
     std::deque<double> axis_last_position; // FIFO last 10 values
-    std::string axis_incoming_data;
+    std::string incoming_data;
     u_int axis_data_length = 5012;
 public:
-    std::unique_ptr<sockpp::tcp_connector> axis_client_sock=nullptr;
+    std::unique_ptr<sockpp::tcp_connector> _client=nullptr;
     cnt_linear_motion(const std::string &ip, const uint16_t port);
     virtual ~cnt_linear_motion();
     virtual wgm_feedbacks::enum_sub_sys_feedback move_home() override;
-    virtual wgm_feedbacks::enum_sub_sys_feedback move_to(int new_position) override;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_to(const double_t new_position) override;
     virtual wgm_feedbacks::enum_sub_sys_feedback connect()override;
     virtual wgm_feedbacks::enum_sub_sys_feedback disconnect() override;
     double get_position() override;
     double get_speed() override;
-    wgm_feedbacks::enum_sub_sys_feedback set_speed(double_t new_val) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_up_to(double_t new_pos) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_down_to(double_t new_pos) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_up_by(double_t steps) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_down_by(double_t steps) override;
+    wgm_feedbacks::enum_sub_sys_feedback set_speed(const double_t new_val) override;
+    wgm_feedbacks::enum_sub_sys_feedback move_up_to(const double_t new_pos) override;
+    wgm_feedbacks::enum_sub_sys_feedback move_down_to(const double_t new_pos) override;
+    wgm_feedbacks::enum_sub_sys_feedback move_up_by(const double_t steps) override;
+    wgm_feedbacks::enum_sub_sys_feedback move_down_by(const double_t steps) override;
     virtual bool getStatus() override;
     virtual std::string sendDirectCmd(std::string cmd) override;
     std::string waitForResponse();

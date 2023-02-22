@@ -59,7 +59,7 @@ file(GLOB lib_SRCS
 "${PROJECT_SOURCE_DIR}/src/Icnt_high_voltage.cpp"
 "${PROJECT_SOURCE_DIR}/src/Icnt_axis_motion.cpp"
 "${PROJECT_SOURCE_DIR}/src/Icnt_dispensing.cpp"
-"${PROJECT_SOURCE_DIR}/src/cnt_high_voltage_gbs.cpp"
+"${PROJECT_SOURCE_DIR}/src/cnt_hvac_gbs.cpp"
 "${PROJECT_SOURCE_DIR}/src/cnt_linear_motion.cpp"
 "${PROJECT_SOURCE_DIR}/src/cnt_dispenser_vibration.cpp"
 

@@ -6,7 +6,7 @@
 #include <sockpp/tcp_connector.h>
 #include "Windows.h" 
 #include <shellapi.h> 
-#include <map>
+#include <unordered_map>
 #include <thread>
 #include <atomic>
 #include "Icnt_dispenser.h"
@@ -24,19 +24,19 @@ private:
     cnt_dispenser_vibration_server _dispenser_server;
     sockpp::socket_initializer sockInit;
 
-    std::map<std::string, std::string> dispenser_cmds = {
+    std::unordered_map<std::string, std::string> dispenser_cmds = {
          {"HELP","help"}, {"ON","on"}, {"OFF","off"},
         {"VIBRATE","vibrate"}, {"GETDUR","dur?"},
         {"SETDUR","dur"}, {"GETFREQ","freq?"}, {"SETFREQ","freq"}
     };
-    std::string dispenser_incoming_data;
+    std::string incoming_data;
     u_int dispenser_data_length = 5012;
     bool dispenserReady = false;
     double frequency = 0;
     const int max_attempts = 10;
 
 public:
-    std::unique_ptr<sockpp::tcp_connector> _dispenser_client;
+    std::unique_ptr<sockpp::tcp_connector> _client;
     cnt_dispenser_vibration(const std::string &ip, const uint16_t port);
     virtual ~cnt_dispenser_vibration();
     wgm_feedbacks::enum_sub_sys_feedback connect() override;
@@ -45,11 +45,10 @@ public:
     wgm_feedbacks::enum_sub_sys_feedback activate() override;
     wgm_feedbacks::enum_sub_sys_feedback deactivate() override;
     wgm_feedbacks::enum_sub_sys_feedback vibrate() override;
-    wgm_feedbacks::enum_sub_sys_feedback setVibrateDuration(u_int durationSecond) override;
+    wgm_feedbacks::enum_sub_sys_feedback setVibrateDuration(const u_int durationSecond) override;
     std::string waitForResponse() override;
     double getFrequency() override;
-    wgm_feedbacks::enum_sub_sys_feedback setVibrateFreq(u_int new_freq) override;
+    wgm_feedbacks::enum_sub_sys_feedback setVibrateFreq(const u_int new_freq) override;
     double getDuration() override;
-    std::string sendDirectCmd(std::string cmd) override;
-    
+    std::string sendDirectCmd(std::string cmd) override;    
 };

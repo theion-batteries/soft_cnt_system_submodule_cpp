@@ -3,7 +3,7 @@ import socket
 def run_server():
     s = socket.socket()
     print("Socket successfully created")
-    port = 8882
+    port = 8883
     s.bind(('', port))
     print("socket binded to %s" % (port))
     s.listen(5)
@@ -21,47 +21,50 @@ def run_server():
                     print("Connection lost, reconnecting...")
                     c.close()
                     break
+                print("dataaaaa",data)
                 
 
-                if data == b'on\r\n':
+                if data == b'start\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
 
-                elif data == b'off\r\n':
+                elif data == b'stop\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
 
-                elif data == b'vibrate\r\n':
-                    print(f"received: {data}")
-                    print(f"sent: ok")
-                    c.send(b'ok')
-
-                elif data == b'dur\r\n':
-                    print(f"received: {data}")
-                    print(f"sent: ok")
-                    c.send(b'ok')
-
-                elif data == b'dur?\r\n':
+                elif data == b'op_current\r\n':
                     print(f"received: {data}")
                     print(f"sent: 200")
                     c.send('200'.encode('UTF-8'))
 
-                elif data == b'dur=200\r\n':
-                    print(f"received: {data}")
-                    print(f"sent: ok")
-                    c.send(b'ok')
-
-                elif data == b'freq=200\r\n':
-                    print(f"received: {data}")
-                    print(f"sent: ok")
-                    c.send(b'ok')
-
-                elif data == b'freq?\r\n':
+                elif data == b'op_voltage\r\n':
                     print(f"received: {data}")
                     print(f"sent: 200")
                     c.send('200'.encode('UTF-8'))
+
+
+                elif data == b'op_frequency\r\n':
+                    print(f"received: {data}")
+                    print(f"sent: 200")
+                    c.send('200'.encode('UTF-8'))
+
+                elif data == b'op_resistvity\r\n':
+                    print(f"received: {data}")
+                    print(f"sent: 200")
+                    c.send('200'.encode('UTF-8'))
+ 
+                elif data == b'set_op_voltage=200.000000\r\n':
+                    print(f"received: {data}")
+                    print(f"sent: ok")
+                    c.send(b'ok')
+     
+                elif data == b'set_op_frequency=200.000000\r\n':
+                    print(f"received: {data}")
+                    print(f"sent: ok")
+                    c.send(b'ok')
+
 
 
         except KeyboardInterrupt:
