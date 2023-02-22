@@ -34,6 +34,39 @@ def run_server():
                     print(f"sent: ok")
                     c.send(b'ok')
 
+                elif data == b'op_current\r\n':
+                    print(f"received: {data}")
+                    print(f"sent: 200")
+                    c.send('200'.encode('UTF-8'))
+
+                elif data == b'op_voltage\r\n':
+                    print(f"received: {data}")
+                    print(f"sent: 200")
+                    c.send('200'.encode('UTF-8'))
+
+
+                elif data == b'op_frequency\r\n':
+                    print(f"received: {data}")
+                    print(f"sent: 200")
+                    c.send('200'.encode('UTF-8'))
+
+                elif data == b'op_resistvity\r\n':
+                    print(f"received: {data}")
+                    print(f"sent: 200")
+                    c.send('200'.encode('UTF-8'))
+ 
+                elif data == b'set_op_voltage=200.000000\r\n':
+                    print(f"received: {data}")
+                    print(f"sent: ok")
+                    c.send(b'ok')
+     
+                elif data == b'set_op_frequency=200.000000\r\n':
+                    print(f"received: {data}")
+                    print(f"sent: ok")
+                    c.send(b'ok')
+
+
+
         except KeyboardInterrupt:
             print("Program stopped by user.")
             break

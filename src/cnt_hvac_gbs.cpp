@@ -57,7 +57,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::connect()
 
 std::string cnt_hvac_gbs::sendDirectCmd(std::string cmd) {
  if (_client.get() == nullptr) return "not connected";
-    std::cout << "sending linear dispenser command " << cmd << std::endl;
+    std::cout << "sending hvac command " << cmd << std::endl;
     cmd = cmd + "\r\n";
     if (_client->write(cmd) != ssize_t(std::string(cmd).length())) {
         std::cout << "Error writing to the TCP stream: "
