@@ -86,6 +86,8 @@ public:
     // direct call
     void sendDirectCmd(std::string& cmd);
     std::string sendDirectCmdAxis(std::string& cmd);
+    std::string sendDirectCmdDispenser(std::string& cmd);
+    std::string sendDirectCmdHvac(std::string& cmd);
     void reload_config_file();
     
 };
