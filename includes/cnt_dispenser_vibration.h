@@ -15,6 +15,7 @@ struct cnt_dispenser_vibration_server
 {
     std::string ip = "192.168.0.203";
     uint16_t port = 8881;
+    uint16_t timeout = 10;
 };
 
 
@@ -37,7 +38,7 @@ private:
 
 public:
     std::unique_ptr<sockpp::tcp_connector> _client;
-    cnt_dispenser_vibration(const std::string &ip, const uint16_t port);
+    cnt_dispenser_vibration(const std::string &ip, const uint16_t port, const uint16_t timeout);
     virtual ~cnt_dispenser_vibration();
     wgm_feedbacks::enum_sub_sys_feedback connect() override;
     bool getStatus() override;

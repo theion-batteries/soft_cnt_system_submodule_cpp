@@ -18,6 +18,7 @@ struct cnt_config_yaml_params
     uint16_t cnt_dispenser_server_port = 8882;
     std::string cnt_hv_server_ip = "192.168.0.203";
     uint16_t cnt_hv_server_port = 8882;    
+    uint16_t timeout = 10;
 };
 class cnt_controller
 {

@@ -3,11 +3,12 @@
 #include <mutex>
 #include <chrono>
 
-cnt_dispenser_vibration::cnt_dispenser_vibration(const std::string &ip, uint16_t port)
+cnt_dispenser_vibration::cnt_dispenser_vibration(const std::string &ip, uint16_t port, const uint16_t timeout)
 {
         std::cout << "creating dispenser  client" << std::endl;
         _dispenser_server.ip=ip;
         _dispenser_server.port=port;
+        _dispenser_server.timeout=timeout;
 }
 
 cnt_dispenser_vibration::~cnt_dispenser_vibration()
@@ -21,6 +22,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::connect()
     std::cout << "connecting to dispenser server" << std::endl;
     auto dispenser_server_addr = sockpp::tcp_connector::addr_t{_dispenser_server.ip, _dispenser_server.port};
     _client = std::make_unique<sockpp::tcp_connector>(dispenser_server_addr);
+    _client->set_non_blocking();
     // Implicitly creates an inet_address from {host,port}
     // and then tries the connection.
     if (!_client) {

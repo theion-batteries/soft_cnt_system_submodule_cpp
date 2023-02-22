@@ -11,7 +11,7 @@
 #include "cnt_linear_motion.h"
 
 
-cnt_linear_motion::cnt_linear_motion(const std::string &ip, const uint16_t port)
+cnt_linear_motion::cnt_linear_motion(const std::string &ip, const uint16_t port, const uint16_t timeout)
 {
         std::cout << "creating dispenser  client" << std::endl;
         
@@ -55,10 +55,12 @@ std::string cnt_linear_motion::waitForResponse()
         }
         else
         {
-            std::cout << "no server response, retry " << n << std::endl;
             incoming_data = "NA";
             long long timeout = 10;
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count();
+            const long long minimum_time_to_print=5;
+            std::cout << "no server response, retry " << n << std::endl;
+         
             if(duration >= timeout)
             {
             std::cout << "no response within a timeout of "<<duration<< " seconds, " <<"aborting.."<< std::endl;
@@ -104,6 +106,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::connect()
     auto axis_server_addr = sockpp::tcp_connector::addr_t{_motion_axis_struct.ip,_motion_axis_struct.port};
 
     _client =std::make_unique<sockpp::tcp_connector>(axis_server_addr);
+    _client->set_non_blocking();
 
     // Implicitly creates an inet_address from {host,port}
     // and then tries the connection.
@@ -324,6 +327,33 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_center()
     }
     return sub_error;
 }
+
+wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::pause() {
+    auto command = axis_cmds.find("pause");
+    if (command != axis_cmds.end()) {
+        std::cout << "sending command: " << command->second << '\n';
+        auto reply = sendDirectCmd(command->second);
+        std::cout << "unlock reply received " << reply << '\n';
+        if (reply == "ok") return sub_success;
+        return sub_error;
+    }
+    return sub_error;
+
+}
+
+wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::resume() {
+    auto command = axis_cmds.find("resume");
+    if (command != axis_cmds.end()) {
+        std::cout << "sending command: " << command->second << '\n';
+        auto reply = sendDirectCmd(command->second);
+        std::cout << "unlock reply received " << reply << '\n';
+        if (reply == "ok") return sub_success;
+        return sub_error;
+    }
+    return sub_error;
+
+}
+
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::unlock()
 {

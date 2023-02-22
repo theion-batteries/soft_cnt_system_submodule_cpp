@@ -2,12 +2,13 @@
 
 
 
-cnt_hvac_gbs::cnt_hvac_gbs(const std::string &ip, const uint16_t port)
+cnt_hvac_gbs::cnt_hvac_gbs(const std::string &ip, const uint16_t port, const uint16_t timeout)
 {
         std::cout << "creating CNT high voltage client" << std::endl;
         
         _hv_server.ip=ip;
         _hv_server.port=port;
+        _hv_server.timeout=timeout;
 }
 
 cnt_hvac_gbs::~cnt_hvac_gbs()
@@ -31,7 +32,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::connect()
     auto hv_server_addr = sockpp::tcp_connector::addr_t{_hv_server.ip,_hv_server.port};
 
      _client =std::make_unique<sockpp::tcp_connector>(hv_server_addr);
-
+     _client->set_non_blocking();
+     
     // Implicitly creates an inet_address from {host,port}
     // and then tries the connection.
     if (! _client->is_connected()) {

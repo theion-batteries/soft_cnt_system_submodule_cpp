@@ -20,25 +20,26 @@ cnt_controller::cnt_controller(/* args */)
     _cnt_params.cnt_max_speed = config["cnt_max_speed"].as<double>();
     _cnt_params.cnt_dispenser_server_ip=config["cnt_dispenser_server_ip"].as<std::string>();
     _cnt_params.cnt_dispenser_server_port=config["cnt_dispenser_server_port"].as<uint16_t>();
-    _cnt_params.cnt_hv_server_ip=config["cnt_dispenser_server_ip"].as<std::string>();
-    _cnt_params.cnt_hv_server_port=config["cnt_dispenser_server_port"].as<uint16_t>();
-    _cnt_params.cnt_motion_server_ip=config["cnt_dispenser_server_ip"].as<std::string>();
-    _cnt_params.cnt_motion_server_port=config["cnt_dispenser_server_port"].as<uint16_t>();
+    _cnt_params.cnt_hv_server_ip=config["cnt_hv_server_ip"].as<std::string>();
+    _cnt_params.cnt_hv_server_port=config["cnt_hv_server_port"].as<uint16_t>();
+    _cnt_params.cnt_motion_server_ip=config["cnt_motion_server_ip"].as<std::string>();
+    _cnt_params.cnt_motion_server_port=config["cnt_motion_server_port"].as<uint16_t>();
+    _cnt_params.timeout=config["timeout"].as<uint16_t>();    
 #endif 
 #ifdef CNT_DISPENSER_MOCK
     dispenser = std::make_shared< cntDispenserMock>();
 #else
-    dispenser = std::make_shared< cnt_dispenser_vibration>(_cnt_params.cnt_dispenser_server_ip, _cnt_params.cnt_dispenser_server_port);
+    dispenser = std::make_shared< cnt_dispenser_vibration>(_cnt_params.cnt_dispenser_server_ip, _cnt_params.cnt_dispenser_server_port, _cnt_params.timeout);
 #endif
 #ifdef CNT_AXIS_MOCK
     motion = std::make_shared< cntAxisMock>();
 #else
-    motion = std::make_shared< cnt_linear_motion>(_cnt_params.cnt_motion_server_ip, _cnt_params.cnt_motion_server_port);
+    motion = std::make_shared< cnt_linear_motion>(_cnt_params.cnt_motion_server_ip, _cnt_params.cnt_motion_server_port,_cnt_params.timeout);
 #endif
 #ifdef CNT_HV_MOCK
     hv_Dev = std::make_shared< cntHvMock>();
 #else
-    hv_Dev = std::make_shared< cnt_hvac_gbs>(_cnt_params.cnt_hv_server_ip, _cnt_params.cnt_hv_server_port);
+    hv_Dev = std::make_shared< cnt_hvac_gbs>(_cnt_params.cnt_hv_server_ip, _cnt_params.cnt_hv_server_port,_cnt_params.timeout);
 #endif
 }
 
@@ -56,15 +57,16 @@ cnt_controller::cnt_controller(const std::string &ip, const uint16_t motion_port
     _cnt_params.dispenser_duration = config["dispenser_duration"].as<double>();
     _cnt_params.cnt_max_travel = config["cnt_max_travel"].as<double>();
     _cnt_params.cnt_max_speed = config["cnt_max_speed"].as<double>();
+    _cnt_params.timeout=config["timeout"].as<uint16_t>();    
     _cnt_params.cnt_dispenser_server_ip=ip;
     _cnt_params.cnt_dispenser_server_port=dispenser_port;
     _cnt_params.cnt_hv_server_ip=ip;
     _cnt_params.cnt_hv_server_port=hvac_port;
     _cnt_params.cnt_motion_server_ip=ip;
     _cnt_params.cnt_motion_server_port=motion_port;
-    dispenser = std::make_shared< cnt_dispenser_vibration>(_cnt_params.cnt_dispenser_server_ip, _cnt_params.cnt_dispenser_server_port);
-    motion = std::make_shared< cnt_linear_motion>(_cnt_params.cnt_motion_server_ip, _cnt_params.cnt_motion_server_port);
-    hv_Dev = std::make_shared< cnt_hvac_gbs>(_cnt_params.cnt_hv_server_ip, _cnt_params.cnt_hv_server_port);
+    dispenser = std::make_shared< cnt_dispenser_vibration>(_cnt_params.cnt_dispenser_server_ip, _cnt_params.cnt_dispenser_server_port, _cnt_params.timeout);
+    motion = std::make_shared< cnt_linear_motion>(_cnt_params.cnt_motion_server_ip, _cnt_params.cnt_motion_server_port,  _cnt_params.timeout);
+    hv_Dev = std::make_shared< cnt_hvac_gbs>(_cnt_params.cnt_hv_server_ip, _cnt_params.cnt_hv_server_port,  _cnt_params.timeout);
 }
 
 cnt_controller::~cnt_controller()
@@ -76,7 +78,7 @@ cnt_controller::~cnt_controller()
 wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_controller_connect()
 {
 
-    if(motion->connect() == sub_error || dispenser->connect() == sub_error || hv_Dev->connect() == sub_error) return sub_error;
+    if(motion->connect() == sub_error || dispenser->connect() == sub_error /*|| hv_Dev->connect() == sub_error*/) return sub_error;
     cntReady=true;
     return sub_success;
 }
@@ -85,7 +87,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_controller_connect()
 wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_controller_disconnect()
 {
 
-    if(motion->disconnect() == sub_error || dispenser->disconnect() == sub_error || hv_Dev->disconnect() == sub_error)
+    if(motion->disconnect() == sub_error || dispenser->disconnect() == sub_error /* || hv_Dev->disconnect() == sub_error*/)
     {
      cntReady= false; 
      return sub_error;
@@ -132,10 +134,12 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_home()
 {
     return motion->move_home();
 }
+
 wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_to_center(const double_t new_pos)
 {
     return motion->move_down_to(new_pos);
 }
+
 wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_target_position()
 {
     return motion->move_down_to(_cnt_params.distance_to_center);
@@ -251,7 +255,7 @@ void cnt_controller::sendDirectCmd( std::string& cmd)
 
 std::string cnt_controller::sendDirectCmdAxis(std::string& cmd)
 {
-    return motion->sendDirectCmd(cmd);
+     return motion->sendDirectCmd(cmd);
 }
 
 std::string cnt_controller::sendDirectCmdDispenser(std::string& cmd) {
@@ -280,6 +284,7 @@ void cnt_controller::reload_config_file()
     _cnt_params.dispenser_duration = config["dispenser_duration"].as<double>();
     _cnt_params.cnt_max_travel = config["cnt_max_travel"].as<double>();
     _cnt_params.cnt_max_speed = config["cnt_max_speed"].as<double>();
+    _cnt_params.timeout=config["timeout"].as<uint16_t>();    
 }
 
 
@@ -307,11 +312,11 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::reset_config_file() // set 
      config["cnt_max_speed"]=  _cnt_params.cnt_max_speed ;
     config["cnt_dispenser_server_ip"]=_cnt_params.cnt_dispenser_server_ip;
     config["cnt_dispenser_server_port"]= _cnt_params.cnt_dispenser_server_port;
-    config["cnt_dispenser_server_ip"]= _cnt_params.cnt_hv_server_ip;
-    config["cnt_dispenser_server_port"]= _cnt_params.cnt_hv_server_port;
-    config["cnt_dispenser_server_ip"]= _cnt_params.cnt_motion_server_ip;
-    config["cnt_dispenser_server_port"]= _cnt_params.cnt_motion_server_port;
-
+    config["cnt_hv_server_ip"]= _cnt_params.cnt_hv_server_ip;
+    config["cnt_hv_server_port"]= _cnt_params.cnt_hv_server_port;
+    config["cnt_motion_server_ip"]= _cnt_params.cnt_motion_server_ip;
+    config["cnt_motion_server_port"]= _cnt_params.cnt_motion_server_port;
+    config["timeout"]= _cnt_params.timeout;    
     std::ofstream fout(CNT_CONFIG);
     fout << config;
     fout.close();
