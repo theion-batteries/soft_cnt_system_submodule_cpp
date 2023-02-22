@@ -35,6 +35,9 @@ public:
     cnt_controller(const std::string &ip, const uint16_t motion_port, const uint16_t dispenser_port, const uint16_t hvac_port);
     ~cnt_controller();
     // controller
+    wgm_feedbacks::enum_sub_sys_feedback open_config_file();
+    wgm_feedbacks::enum_sub_sys_feedback reset_config_file();
+
     wgm_feedbacks::enum_sub_sys_feedback cnt_controller_connect();
     wgm_feedbacks::enum_sub_sys_feedback cnt_controller_disconnect();
 
@@ -53,13 +56,25 @@ public:
     wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_setVibrateDuration(const u_int durationSecond);
 
     // hv
-    wgm_feedbacks::enum_sub_sys_feedback cnt_hv_connect();
-    wgm_feedbacks::enum_sub_sys_feedback hv_start();
-    wgm_feedbacks::enum_sub_sys_feedback hv_stop();
+    wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_connect();
+    wgm_feedbacks::enum_sub_sys_feedback hvac_start();
+    wgm_feedbacks::enum_sub_sys_feedback hvac_stop();
+
+     double hvac_get_output_voltage();
+     double hvac_get_output_frequency();
+     double hvac_get_output_current();
+
+
+     enum_sub_sys_feedback hvac_set_output_voltage(const double ) ;
+     double hvac_get_output_resistivity() ;
+     enum_sub_sys_feedback hvac_set_output_frequency(const double) ;
+
+
+
     /********* helper functions */
     bool get_motion_status();
     bool get_dispenser_status();
-    bool get_hv_status();
+    bool get_hvac_status();
     bool get_cnt_controller_status();
     double get_center_target_distance();
     /*     helper getter */
@@ -72,6 +87,7 @@ public:
     void sendDirectCmd(std::string& cmd);
     std::string sendDirectCmdAxis(std::string& cmd);
     void reload_config_file();
+    
 };
 
 

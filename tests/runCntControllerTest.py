@@ -22,16 +22,12 @@ def test(test_name):
 
 
 if __name__ == "__main__":
-    test( "Connect")
-    test("MotionConnect")
-    test("MotionMoveHome")
-    test("MotionMoveCenter")
-    test("MotionTargetPosition")
-    test("MotionUnlock")
+    tests= ["Connect", "MotionConnect","MotionStatus", "MotionMoveHome", "MotionMoveCenter","MotionTargetPosition","MotionDisconnect"
+    "MotionUnlock", "DispenserConnect", "DispenserStatus","DispenserActivate", "DispenserVibrate", 
+    "DispenserSetVibrateDuration","DispenserDeactivate","DispenserDisconnect" 
+    "HvacConnect","HvacStart","HvacStatus","HvacStop","HvacDisconnect"]
 
-    test("DispenserConnect")
-    test("DispenserActivate")
-    test("DispenserVibrate")
-    test("DispenserSetVibrateDuration")
-    test("DispenserDeactivate")
+    for testName in tests:
+        test(testName)  
+
 

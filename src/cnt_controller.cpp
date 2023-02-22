@@ -148,19 +148,50 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_target_posi
 
 // hv
 
- wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_hv_connect()
+ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_hvac_connect()
 {
     return hv_Dev->connect();
 }
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::hv_start()
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::hvac_start()
 {
     return hv_Dev->start();
 }
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::hv_stop()
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::hvac_stop()
 {
     return hv_Dev->stop();
 }
+
+double cnt_controller::hvac_get_output_voltage() {
+    return hv_Dev->get_output_voltage();
+}
+
+double cnt_controller::hvac_get_output_frequency() {
+    return hv_Dev->get_output_voltage();
+}
+
+double cnt_controller::hvac_get_output_current(){
+        return hv_Dev->get_output_current();
+}
+
+
+enum_sub_sys_feedback cnt_controller::hvac_set_output_voltage(const double voltage ) {
+        return hv_Dev->set_output_voltage(voltage);
+}
+
+double cnt_controller::hvac_get_output_resistivity() {
+        return hv_Dev->get_output_resistivity();
+}
+
+enum_sub_sys_feedback cnt_controller::hvac_set_output_frequency(const double frequency) {
+        return hv_Dev->set_output_frequency(frequency);
+}
+
+
+
+
+
+
 
 /********* helper functions */
 bool cnt_controller::get_motion_status()
@@ -171,7 +202,7 @@ bool cnt_controller::get_dispenser_status()
 {
     return dispenser->getStatus();
 }
-bool cnt_controller::get_hv_status()
+bool cnt_controller::get_hvac_status()
 {
     return hv_Dev->getStatus();
 
@@ -237,4 +268,46 @@ void cnt_controller::reload_config_file()
     _cnt_params.dispenser_duration = config["dispenser_duration"].as<double>();
     _cnt_params.cnt_max_travel = config["cnt_max_travel"].as<double>();
     _cnt_params.cnt_max_speed = config["cnt_max_speed"].as<double>();
+}
+
+
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::open_config_file()
+{
+    std::string file = CNT_CONFIG;
+    std::cout << "opening config file in notepad \n";
+    std::string command = "notepad.exe " + file;
+    auto val = system(command.c_str());
+    if (val == 0) return sub_success;
+    return sub_error;
+}
+
+
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::reset_config_file() // set config file params to default
+{
+
+    std::cout << "resetting config file: " << CNT_CONFIG << std::endl;
+    config = YAML::LoadFile(CNT_CONFIG);
+
+     config["distance_to_center"]= _cnt_params.distance_to_center ;
+    config["dispenser_frequency"]= _cnt_params.dispenser_frequency;
+    config["dispenser_duration"]=  _cnt_params.dispenser_duration ;
+    config["cnt_max_travel"]= _cnt_params.cnt_max_travel ;
+     config["cnt_max_speed"]=  _cnt_params.cnt_max_speed ;
+    config["cnt_dispenser_server_ip"]=_cnt_params.cnt_dispenser_server_ip;
+    config["cnt_dispenser_server_port"]= _cnt_params.cnt_dispenser_server_port;
+    config["cnt_dispenser_server_ip"]= _cnt_params.cnt_hv_server_ip;
+    config["cnt_dispenser_server_port"]= _cnt_params.cnt_hv_server_port;
+    config["cnt_dispenser_server_ip"]= _cnt_params.cnt_motion_server_ip;
+    config["cnt_dispenser_server_port"]= _cnt_params.cnt_motion_server_port;
+
+    std::ofstream fout(CNT_CONFIG);
+    fout << config;
+    fout.close();
+    std::ifstream filein(CNT_CONFIG);
+    for (std::string line; std::getline(filein, line); )
+    {
+        std::cout << line << std::endl;
+    }
+    return sub_success;
+
 }
