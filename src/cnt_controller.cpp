@@ -246,13 +246,25 @@ double cnt_controller::get_center_target_distance()
 // direct call
 void cnt_controller::sendDirectCmd( std::string& cmd)
 {
-
+ 
 }
 
 std::string cnt_controller::sendDirectCmdAxis(std::string& cmd)
 {
     return motion->sendDirectCmd(cmd);
 }
+
+std::string cnt_controller::sendDirectCmdDispenser(std::string& cmd) {
+        return dispenser->sendDirectCmd(cmd);
+}
+
+
+std::string cnt_controller::sendDirectCmdHvac(std::string& cmd) {
+        return hv_Dev->sendDirectCmd(cmd);
+}
+
+
+
 
 void cnt_controller::reload_config_file()
 {

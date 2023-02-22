@@ -7,8 +7,10 @@ enum options {
 	OPEN_CONFIG = 1,
 	RESET_CONFIG = 2,
 	CONNECT = 3,
-	SEND_CMD = 4,
-	CHANGE_IP = 5,
+	SEND_AXIS_CMD = 4,
+	SEND_DISPENSER_CMD = 5,
+	SEND_HVAC_CMD = 6,
+	CHANGE_IP = 7
 };
 
 
@@ -43,11 +45,23 @@ int main()
 		case CONNECT:
 			controller.cnt_controller_connect();
 			break;
-		case SEND_CMD:
+		case SEND_AXIS_CMD:
 			std::cout << "Enter command: ";
 			std::cin >> cmd;
 			std::cout << controller.sendDirectCmdAxis(cmd) <<std::endl;
 			break;
+		case SEND_DISPENSER_CMD:	
+			std::cout << "Enter command: ";
+			std::cin >> cmd;
+			std::cout << controller.sendDirectCmdDispenser(cmd) <<std::endl;
+			break;
+
+		case SEND_HVAC_CMD:
+			std::cout << "Enter command: ";
+			std::cin >> cmd;
+			std::cout << controller.sendDirectCmdHvac(cmd) <<std::endl;
+			break;
+
 		case CHANGE_IP:
 			std::cout << "Enter IP: ";
 			std::cin >> ip;
