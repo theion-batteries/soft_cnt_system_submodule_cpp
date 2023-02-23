@@ -10,7 +10,7 @@ class CntDispenserTest: public ::testing::Test {
   std::unique_ptr<Icnt_dispenser> mover_;
 
   void SetUp() override  {
-    mover_ = std::make_unique<cnt_dispenser_vibration>("127.0.0.1",8882);
+    mover_ = std::make_unique<cnt_dispenser_vibration>("127.0.0.1",8882,10);
     mover_->connect();
   }
 

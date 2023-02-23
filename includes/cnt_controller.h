@@ -48,6 +48,9 @@ public:
     wgm_feedbacks::enum_sub_sys_feedback cnt_motion_move_to_center(const double_t new_pos);
     wgm_feedbacks::enum_sub_sys_feedback cnt_motion_move_target_position();
     wgm_feedbacks::enum_sub_sys_feedback cnt_motion_unlock();
+    wgm_feedbacks::enum_sub_sys_feedback cnt_motion_pause();
+    wgm_feedbacks::enum_sub_sys_feedback cnt_motion_resume();
+    
 
     // dispenser
     wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_connect();

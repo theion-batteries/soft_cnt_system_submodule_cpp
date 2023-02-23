@@ -214,6 +214,10 @@ double cnt_linear_motion::get_speed()
     return speed;
 }
 
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::set_speed(double_t new_val)
 {
     std::cout << "set  axis curent spped" << std::endl;
@@ -231,14 +235,17 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::set_speed(double_t new_v
     return sub_error;
 }
 
-
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_to(double_t new_pos)
 {
     std::cout << "moving up by " << new_pos << std::endl;
     auto command = axis_cmds.find("move");
     if (command != axis_cmds.end()) {
         std::cout << "sending command: " << command->second << " args: " << new_pos << '\n';
-        std::string args = "-" + std::to_string(new_pos);
+        std::string args = std::to_string(new_pos);
         auto cmd = (command->second) + args;
         // X-new_pos
         auto reply = sendDirectCmd(cmd);
@@ -248,6 +255,11 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_to(double_t new_
     }
     return sub_error;
 }
+
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_down_to(double_t new_pos)
 {
     std::cout << "moving down to " << new_pos << std::endl;
@@ -266,7 +278,10 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_down_to(double_t ne
 }
 
 
-
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_by(double_t steps)
 {
     std::cout << "moving up by " << steps << std::endl;
@@ -283,6 +298,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_by(double_t step
     }
     return sub_error;
 }
+
 
 /**
  * @brief
@@ -308,11 +324,10 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_down_by(double_t st
 
 }
 
-
-
-
-
-
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_center()
 {
     auto command = axis_cmds.find("move");
@@ -328,6 +343,10 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_center()
     return sub_error;
 }
 
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::pause() {
     auto command = axis_cmds.find("pause");
     if (command != axis_cmds.end()) {
@@ -338,9 +357,12 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::pause() {
         return sub_error;
     }
     return sub_error;
-
 }
 
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::resume() {
     auto command = axis_cmds.find("resume");
     if (command != axis_cmds.end()) {
@@ -351,10 +373,13 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::resume() {
         return sub_error;
     }
     return sub_error;
-
 }
 
 
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::unlock()
 {
     auto command = axis_cmds.find("unlock");

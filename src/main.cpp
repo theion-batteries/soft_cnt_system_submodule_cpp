@@ -28,6 +28,11 @@ void processAxisCmd(cnt_controller &controller, options option){
  }
 }
 
+void axis_cmd(cnt_controller &controller, const std::string &cmd) {
+    
+
+}
+
 int main() {
 	cnt_controller controller;
 	options choices = CLOSE;

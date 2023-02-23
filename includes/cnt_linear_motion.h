@@ -38,10 +38,6 @@ class cnt_linear_motion: public Icnt_axis_motion
 private:
     cnt_axis_motion_server _motion_axis_struct;
     sockpp::socket_initializer sockInit;
-    std::map<u_int, std::string> motion_cmds = {
-        {0,"unlock"}, {1,"move_up"}, {2,"move_down"}
-        
-    };
     std::string motion_incoming_data;
     const u_int motion_data_length = 5012;
     bool axisReady = false;

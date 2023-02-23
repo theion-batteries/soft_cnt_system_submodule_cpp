@@ -150,6 +150,18 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_target_posi
     return motion->unlock();
 }
 
+
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_pause(){
+    return motion->pause(); 
+}
+
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_resume(){
+    return motion->resume();
+}
+
+
+
+
 // hv
 
  wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_hvac_connect()
