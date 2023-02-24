@@ -63,6 +63,11 @@ def run_server():
                     print(f"sent: 200")
                     c.send('200'.encode('UTF-8'))
 
+                elif data == b'help\r\n':    
+                    print(f"received: {data}")
+                    print(f"sent: ok")
+                    c.send(b'ok')
+
 
         except KeyboardInterrupt:
             print("Program stopped by user.")

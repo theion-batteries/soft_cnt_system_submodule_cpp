@@ -153,10 +153,14 @@ double cnt_linear_motion::get_position()
     std::cout << "sending command: " << command->second << '\n';
     auto resp =sendDirectCmd(command->second);
     std::string extracted = resp.substr(resp.find_first_of(":") + 1, resp.find_first_of(",") - 1 - resp.find_first_of(":"));
+    try{
     axis_pos = std::stod(extracted); // to double
     std::cout << "filter val : " << axis_pos << std::endl;
     axis_last_position.push_front(axis_pos); // add to table
     std::cout << "value added to table " << axis_last_position.front() << std::endl;
+    } catch(std::exception &e) {
+        std::cerr<<"Exception caught in getting position "<<__FILE__<<" "<<__LINE__<<" "<<e.what()<<"\n";
+    }
     return axis_pos;
 }
 
@@ -184,7 +188,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_home()
 double cnt_linear_motion::get_speed()
 {
     double speed = 0;
-    std::cout << "get axis curent spped" << std::endl;
+    std::cout << "get axis curent speed" << std::endl;
     auto command = axis_cmds.find("get_setting");
     std::cout << "sending command: " << command->second << '\n';
 
@@ -241,7 +245,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::set_speed(double_t new_v
  */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_to(double_t new_pos)
 {
-    std::cout << "moving up by " << new_pos << std::endl;
+    std::cout << "moving up to " << new_pos << std::endl;
     auto command = axis_cmds.find("move");
     if (command != axis_cmds.end()) {
         std::cout << "sending command: " << command->second << " args: " << new_pos << '\n';
@@ -250,7 +254,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_to(double_t new_
         // X-new_pos
         auto reply = sendDirectCmd(cmd);
         if (reply == "ok") return sub_success;
-        std::cout << "move down reply received " << reply << '\n';
+        std::cout << "move up to " << reply << '\n';
         return sub_error;
     }
     return sub_error;
@@ -373,6 +377,25 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::resume() {
         return sub_error;
     }
     return sub_error;
+}
+
+
+/**
+ * @brief
+ *
+ */
+std::string cnt_linear_motion::get_settings() {
+    std::cout << "get axis curent speed" << std::endl;
+    auto command = axis_cmds.find("get_setting");
+    std::cout << "sending command: " << command->second << '\n';
+
+    auto resp = sendDirectCmd(command->second);
+    if (!resp.find("ok"))
+    {
+        std::cout << "missing ok, error" << std::endl;
+        return "NA";
+    }
+    return resp;
 }
 
 

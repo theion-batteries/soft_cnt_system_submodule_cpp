@@ -69,23 +69,19 @@ cnt_controller::cnt_controller(const std::string &ip, const uint16_t motion_port
     hv_Dev = std::make_shared< cnt_hvac_gbs>(_cnt_params.cnt_hv_server_ip, _cnt_params.cnt_hv_server_port,  _cnt_params.timeout);
 }
 
-cnt_controller::~cnt_controller()
-{
+cnt_controller::~cnt_controller() {
 }
 
 // controller
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_controller_connect()
-{
-
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_controller_connect() {
     if(motion->connect() == sub_error || dispenser->connect() == sub_error /*|| hv_Dev->connect() == sub_error*/) return sub_error;
     cntReady=true;
     return sub_success;
 }
 
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_controller_disconnect()
-{
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_controller_disconnect() {
 
     if(motion->disconnect() == sub_error || dispenser->disconnect() == sub_error /* || hv_Dev->disconnect() == sub_error*/)
     {
@@ -97,65 +93,71 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_controller_disconnect()
 
 
 // dispenser
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_connect()
-{
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_connect() {
     return dispenser->connect();
 }
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_activate()
-{
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_activate() {
     return dispenser->activate();
 }
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_deactivate()
-
-{
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_deactivate() {
     return dispenser->deactivate();
 }
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_vibrate()
-{
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_vibrate() {
     return dispenser->vibrate();
 }
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_setVibrateDuration(const u_int durationSecond)
-{
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_setVibrateDuration(const u_int durationSecond) {
     return dispenser->setVibrateDuration(durationSecond);
 }
 
+std::string cnt_controller::cnt_dispenser_help() {
+    return dispenser->get_help();
+}
+
+double cnt_controller::get_dispenser_duration() {
+    return dispenser->getDuration();
+}
+
+enum_sub_sys_feedback cnt_controller::set_dispenser_frequency(const u_int freq) {
+    return dispenser->setVibrateFreq(freq);
+}
 
 // cnt motion methods
- wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_connect()
-{
+ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_connect() {
     return motion->connect();
 }
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_home()
-{
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_home() {
     return motion->move_home();
 }
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_to_center(const double_t new_pos)
-{
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_to_center(const double_t new_pos) {
     return motion->move_down_to(new_pos);
 }
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_target_position()
-{
+
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_to(const double_t new_pos) {
+    return motion->move_to(new_pos);
+}
+
+
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_target_position() {
     return motion->move_down_to(_cnt_params.distance_to_center);
 } 
 
- wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_unlock()
-{
+ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_unlock() {
     return motion->unlock();
 }
 
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_pause(){
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_pause() {
     return motion->pause(); 
 }
 
-wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_resume(){
+wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_resume() {
     return motion->resume();
 }
 
@@ -279,8 +281,13 @@ std::string cnt_controller::sendDirectCmdHvac(std::string& cmd) {
         return hv_Dev->sendDirectCmd(cmd);
 }
 
+std::string cnt_controller::cnt_motion_get_settings(){
+    return motion->get_settings();
+}
 
-
+double cnt_controller::cnt_motion_get_speed() {
+    return motion->get_speed();
+}
 
 void cnt_controller::reload_config_file()
 {

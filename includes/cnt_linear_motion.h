@@ -64,12 +64,12 @@ public:
 
     virtual wgm_feedbacks::enum_sub_sys_feedback pause() override;
     virtual wgm_feedbacks::enum_sub_sys_feedback resume() override;
-
-    wgm_feedbacks::enum_sub_sys_feedback set_speed(const double_t new_val) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_up_to(const double_t new_pos) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_down_to(const double_t new_pos) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_up_by(const double_t steps) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_down_by(const double_t steps) override;
+    virtual std::string get_settings() override;  
+    virtual wgm_feedbacks::enum_sub_sys_feedback set_speed(const double_t new_val) override;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_up_to(const double_t new_pos) override;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_down_to(const double_t new_pos) override;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_up_by(const double_t steps) override;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_down_by(const double_t steps) override;
     virtual bool getStatus() override;
     virtual std::string sendDirectCmd(std::string cmd) override;
     std::string waitForResponse();

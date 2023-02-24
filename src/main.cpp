@@ -1,5 +1,6 @@
 #include "cnt_controller.h"
-
+#include <any>
+#include <optional>
 
 
 enum options {
@@ -14,24 +15,94 @@ enum options {
 	RELOAD_CONFIG = 8
 };
 
-void processAxisCmd(cnt_controller &controller, options option){
+
+void print_result(const std::string &cmd, const std::any result) {
+	if (typeid(enum_sub_sys_feedback).name()==result.type().name()) 
+    {
+		   switch(std::any_cast<wgm_feedbacks::enum_sub_sys_feedback>(result)) {
+			 case sub_success:
+			    std::cout<<cmd<<": success"<<"\n";
+		     break;
+
+			 case sub_error:
+			    std::cout<<cmd<<": error"<<"\n";   		
+			break;	
+	   }
+	}
+
+	else if(typeid(double).name()==result.type().name()) 
+	   std::cout<<cmd<<" "<<std::any_cast<double>(result)<<"\n";
+    
+	else if (typeid(std::string).name()==result.type().name()) {
+		std::cout<<cmd<<" "<<std::any_cast<std::string>(result)<<"\n";
+	}
+}
+
+std::optional<double> string_to_double(const std::string &cmd, const size_t initial_pos) {
+	double pos=0.0;
+	try { 
+		pos = std::stod(std::string(cmd.begin()+initial_pos,cmd.end()));
+	} 
+	catch(std::exception &e) {
+		std::cout<<"conversion error: "<<e.what()<<"\n";
+		return std::nullopt;
+	}
+	return pos;
+}
+
+void axis_cmd(cnt_controller &controller, const std::string &cmd) {
+	std::any result="";
+	if(cmd == "!") result = controller.cnt_motion_pause();
+    else if (cmd=="~") result = controller.cnt_motion_resume(); 
+	else if (cmd=="?") result = controller.get_axis_position();
+	else if (cmd=="$H") result = controller.cnt_motion_move_home();
+    else if (cmd == "$X") result = controller.cnt_motion_unlock();
+	else if (cmd == "$$") result = controller.cnt_motion_get_settings();
+    else if(cmd[0]=='X') {
+		std::optional<double> pos = string_to_double(cmd,1);
+		std::cout<<pos.value()<<"\n";
+		if(pos.has_value()) result = controller.cnt_motion_move_to(pos.value());
+	}  	
+    print_result(cmd, result);
+}
+
+
+
+
+void dispenser_cmd(cnt_controller &controller,  std::string &cmd) {
+  std::any result = " ";
+  std::optional<double> pos = std::nullopt;
+  if(cmd=="help") result = controller.cnt_dispenser_help();
+  else if(cmd=="on") result = controller.cnt_dispenser_activate();
+  else if(cmd=="off") result = controller.cnt_dispenser_deactivate();
+  else if(cmd=="dur?") result= controller.get_dispenser_duration();
+  else if(cmd=="freq?") result= controller.get_dispenser_frequency();
+  else if (cmd.substr(0,4)=="dur=") {
+		controller.sendDirectCmdDispenser(cmd);
+		//pos = string_to_double(cmd,4);
+		//if(pos.has_value()) result = controller.cnt_dispenser_setVibrateDuration((u_int)pos.value());
+  } else if (cmd.substr(0,5)=="freq=") {
+		pos =  string_to_double(cmd,5);
+		if(pos.has_value()) result = controller.set_dispenser_frequency((u_int)pos.value());
+  }
+  print_result(cmd,result);
+}
+
+void processCmd(cnt_controller &controller, options option){
 	std::string cmd;
  while (true) {
 	std::cout<<"Type E or e to exit \n";
 	std::cout << "Enter command: ";
     std::cin>>cmd;
    if(cmd=="E" || cmd == "e") break;  
-   if(option==SEND_AXIS_CMD)  
-    std::cout << controller.sendDirectCmdAxis(cmd) <<std::endl;
+   if(option==SEND_AXIS_CMD) 
+      axis_cmd(controller,cmd); 
+    // std::cout << controller.sendDirectCmdAxis(cmd) <<std::endl;
    if(option==SEND_DISPENSER_CMD)  
-    std::cout << controller.sendDirectCmdDispenser(cmd) <<std::endl;
+      dispenser_cmd(controller, cmd);
  }
 }
 
-void axis_cmd(cnt_controller &controller, const std::string &cmd) {
-    
-
-}
 
 int main() {
 	cnt_controller controller;
@@ -68,13 +139,13 @@ int main() {
 			break;
 		case SEND_AXIS_CMD:
 		    if (controller.get_motion_status()){ 
-				processAxisCmd(controller,SEND_AXIS_CMD);
+				processCmd(controller,SEND_AXIS_CMD);
 			} else std::cout<<"No connection to CNT Motion Axis \n";
 			break;
 
 		case SEND_DISPENSER_CMD:	
 		    if (controller.get_dispenser_status()) {
-					processAxisCmd(controller,SEND_DISPENSER_CMD);
+					processCmd(controller,SEND_DISPENSER_CMD);
 			} 
 			else std::cout<<"No connection to CNT Dispenser \n";
 			break;	
