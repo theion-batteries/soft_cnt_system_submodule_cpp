@@ -18,6 +18,7 @@ struct cnt_config_yaml_params
     uint16_t cnt_dispenser_server_port = 8882;
     std::string cnt_hv_server_ip = "192.168.0.203";
     uint16_t cnt_hv_server_port = 8882;    
+    uint16_t timeout = 10;
 };
 class cnt_controller
 {
@@ -47,14 +48,19 @@ public:
     wgm_feedbacks::enum_sub_sys_feedback cnt_motion_move_to_center(const double_t new_pos);
     wgm_feedbacks::enum_sub_sys_feedback cnt_motion_move_target_position();
     wgm_feedbacks::enum_sub_sys_feedback cnt_motion_unlock();
-
+    wgm_feedbacks::enum_sub_sys_feedback cnt_motion_pause();
+    wgm_feedbacks::enum_sub_sys_feedback cnt_motion_resume();
+    wgm_feedbacks::enum_sub_sys_feedback cnt_motion_move_to(const double_t new_pos);
+    std::string cnt_motion_get_settings();
+    double cnt_motion_get_speed();
+    
     // dispenser
     wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_connect();
     wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_activate();
     wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_deactivate();
     wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibrate();
     wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_setVibrateDuration(const u_int durationSecond);
-
+   
     // hv
     wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_connect();
     wgm_feedbacks::enum_sub_sys_feedback hvac_start();
@@ -63,7 +69,7 @@ public:
      double hvac_get_output_voltage();
      double hvac_get_output_frequency();
      double hvac_get_output_current();
-
+      
 
      enum_sub_sys_feedback hvac_set_output_voltage(const double ) ;
      double hvac_get_output_resistivity() ;
@@ -78,8 +84,12 @@ public:
     bool get_cnt_controller_status();
     double get_center_target_distance();
     /*     helper getter */
+    std::string cnt_dispenser_help(); 
+    double get_dispenser_duration();  
     double get_dispenser_frequency();
     double get_axis_position();
+
+    enum_sub_sys_feedback set_dispenser_frequency(const u_int);
     Icnt_axis_motion* get_axis_ptr();
     Icnt_dispenser* get_dispenser_ptr();
     Icnt_high_voltage* get_hv_ptr();

@@ -3,11 +3,12 @@
 #include <mutex>
 #include <chrono>
 
-cnt_dispenser_vibration::cnt_dispenser_vibration(const std::string &ip, uint16_t port)
+cnt_dispenser_vibration::cnt_dispenser_vibration(const std::string &ip, uint16_t port, const uint16_t timeout)
 {
         std::cout << "creating dispenser  client" << std::endl;
         _dispenser_server.ip=ip;
         _dispenser_server.port=port;
+        _dispenser_server.timeout=timeout;
 }
 
 cnt_dispenser_vibration::~cnt_dispenser_vibration()
@@ -16,11 +17,22 @@ cnt_dispenser_vibration::~cnt_dispenser_vibration()
 
 
 
+std::optional<u_int> cnt_dispenser_vibration::convert_to_double(const std::string &str) {
+    try {
+        double val = std::stoi(str);
+        return (u_int)val;
+    } catch(std::exception &e) {
+        std::cerr<<" Error in double conversion "<<__FILE__<<" "<<__LINE__<<" "<<e.what()<<"\n";
+    }
+      return std::nullopt; 
+}
+ 
 wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::connect()
 {
     std::cout << "connecting to dispenser server" << std::endl;
     auto dispenser_server_addr = sockpp::tcp_connector::addr_t{_dispenser_server.ip, _dispenser_server.port};
     _client = std::make_unique<sockpp::tcp_connector>(dispenser_server_addr);
+    _client->set_non_blocking();
     // Implicitly creates an inet_address from {host,port}
     // and then tries the connection.
     if (!_client) {
@@ -81,7 +93,7 @@ std::string cnt_dispenser_vibration::waitForResponse()
         }
         else
         {
-            std::cout << "no server response, retry " << n << std::endl;
+          //  std::cout << "no server response, retry " << n << std::endl;
             incoming_data = "NA";
             long long timeout = 10;
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count();
@@ -109,6 +121,21 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::activate()
     }
     return sub_error;
 }
+
+
+std::string cnt_dispenser_vibration::get_help() {
+  std::cout<<"Getting help from the dispenser "<<"\n";
+    auto command = dispenser_cmds.find("HELP");
+    if (command != dispenser_cmds.end()) {
+        std::cout << "sending command: " << command->second << '\n';
+        auto response=sendDirectCmd(command->second);
+        if(!response.find("ok")) return "NA";
+        return response;   
+    }
+    return "NA";
+}
+
+
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::deactivate()
 {
@@ -143,7 +170,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::setVibrateDuration
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << " args: " << durationSecond << '\n';
         std::string args = "=" + std::to_string(durationSecond);
-       auto response= sendDirectCmd(command->second);
+       auto response= sendDirectCmd(command->second+args);
        if(response=="ok") return sub_success;
         return sub_error;   
     }
@@ -166,13 +193,14 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::setVibrateFreq(con
 
 double cnt_dispenser_vibration::getDuration()
 {
-    double duration = 0;
+    std::optional<u_int> duration = 0;
     std::cout << "get dispenser Duration" << std::endl;
     auto command = dispenser_cmds.find("GETDUR");
     std::cout << "sending command: " << command->second << '\n';
     auto resp =sendDirectCmd(command->second);
-    duration = std::stod(resp); // to double
-    return duration;
+    duration = convert_to_double(resp); // to double
+     if(!duration.has_value()) duration=0;
+    return duration.value();
 }
 
 
@@ -182,8 +210,9 @@ double cnt_dispenser_vibration::getFrequency()
     auto command = dispenser_cmds.find("GETFREQ");
     std::cout << "sending command: " << command->second << '\n';
     auto resp =sendDirectCmd(command->second);
-    frequency = std::stod(resp); // to double
-    return frequency;
+    std::optional<u_int> frequency = convert_to_double(resp); // to double
+    if(!frequency.has_value()) frequency=0;
+    return frequency.value();
 }
 
 bool cnt_dispenser_vibration::getStatus()

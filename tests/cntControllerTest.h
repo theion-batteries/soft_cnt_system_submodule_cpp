@@ -42,6 +42,14 @@ TEST_F(CntControllerTest, MotionTargetPosition) {
 }
 
 
+TEST_F(CntControllerTest, MotionPause) {
+    EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_success, mover_->cnt_motion_pause());
+}
+
+TEST_F(CntControllerTest, MotionResume) {
+    EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_success, mover_->cnt_motion_resume());
+}
+
 TEST_F(CntControllerTest, MotionStatus) {
     EXPECT_TRUE(mover_->get_motion_status());
 }
@@ -74,8 +82,6 @@ TEST_F(CntControllerTest, DispenseSetVibrateDuration) {
 TEST_F(CntControllerTest, DispenserDeactivate) {
     EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_success, mover_->cnt_dispenser_deactivate());
 }
-
-
 
 TEST_F(CntControllerTest, HvacConnect) {
     EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_success, mover_->cnt_hvac_connect());
@@ -123,8 +129,6 @@ TEST_F(CntControllerTest, HvacSetOutputFrequency) {
 TEST_F(CntControllerTest, HvacStop) {
     EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_success, mover_->hvac_stop());
 }
-
-
 
 TEST_F(CntControllerTest, Disconnect) {
   EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_success, mover_->cnt_controller_disconnect());  

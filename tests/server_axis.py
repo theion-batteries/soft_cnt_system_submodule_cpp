@@ -99,6 +99,17 @@ def run_server():
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')                 
+
+                elif data == b'!\r\n':         
+                    print(f"received: {data}")
+                    print(f"sent: ok")
+                    c.send(b'ok')                      
+
+                elif data == b'~\r\n':         
+                    print(f"received: {data}")
+                    print(f"sent: ok")
+                    c.send(b'ok')                      
+
         except KeyboardInterrupt:
             print("Program stopped by user.")
             break

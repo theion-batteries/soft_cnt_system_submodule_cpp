@@ -34,6 +34,9 @@ public:
     virtual bool getStatus() =0;
     virtual double get_speed() =0;
     virtual wgm_feedbacks::enum_sub_sys_feedback set_speed(const double_t new_val) =0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback pause() = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback resume() = 0;
+    virtual std::string get_settings() = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback move_up_to(const double_t new_pos) =0;
     virtual wgm_feedbacks::enum_sub_sys_feedback move_down_to(const double_t new_pos) =0;
     virtual wgm_feedbacks::enum_sub_sys_feedback move_up_by(const double_t steps) =0;

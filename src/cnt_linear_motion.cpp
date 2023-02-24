@@ -11,7 +11,7 @@
 #include "cnt_linear_motion.h"
 
 
-cnt_linear_motion::cnt_linear_motion(const std::string &ip, const uint16_t port)
+cnt_linear_motion::cnt_linear_motion(const std::string &ip, const uint16_t port, const uint16_t timeout)
 {
         std::cout << "creating dispenser  client" << std::endl;
         
@@ -55,10 +55,12 @@ std::string cnt_linear_motion::waitForResponse()
         }
         else
         {
-            std::cout << "no server response, retry " << n << std::endl;
             incoming_data = "NA";
             long long timeout = 10;
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count();
+            const long long minimum_time_to_print=5;
+            std::cout << "no server response, retry " << n << std::endl;
+         
             if(duration >= timeout)
             {
             std::cout << "no response within a timeout of "<<duration<< " seconds, " <<"aborting.."<< std::endl;
@@ -104,6 +106,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::connect()
     auto axis_server_addr = sockpp::tcp_connector::addr_t{_motion_axis_struct.ip,_motion_axis_struct.port};
 
     _client =std::make_unique<sockpp::tcp_connector>(axis_server_addr);
+    _client->set_non_blocking();
 
     // Implicitly creates an inet_address from {host,port}
     // and then tries the connection.
@@ -150,10 +153,14 @@ double cnt_linear_motion::get_position()
     std::cout << "sending command: " << command->second << '\n';
     auto resp =sendDirectCmd(command->second);
     std::string extracted = resp.substr(resp.find_first_of(":") + 1, resp.find_first_of(",") - 1 - resp.find_first_of(":"));
+    try{
     axis_pos = std::stod(extracted); // to double
     std::cout << "filter val : " << axis_pos << std::endl;
     axis_last_position.push_front(axis_pos); // add to table
     std::cout << "value added to table " << axis_last_position.front() << std::endl;
+    } catch(std::exception &e) {
+        std::cerr<<"Exception caught in getting position "<<__FILE__<<" "<<__LINE__<<" "<<e.what()<<"\n";
+    }
     return axis_pos;
 }
 
@@ -181,7 +188,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_home()
 double cnt_linear_motion::get_speed()
 {
     double speed = 0;
-    std::cout << "get axis curent spped" << std::endl;
+    std::cout << "get axis curent speed" << std::endl;
     auto command = axis_cmds.find("get_setting");
     std::cout << "sending command: " << command->second << '\n';
 
@@ -211,6 +218,10 @@ double cnt_linear_motion::get_speed()
     return speed;
 }
 
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::set_speed(double_t new_val)
 {
     std::cout << "set  axis curent spped" << std::endl;
@@ -228,23 +239,31 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::set_speed(double_t new_v
     return sub_error;
 }
 
-
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_to(double_t new_pos)
 {
-    std::cout << "moving up by " << new_pos << std::endl;
+    std::cout << "moving up to " << new_pos << std::endl;
     auto command = axis_cmds.find("move");
     if (command != axis_cmds.end()) {
         std::cout << "sending command: " << command->second << " args: " << new_pos << '\n';
-        std::string args = "-" + std::to_string(new_pos);
+        std::string args = std::to_string(new_pos);
         auto cmd = (command->second) + args;
         // X-new_pos
         auto reply = sendDirectCmd(cmd);
         if (reply == "ok") return sub_success;
-        std::cout << "move down reply received " << reply << '\n';
+        std::cout << "move up to " << reply << '\n';
         return sub_error;
     }
     return sub_error;
 }
+
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_down_to(double_t new_pos)
 {
     std::cout << "moving down to " << new_pos << std::endl;
@@ -263,7 +282,10 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_down_to(double_t ne
 }
 
 
-
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_by(double_t steps)
 {
     std::cout << "moving up by " << steps << std::endl;
@@ -280,6 +302,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_by(double_t step
     }
     return sub_error;
 }
+
 
 /**
  * @brief
@@ -305,11 +328,10 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_down_by(double_t st
 
 }
 
-
-
-
-
-
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_center()
 {
     auto command = axis_cmds.find("move");
@@ -325,6 +347,62 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_center()
     return sub_error;
 }
 
+/**
+ * @brief
+ *
+ */
+wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::pause() {
+    auto command = axis_cmds.find("pause");
+    if (command != axis_cmds.end()) {
+        std::cout << "sending command: " << command->second << '\n';
+        auto reply = sendDirectCmd(command->second);
+        std::cout << "unlock reply received " << reply << '\n';
+        if (reply == "ok") return sub_success;
+        return sub_error;
+    }
+    return sub_error;
+}
+
+/**
+ * @brief
+ *
+ */
+wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::resume() {
+    auto command = axis_cmds.find("resume");
+    if (command != axis_cmds.end()) {
+        std::cout << "sending command: " << command->second << '\n';
+        auto reply = sendDirectCmd(command->second);
+        std::cout << "unlock reply received " << reply << '\n';
+        if (reply == "ok") return sub_success;
+        return sub_error;
+    }
+    return sub_error;
+}
+
+
+/**
+ * @brief
+ *
+ */
+std::string cnt_linear_motion::get_settings() {
+    std::cout << "get axis curent speed" << std::endl;
+    auto command = axis_cmds.find("get_setting");
+    std::cout << "sending command: " << command->second << '\n';
+
+    auto resp = sendDirectCmd(command->second);
+    if (!resp.find("ok"))
+    {
+        std::cout << "missing ok, error" << std::endl;
+        return "NA";
+    }
+    return resp;
+}
+
+
+/**
+ * @brief
+ *
+ */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::unlock()
 {
     auto command = axis_cmds.find("unlock");

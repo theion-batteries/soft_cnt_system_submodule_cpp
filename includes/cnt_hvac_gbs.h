@@ -20,6 +20,7 @@ struct cnt_hvac_gbs_server
 {
     std::string ip = "192.168.0.100";
     uint16_t port = 80;
+    uint16_t timeout = 10;
 };
 
 struct cnt_hvac_gbs_paramteres
@@ -50,7 +51,7 @@ private:
 
 public:
     std::unique_ptr<sockpp::tcp_connector> _client=nullptr;
-    cnt_hvac_gbs(const std::string &ip, const uint16_t port);
+    cnt_hvac_gbs(const std::string &ip, const uint16_t port,const uint16_t timeout);
     ~cnt_hvac_gbs();
 
     virtual wgm_feedbacks::enum_sub_sys_feedback disconnect() override;

@@ -34,6 +34,7 @@ public:
     virtual wgm_feedbacks::enum_sub_sys_feedback vibrate() = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback setVibrateDuration(u_int durationSecond) = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback setVibrateFreq(u_int new_freq) = 0;
+    virtual std::string get_help() = 0;
     virtual double getFrequency() = 0;
     virtual double getDuration() = 0;
     virtual std::string sendDirectCmd(std::string cmd)=0;

@@ -10,7 +10,7 @@ class CntLinearMotionTest: public ::testing::Test {
   std::unique_ptr<Icnt_axis_motion> mover_;
 
   void SetUp() override  {
-    mover_ = std::make_unique<cnt_linear_motion>("127.0.0.1",8881);
+    mover_ = std::make_unique<cnt_linear_motion>("127.0.0.1",8881,10);
     mover_->connect();
   }
 
@@ -56,6 +56,19 @@ TEST_F(CntLinearMotionTest, MoveCenter) {
 TEST_F(CntLinearMotionTest, MoveDownTo) {
     EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_success, mover_->move_down_to(100));
 }
+
 TEST_F(CntLinearMotionTest, MoveUpTo) {
     EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_success, mover_->move_up_to(100));
 }
+
+
+TEST_F(CntLinearMotionTest, Pause) {
+    EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_success, mover_->pause());
+}
+
+
+TEST_F(CntLinearMotionTest, Resume) {
+    EXPECT_EQ(wgm_feedbacks::enum_sub_sys_feedback::sub_success, mover_->resume());
+}
+
+

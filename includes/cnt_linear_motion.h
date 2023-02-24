@@ -38,10 +38,6 @@ class cnt_linear_motion: public Icnt_axis_motion
 private:
     cnt_axis_motion_server _motion_axis_struct;
     sockpp::socket_initializer sockInit;
-    std::map<u_int, std::string> motion_cmds = {
-        {0,"unlock"}, {1,"move_up"}, {2,"move_down"}
-        
-    };
     std::string motion_incoming_data;
     const u_int motion_data_length = 5012;
     bool axisReady = false;
@@ -57,7 +53,7 @@ private:
     u_int axis_data_length = 5012;
 public:
     std::unique_ptr<sockpp::tcp_connector> _client=nullptr;
-    cnt_linear_motion(const std::string &ip, const uint16_t port);
+    cnt_linear_motion(const std::string &ip, const uint16_t port, const uint16_t timeout);
     virtual ~cnt_linear_motion();
     virtual wgm_feedbacks::enum_sub_sys_feedback move_home() override;
     virtual wgm_feedbacks::enum_sub_sys_feedback move_to(const double_t new_position) override;
@@ -65,11 +61,15 @@ public:
     virtual wgm_feedbacks::enum_sub_sys_feedback disconnect() override;
     double get_position() override;
     double get_speed() override;
-    wgm_feedbacks::enum_sub_sys_feedback set_speed(const double_t new_val) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_up_to(const double_t new_pos) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_down_to(const double_t new_pos) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_up_by(const double_t steps) override;
-    wgm_feedbacks::enum_sub_sys_feedback move_down_by(const double_t steps) override;
+
+    virtual wgm_feedbacks::enum_sub_sys_feedback pause() override;
+    virtual wgm_feedbacks::enum_sub_sys_feedback resume() override;
+    virtual std::string get_settings() override;  
+    virtual wgm_feedbacks::enum_sub_sys_feedback set_speed(const double_t new_val) override;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_up_to(const double_t new_pos) override;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_down_to(const double_t new_pos) override;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_up_by(const double_t steps) override;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_down_by(const double_t steps) override;
     virtual bool getStatus() override;
     virtual std::string sendDirectCmd(std::string cmd) override;
     std::string waitForResponse();

@@ -10,7 +10,7 @@ class CntHvacTest: public ::testing::Test {
   std::unique_ptr<cnt_hvac_gbs> mover_;
 
   void SetUp() override  {
-    mover_ = std::make_unique<cnt_hvac_gbs>("127.0.0.1",8883);
+    mover_ = std::make_unique<cnt_hvac_gbs>("127.0.0.1",8883,10);
     mover_->connect();
   }
 
