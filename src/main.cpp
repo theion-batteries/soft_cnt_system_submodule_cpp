@@ -116,9 +116,8 @@ void dispenser_cmd(cnt_controller &controller, std::string &cmd)
 		result = controller.get_dispenser_frequency();
 	else if (cmd.substr(0, 4) == "dur=")
 	{
-		controller.sendDirectCmdDispenser(cmd);
-		// pos = string_to_double(cmd,4);
-		// if(pos.has_value()) result = controller.cnt_dispenser_setVibrateDuration((u_int)pos.value());
+		 pos = string_to_double(cmd,4);
+		 if(pos.has_value()) result = controller.cnt_dispenser_setVibrateDuration((u_int)pos.value());
 	}
 	else if (cmd.substr(0, 5) == "freq=")
 	{
@@ -147,7 +146,6 @@ void processCmd(cnt_controller &controller, options option)
 			break;
 		if (option == SEND_AXIS_CMD)
 			axis_cmd(controller, cmd);
-		// std::cout << controller.sendDirectCmdAxis(cmd) <<std::endl;
 		if (option == SEND_DISPENSER_CMD)
 			dispenser_cmd(controller, cmd);
 	}
