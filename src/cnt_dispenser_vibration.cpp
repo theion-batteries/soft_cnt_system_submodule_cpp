@@ -63,8 +63,9 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::disconnect()
 std::string cnt_dispenser_vibration::sendDirectCmd(std::string cmd)
 {
     if (_client.get() == nullptr) return "not connected";
-    std::cout << "sending linear dispenser command " << cmd << std::endl;
     cmd = cmd + "\r\n";
+    std::cout << "sending cnt dispenser command " << cmd <<" size of cmd: "<< cmd.size()<<std::endl;
+
     if (_client->write(cmd) != ssize_t(std::string(cmd).length())) {
         std::cout << "Error writing to the TCP stream: "
             << _client->last_error_str() << std::endl;
@@ -100,6 +101,7 @@ std::string cnt_dispenser_vibration::waitForResponse()
             if(duration >= timeout)
             {
             std::cout << "no response within a timeout of "<<duration<< " seconds, " <<"aborting.."<< std::endl;
+            std::cerr<<"The error is: " <<_client->last_error_str()<<"\n";
             break;
             } 
             continue;

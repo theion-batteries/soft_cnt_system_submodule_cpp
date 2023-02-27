@@ -1,5 +1,6 @@
 import socket
 
+
 def run_server():
     s = socket.socket()
     print("Socket successfully created")
@@ -21,8 +22,7 @@ def run_server():
                     print("Connection lost, reconnecting...")
                     c.close()
                     break
-                print("dataaaaa",data)
-                
+                print("dataaaaa", data)
 
                 if data == b'start\r\n':
                     print(f"received: {data}")
@@ -44,7 +44,6 @@ def run_server():
                     print(f"sent: 200")
                     c.send('200'.encode('UTF-8'))
 
-
                 elif data == b'op_frequency\r\n':
                     print(f"received: {data}")
                     print(f"sent: 200")
@@ -54,18 +53,16 @@ def run_server():
                     print(f"received: {data}")
                     print(f"sent: 200")
                     c.send('200'.encode('UTF-8'))
- 
+
                 elif data == b'set_op_voltage=200.000000\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
-     
+
                 elif data == b'set_op_frequency=200.000000\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
-
-
 
         except KeyboardInterrupt:
             print("Program stopped by user.")
@@ -74,6 +71,7 @@ def run_server():
             print("Error occurred:", e)
 
     s.close()
+
 
 if __name__ == "__main__":
     run_server()

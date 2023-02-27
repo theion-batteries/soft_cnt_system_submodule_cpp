@@ -24,8 +24,8 @@ def test(test_name):
 if __name__ == "__main__":
     tests= ["Connect", "MotionConnect","MotionStatus", "MotionMoveHome", "MotionMoveCenter","MotionTargetPosition","MotionDisconnect",
     "MotionPause","MotionResume","MotionUnlock", 
-    # "DispenserConnect", "DispenserStatus","DispenserActivate", "DispenserVibrate", 
-    # "DispenserSetVibrateDuration","DispenserDeactivate","DispenserDisconnect" 
+     "DispenserConnect", "DispenserStatus","DispenserActivate", "DispenserVibrate", 
+     "DispenserSetVibrateDuration","DispenserDeactivate","DispenserDisconnect" 
     # "HvacConnect","HvacStart","HvacStatus","HvacStop","HvacDisconnect"
     ]
 

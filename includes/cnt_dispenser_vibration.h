@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 #include <sockpp/tcp_connector.h>
-#include "Windows.h" 
-#include <shellapi.h> 
+#include "Windows.h"
+#include <shellapi.h>
 #include <unordered_map>
 #include <thread>
 #include <atomic>
@@ -18,7 +18,6 @@ struct cnt_dispenser_vibration_server
     uint16_t timeout = 10;
 };
 
-
 class cnt_dispenser_vibration : public Icnt_dispenser
 {
 private:
@@ -26,10 +25,7 @@ private:
     sockpp::socket_initializer sockInit;
 
     std::unordered_map<std::string, std::string> dispenser_cmds = {
-         {"HELP","help"}, {"ON","on"}, {"OFF","off"},
-        {"VIBRATE","vibrate"}, {"GETDUR","dur?"},
-        {"SETDUR","dur"}, {"GETFREQ","freq?"}, {"SETFREQ","freq"}
-    };
+        {"HELP", "help"}, {"ON", "on"}, {"OFF", "off"}, {"VIBRATE", "vibrate"}, {"GETDUR", "dur?"}, {"SETDUR", "dur"}, {"GETFREQ", "freq?"}, {"SETFREQ", "freq"}};
     std::string incoming_data;
     u_int dispenser_data_length = 5012;
     bool dispenserReady = false;
@@ -53,5 +49,5 @@ public:
     double getFrequency() override;
     wgm_feedbacks::enum_sub_sys_feedback setVibrateFreq(const u_int new_freq) override;
     double getDuration() override;
-    std::string sendDirectCmd(std::string cmd) override;    
+    std::string sendDirectCmd(std::string cmd) override;
 };

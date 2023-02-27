@@ -1,5 +1,6 @@
 import socket
 
+
 def run_server():
     s = socket.socket()
     print("Socket successfully created")
@@ -21,7 +22,6 @@ def run_server():
                     print("Connection lost, reconnecting...")
                     c.close()
                     break
-                
 
                 if data == b'on\r\n':
                     print(f"received: {data}")
@@ -63,11 +63,10 @@ def run_server():
                     print(f"sent: 200")
                     c.send('200'.encode('UTF-8'))
 
-                elif data == b'help\r\n':    
+                elif data == b'help\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
-
 
         except KeyboardInterrupt:
             print("Program stopped by user.")
@@ -76,6 +75,7 @@ def run_server():
             print("Error occurred:", e)
 
     s.close()
+
 
 if __name__ == "__main__":
     run_server()
