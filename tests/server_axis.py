@@ -1,5 +1,6 @@
 import socket
 
+
 def run_server():
     s = socket.socket()
     print("Socket successfully created")
@@ -63,52 +64,52 @@ def run_server():
                     print(f"received: {data}")
                     print(f"sent: {settings}")
                     c.send(settings)
-                elif data == b'?\r\n':         
+                elif data == b'?\r\n':
                     print(f"received: {data}")
                     print(f"sent: {positions}")
                     c.send(positions)
-                elif data == b'$X\r\n':         
+                elif data == b'$X\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
-                elif data == b'$H\r\n':         
+                elif data == b'$H\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
-                elif data == b'X130\r\n':         
+                elif data == b'X130\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
-                elif data == b'X100.000000\r\n':         
+                elif data == b'X100.000000\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
-                elif data == b'X-100.000000\r\n':         
+                elif data == b'X-100.000000\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
                     c.send(b'ok')
-                elif data == b'X-200.000000\r\n':         
+                elif data == b'X-200.000000\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
-                    c.send(b'ok')    
-                elif data == b'X-300.000000\r\n':         
+                    c.send(b'ok')
+                elif data == b'X-300.000000\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
-                    c.send(b'ok')    
-                elif data == b'$110=100.000000\r\n':         
+                    c.send(b'ok')
+                elif data == b'$110=100.000000\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
-                    c.send(b'ok')                 
+                    c.send(b'ok')
 
-                elif data == b'!\r\n':         
+                elif data == b'!\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
-                    c.send(b'ok')                      
+                    c.send(b'ok')
 
-                elif data == b'~\r\n':         
+                elif data == b'~\r\n':
                     print(f"received: {data}")
                     print(f"sent: ok")
-                    c.send(b'ok')                      
+                    c.send(b'ok')
 
         except KeyboardInterrupt:
             print("Program stopped by user.")
@@ -117,6 +118,7 @@ def run_server():
             print("Error occurred:", e)
 
     s.close()
+
 
 if __name__ == "__main__":
     run_server()

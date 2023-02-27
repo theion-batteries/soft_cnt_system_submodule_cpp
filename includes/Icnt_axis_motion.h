@@ -29,21 +29,18 @@ public:
     virtual wgm_feedbacks::enum_sub_sys_feedback disconnect() = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback move_home() = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback move_to(const double_t new_position) = 0;
-    virtual std::string sendDirectCmd(std::string cmd)=0;
+    virtual std::string sendDirectCmd(std::string cmd) = 0;
     virtual double get_position() = 0;
-    virtual bool getStatus() =0;
-    virtual double get_speed() =0;
-    virtual wgm_feedbacks::enum_sub_sys_feedback set_speed(const double_t new_val) =0;
+    virtual bool getStatus() = 0;
+    virtual double get_speed() = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback set_speed(const double_t new_val) = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback pause() = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback resume() = 0;
     virtual std::string get_settings() = 0;
-    virtual wgm_feedbacks::enum_sub_sys_feedback move_up_to(const double_t new_pos) =0;
-    virtual wgm_feedbacks::enum_sub_sys_feedback move_down_to(const double_t new_pos) =0;
-    virtual wgm_feedbacks::enum_sub_sys_feedback move_up_by(const double_t steps) =0;
-    virtual wgm_feedbacks::enum_sub_sys_feedback move_down_by(const double_t steps) =0;
-    virtual wgm_feedbacks::enum_sub_sys_feedback move_center() =0;
-    virtual wgm_feedbacks::enum_sub_sys_feedback unlock()=0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_up_to(const double_t new_pos) = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_down_to(const double_t new_pos) = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_up_by(const double_t steps) = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_down_by(const double_t steps) = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback move_center() = 0;
+    virtual wgm_feedbacks::enum_sub_sys_feedback unlock() = 0;
 };
-
-
-

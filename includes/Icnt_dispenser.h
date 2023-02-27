@@ -23,9 +23,9 @@ class Icnt_dispenser
 private:
     /* data */
 public:
-    virtual  ~Icnt_dispenser() {};
+    virtual ~Icnt_dispenser(){};
     virtual wgm_feedbacks::enum_sub_sys_feedback connect() = 0;
-    wgm_feedbacks::enum_sub_sys_feedback sendCmd(std::string& cmd, sockpp::tcp_connector* client, std::string args = std::string());
+    wgm_feedbacks::enum_sub_sys_feedback sendCmd(std::string &cmd, sockpp::tcp_connector *client, std::string args = std::string());
     virtual bool getStatus() = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback disconnect() = 0;
     virtual std::string waitForResponse() = 0;
@@ -37,6 +37,5 @@ public:
     virtual std::string get_help() = 0;
     virtual double getFrequency() = 0;
     virtual double getDuration() = 0;
-    virtual std::string sendDirectCmd(std::string cmd)=0;
+    virtual std::string sendDirectCmd(std::string cmd) = 0;
 };
-

@@ -17,29 +17,29 @@ namespace wgm_feedbacks
 {
     /********* enumeration classes ***********/
 
-     enum class enum_hw_feedback
+    enum class enum_hw_feedback
     {
         hw_success = 4,
         hw_error = -3
     };
     /*********** feedback classes *************/
-     class hw_feedback
+    class hw_feedback
     {
-        private:
-            enum_hw_feedback hw_feed_val;
-    
-        public:
-            inline void report_feedback (enum_hw_feedback& feedback);
+    private:
+        enum_hw_feedback hw_feed_val;
+
+    public:
+        inline void report_feedback(enum_hw_feedback &feedback);
     };
- 
 
 }
 
-
- void wgm_feedbacks::hw_feedback::report_feedback(enum_hw_feedback& feedback)
+void wgm_feedbacks::hw_feedback::report_feedback(enum_hw_feedback &feedback)
 {
-  if (feedback == enum_hw_feedback::hw_success) hw_feed_val = enum_hw_feedback::hw_success;
-  else hw_feed_val = enum_hw_feedback::hw_error;
+    if (feedback == enum_hw_feedback::hw_success)
+        hw_feed_val = enum_hw_feedback::hw_success;
+    else
+        hw_feed_val = enum_hw_feedback::hw_error;
 }
 
 #endif

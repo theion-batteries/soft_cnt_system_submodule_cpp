@@ -18,24 +18,22 @@
 namespace wgm_feedbacks
 {
     /********* enumeration classes ***********/
-  
+
     enum class enum_sub_sys_feedback
     {
         sub_success = 3,
         sub_error = -2
     };
- 
+
     /*********** feedback classes *************/
-    
-     class sub_sys_feedback
+
+    class sub_sys_feedback
     {
-        private:
-            enum_sub_sys_feedback sub_sys_feed_val;
-            hw_feedback* hw_feed;
+    private:
+        enum_sub_sys_feedback sub_sys_feed_val;
+        hw_feedback *hw_feed;
     };
- 
 
 }
-
 
 #endif
