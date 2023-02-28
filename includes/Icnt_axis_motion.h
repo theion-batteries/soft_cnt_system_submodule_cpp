@@ -43,4 +43,5 @@ public:
     virtual wgm_feedbacks::enum_sub_sys_feedback move_down_by(const double_t steps) = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback move_center() = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback unlock() = 0;
+
 };

@@ -268,10 +268,7 @@ double cnt_controller::get_center_target_distance()
     return _cnt_params.distance_to_center;
 }
 
-// direct call
-void cnt_controller::sendDirectCmd(std::string &cmd)
-{
-}
+
 
 std::string cnt_controller::sendDirectCmdAxis(std::string &cmd)
 {

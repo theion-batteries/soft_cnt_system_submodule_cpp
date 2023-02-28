@@ -94,7 +94,7 @@ public:
     Icnt_dispenser* get_dispenser_ptr();
     Icnt_high_voltage* get_hv_ptr();
     // direct call
-    void sendDirectCmd(std::string& cmd);
+    //void sendDirectCmd(std::string& cmd);
     std::string sendDirectCmdAxis(std::string& cmd);
     std::string sendDirectCmdDispenser(std::string& cmd);
     std::string sendDirectCmdHvac(std::string& cmd);

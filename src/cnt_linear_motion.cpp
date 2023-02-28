@@ -25,6 +25,9 @@ cnt_linear_motion::~cnt_linear_motion()
 
 std::string cnt_linear_motion::sendDirectCmd(std::string cmd)
 {
+    
+    if (blocking) _client->set_non_blocking(false);
+
     if (_client == nullptr)
         return "not connected";
     std::cout << "sending linear axis command " << cmd << std::endl;
@@ -72,6 +75,9 @@ std::string cnt_linear_motion::waitForResponse()
             continue;
         }
     }
+    blocking = false;
+    _client->set_non_blocking(true);
+
     return incoming_data;
 }
 
@@ -450,4 +456,10 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::unlock()
         return sub_error;
     }
     return sub_error;
+}
+
+
+void cnt_linear_motion::setModeBlocking(bool setblockingMode)
+{
+    if (setblockingMode) blocking = true;
 }
