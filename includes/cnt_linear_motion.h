@@ -31,6 +31,7 @@ struct cnt_axis_motion_server
     uint16_t port = 8882;
     double cnt_max_travel = 300;
     double cnt_max_speed = 800;
+    uint16_t timeout = 10;
 };
 
 class cnt_linear_motion : public Icnt_axis_motion

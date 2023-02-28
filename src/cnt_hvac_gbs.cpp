@@ -1,6 +1,6 @@
 #include "cnt_hvac_gbs.h"
 
-cnt_hvac_gbs::cnt_hvac_gbs(const std::string &ip, const uint16_t port, const uint16_t timeout)
+cnt_hvac_gbs::cnt_hvac_gbs(const std::string& ip, const uint16_t port, const uint16_t timeout)
 {
     std::cout << "creating CNT high voltage client" << std::endl;
 
@@ -26,7 +26,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::disconnect()
 wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::connect()
 {
     std::cout << "connecting controller to hv server" << std::endl;
-    auto hv_server_addr = sockpp::tcp_connector::addr_t{_hv_server.ip, _hv_server.port};
+    auto hv_server_addr = sockpp::tcp_connector::addr_t{ _hv_server.ip, _hv_server.port };
 
     _client = std::make_unique<sockpp::tcp_connector>(hv_server_addr);
     _client->set_non_blocking();
@@ -36,8 +36,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::connect()
     if (!_client->is_connected())
     {
         std::cerr << "Error connecting to hv server at "
-                  << sockpp::inet_address(_hv_server.ip, _hv_server.port)
-                  << " -> " << _client->last_error_str();
+            << sockpp::inet_address(_hv_server.ip, _hv_server.port)
+            << " -> " << _client->last_error_str();
         hvReady = false;
         return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
@@ -47,7 +47,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::connect()
     if (!_client->read_timeout(std::chrono::seconds(5)))
     {
         std::cerr << "Error setting timeout on TCP stream: "
-                  << _client->last_error_str() << std::endl;
+            << _client->last_error_str() << std::endl;
         hvReady = false;
         return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
@@ -64,7 +64,7 @@ std::string cnt_hvac_gbs::sendDirectCmd(std::string cmd)
     if (_client->write(cmd) != ssize_t(std::string(cmd).length()))
     {
         std::cout << "Error writing to the TCP stream: "
-                  << _client->last_error_str() << std::endl;
+            << _client->last_error_str() << std::endl;
     }
     return waitForResponse();
 }
@@ -103,12 +103,12 @@ std::string cnt_hvac_gbs::waitForResponse()
         {
             std::cout << "no server response, retry " << n << std::endl;
             incoming_data = "NA";
-            long long timeout = 10;
+            long long timeout = _hv_server.timeout;
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count();
             if (duration >= timeout)
             {
                 std::cout << "no response within a timeout of " << duration << " seconds, "
-                          << "aborting.." << std::endl;
+                    << "aborting.." << std::endl;
                 break;
             }
             continue;

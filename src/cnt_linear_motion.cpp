@@ -16,6 +16,7 @@ cnt_linear_motion::cnt_linear_motion(const std::string &ip, const uint16_t port,
 
     _motion_axis_struct.ip = ip;
     _motion_axis_struct.port = port;
+    _motion_axis_struct.timeout = timeout;
 }
 
 cnt_linear_motion::~cnt_linear_motion()
@@ -57,7 +58,7 @@ std::string cnt_linear_motion::waitForResponse()
         else
         {
             incoming_data = "NA";
-            long long timeout = 10;
+            long long timeout = _motion_axis_struct.timeout;
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count();
             const long long minimum_time_to_print = 5;
             std::cout << "no server response, retry " << n << std::endl;
