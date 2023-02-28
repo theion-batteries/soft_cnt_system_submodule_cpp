@@ -10,7 +10,7 @@
 
 #include "cnt_linear_motion.h"
 
-cnt_linear_motion::cnt_linear_motion(const std::string &ip, const uint16_t port, const uint16_t timeout)
+cnt_linear_motion::cnt_linear_motion(const std::string& ip, const uint16_t port, const uint16_t timeout)
 {
     std::cout << "creating dispenser  client" << std::endl;
 
@@ -32,7 +32,7 @@ std::string cnt_linear_motion::sendDirectCmd(std::string cmd)
     if (_client->write(cmd) != ssize_t(std::string(cmd).length()))
     {
         std::cout << "Error writing to the TCP stream: "
-                  << _client->last_error_str() << std::endl;
+            << _client->last_error_str() << std::endl;
     }
     return waitForResponse();
 }
@@ -66,7 +66,7 @@ std::string cnt_linear_motion::waitForResponse()
             if (duration >= timeout)
             {
                 std::cout << "no response within a timeout of " << duration << " seconds, "
-                          << "aborting.." << std::endl;
+                    << "aborting.." << _client->last_error_str() << std::endl;
                 break;
             }
             continue;
@@ -105,7 +105,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_to(const double_t n
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::connect()
 {
     std::cout << "connecting controller to axis server" << std::endl;
-    auto axis_server_addr = sockpp::tcp_connector::addr_t{_motion_axis_struct.ip, _motion_axis_struct.port};
+    auto axis_server_addr = sockpp::tcp_connector::addr_t{ _motion_axis_struct.ip, _motion_axis_struct.port };
 
     _client = std::make_unique<sockpp::tcp_connector>(axis_server_addr);
     _client->set_non_blocking();
@@ -115,8 +115,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::connect()
     if (!_client->is_connected())
     {
         std::cerr << "Error connecting to axis server at "
-                  << sockpp::inet_address(_motion_axis_struct.ip, _motion_axis_struct.port)
-                  << " -> " << _client->last_error_str();
+            << sockpp::inet_address(_motion_axis_struct.ip, _motion_axis_struct.port)
+            << " -> " << _client->last_error_str();
         axisReady = false;
         return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
@@ -126,7 +126,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::connect()
     if (!_client->read_timeout(std::chrono::seconds(5)))
     {
         std::cerr << "Error setting timeout on TCP stream: "
-                  << _client->last_error_str() << std::endl;
+            << _client->last_error_str() << std::endl;
         axisReady = false;
         return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
@@ -151,23 +151,29 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::disconnect()
  */
 double cnt_linear_motion::get_position()
 {
+    _client->set_non_blocking(false);
+
     double axis_pos = 0;
     std::cout << "get axis curent position" << std::endl;
     auto command = axis_cmds.find("get_position");
     std::cout << "sending command: " << command->second << '\n';
     auto resp = sendDirectCmd(command->second);
-    std::string extracted = resp.substr(resp.find_first_of(":") + 1, resp.find_first_of(",") - 1 - resp.find_first_of(":"));
+    std::string extracted = resp.substr(resp.find("MPos:") + 5, resp.find_first_of(",") - 1);
+    std::cout << "string extracted: " << extracted << "\n";
+
     try
     {
         axis_pos = std::stod(extracted); // to double
-        std::cout << "filter val : " << axis_pos << std::endl;
+        std::cout << "filter val : " << axis_pos << "\n";
         axis_last_position.push_front(axis_pos); // add to table
         std::cout << "value added to table " << axis_last_position.front() << std::endl;
     }
-    catch (std::exception &e)
+    catch (std::exception& e)
     {
         std::cerr << "Exception caught in getting position " << __FILE__ << " " << __LINE__ << " " << e.what() << "\n";
     }
+    _client->set_non_blocking(true);
+
     return axis_pos;
 }
 
@@ -195,6 +201,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_home()
  */
 double cnt_linear_motion::get_speed()
 {
+    _client->set_non_blocking(false);
+
     double speed = 0;
     std::cout << "get axis curent speed" << std::endl;
     auto command = axis_cmds.find("get_setting");
@@ -225,6 +233,8 @@ double cnt_linear_motion::get_speed()
     }();                          // Note the added semicolon here
     speed = std::stod(extracted); // to double
     std::cout << "filter val : " << speed << std::endl;
+    _client->set_non_blocking(true);
+
     return speed;
 }
 

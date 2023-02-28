@@ -18,6 +18,7 @@ cnt_dispenser_vibration::~cnt_dispenser_vibration()
 
 
 std::optional<u_int> cnt_dispenser_vibration::convert_to_double(const std::string& str) {
+
     try {
         double val = std::stoi(str);
         return (u_int)val;
@@ -196,6 +197,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::setVibrateFreq(con
 
 double cnt_dispenser_vibration::getDuration()
 {
+        _client->set_non_blocking(false);
+
     std::optional<u_int> duration = 0;
     std::cout << "get dispenser Duration" << std::endl;
     auto command = dispenser_cmds.find("GETDUR");
@@ -203,18 +206,24 @@ double cnt_dispenser_vibration::getDuration()
     auto resp = sendDirectCmd(command->second);
     duration = convert_to_double(resp); // to double
     if (!duration.has_value()) duration = 0;
+        _client->set_non_blocking(true);
+
     return duration.value();
 }
 
 
 double cnt_dispenser_vibration::getFrequency()
 {
+    _client->set_non_blocking(false);
+
     std::cout << "get dispenser Frequency" << std::endl;
     auto command = dispenser_cmds.find("GETFREQ");
     std::cout << "sending command: " << command->second << '\n';
     auto resp = sendDirectCmd(command->second);
     std::optional<u_int> frequency = convert_to_double(resp); // to double
     if (!frequency.has_value()) frequency = 0;
+        _client->set_non_blocking(true);
+
     return frequency.value();
 }
 

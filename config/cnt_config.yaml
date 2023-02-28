@@ -1,9 +1,9 @@
 ## config file: default and user defined parameters 
-cnt_motion_server_ip: "192.168.0.212" # 192.168.0.209 "127.0.0.1"
-cnt_motion_server_port: 8881
-cnt_dispenser_server_ip: "192.168.0.212" # 192.168.0.209 "127.0.0.1"
-cnt_dispenser_server_port: 8882
-cnt_hv_server_ip: "192.168.0.212" # 192.168.0.209 "127.0.0.1"
+cnt_motion_server_ip: 192.168.0.203 #"127.0.0.1"
+cnt_motion_server_port: 8882
+cnt_dispenser_server_ip: 192.168.0.203 #"127.0.0.1"
+cnt_dispenser_server_port: 8881
+cnt_hv_server_ip: 192.168.0.203 #"127.0.0.1"
 cnt_hv_server_port: 8883
 distance_to_center: 200 # after homing: go to center position where cnt dispenser will vibrate
 dispenser_frequency: 80 # frequency for dispensing
