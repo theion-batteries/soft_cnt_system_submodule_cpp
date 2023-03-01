@@ -12,7 +12,17 @@ cnt_hvac_gbs::cnt_hvac_gbs(const std::string& ip, const uint16_t port, const uin
 cnt_hvac_gbs::~cnt_hvac_gbs()
 {
 }
-
+auto cnt_hvac_gbs::process_cmd(std::string cmd, std::string args = "")
+{
+    auto command = hv_cmds.find(cmd);
+    if (command != hv_cmds.end())
+    {
+        std::cout << "sending command: " << command->second << "\n";
+        auto reply = sendDirectCmd(command->second + args);
+        return reply;
+    }
+    return std::string("");
+}
 wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::disconnect()
 {
     if (!_client->is_connected() || _client->close())
@@ -57,6 +67,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::connect()
 
 std::string cnt_hvac_gbs::sendDirectCmd(std::string cmd)
 {
+        if (blocking) _client->set_non_blocking(false);
+
     if (_client.get() == nullptr)
         return "not connected";
     std::cout << "sending hvac command " << cmd << std::endl;
@@ -69,17 +81,7 @@ std::string cnt_hvac_gbs::sendDirectCmd(std::string cmd)
     return waitForResponse();
 }
 
-auto cnt_hvac_gbs::process_cmd(std::string cmd, std::string args = "")
-{
-    auto command = hv_cmds.find(cmd);
-    if (command != hv_cmds.end())
-    {
-        std::cout << "sending command: " << command->second << "\n";
-        auto reply = sendDirectCmd(command->second + args);
-        return reply;
-    }
-    return std::string("");
-}
+
 
 std::string cnt_hvac_gbs::waitForResponse()
 {
@@ -114,6 +116,8 @@ std::string cnt_hvac_gbs::waitForResponse()
             continue;
         }
     }
+    blocking = false;
+    _client->set_non_blocking(true);
     return incoming_data;
 }
 
@@ -224,3 +228,9 @@ enum_sub_sys_feedback cnt_hvac_gbs::set_output_frequency(const double frequency)
         return sub_success;
     return sub_error;
 }
+
+void cnt_hvac_gbs::setModeBlocking(bool setblockingMode)
+{
+    if (setblockingMode) blocking = true;
+}
+

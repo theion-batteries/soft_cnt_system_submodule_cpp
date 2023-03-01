@@ -32,6 +32,7 @@ private:
     double frequency = 0;
     const int max_attempts = 10;
     std::optional<u_int> convert_to_double(const std::string &);
+    static inline bool blocking = false;
 
 public:
     std::unique_ptr<sockpp::tcp_connector> _client;
@@ -50,4 +51,6 @@ public:
     wgm_feedbacks::enum_sub_sys_feedback setVibrateFreq(const u_int new_freq) override;
     double getDuration() override;
     std::string sendDirectCmd(std::string cmd) override;
+    static void setModeBlocking(bool setblockingMode);
+
 };

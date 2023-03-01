@@ -40,6 +40,7 @@ private:
     bool hvReady = false;
     cnt_hvac_gbs_paramteres params;
     auto process_cmd(std::string, std::string);
+    static inline bool blocking = false;
 
 public:
     std::unique_ptr<sockpp::tcp_connector> _client = nullptr;
@@ -66,4 +67,6 @@ public:
     virtual enum_sub_sys_feedback set_output_voltage(const double) override;
     virtual double get_output_resistivity() override;
     virtual enum_sub_sys_feedback set_output_frequency(const double) override;
+    static void setModeBlocking(bool setblockingMode);
+
 };

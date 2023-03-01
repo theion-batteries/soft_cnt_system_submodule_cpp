@@ -64,6 +64,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::disconnect()
 
 std::string cnt_dispenser_vibration::sendDirectCmd(std::string cmd)
 {
+        if (blocking) _client->set_non_blocking(false);
+
     if (_client.get() == nullptr) return "not connected";
     cmd = cmd + "\r\n";
     std::cout << "sending cnt dispenser command " << cmd << " size of cmd: " << cmd.size() << std::endl;
@@ -110,6 +112,8 @@ std::string cnt_dispenser_vibration::waitForResponse()
         }
 
     }
+    blocking = false;
+    _client->set_non_blocking(true);
     return incoming_data;
 }
 
@@ -232,3 +236,7 @@ bool cnt_dispenser_vibration::getStatus()
     return dispenserReady;
 }
 
+void cnt_dispenser_vibration::setModeBlocking(bool setblockingMode)
+{
+    if (setblockingMode) blocking = true;
+}
