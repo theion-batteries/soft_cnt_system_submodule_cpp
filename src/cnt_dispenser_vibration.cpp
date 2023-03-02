@@ -64,7 +64,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::disconnect()
 
 std::string cnt_dispenser_vibration::sendDirectCmd(std::string cmd)
 {
-        if (blocking) _client->set_non_blocking(false);
+    if (blocking) _client->set_non_blocking(false);
 
     if (_client.get() == nullptr) return "not connected";
     cmd = cmd + "\r\n";
@@ -84,9 +84,7 @@ std::string cnt_dispenser_vibration::waitForResponse()
     auto start = std::chrono::steady_clock::now();
     while (_client->is_connected())
     {
-
         char Strholder[5012];
-
         ssize_t n = _client->read_n(&Strholder, sizeof(Strholder));
         if (n > 0)
         {
@@ -110,7 +108,6 @@ std::string cnt_dispenser_vibration::waitForResponse()
             }
             continue;
         }
-
     }
     blocking = false;
     _client->set_non_blocking(true);
@@ -131,7 +128,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::activate()
 }
 
 
-std::string cnt_dispenser_vibration::get_help() {
+std::string cnt_dispenser_vibration::get_help()
+{
     std::cout << "Getting help from the dispenser " << "\n";
     auto command = dispenser_cmds.find("HELP");
     if (command != dispenser_cmds.end()) {
@@ -201,8 +199,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::setVibrateFreq(con
 
 double cnt_dispenser_vibration::getDuration()
 {
-        _client->set_non_blocking(false);
-
+    _client->set_non_blocking(false);
     std::optional<u_int> duration = 0;
     std::cout << "get dispenser Duration" << std::endl;
     auto command = dispenser_cmds.find("GETDUR");
@@ -210,8 +207,7 @@ double cnt_dispenser_vibration::getDuration()
     auto resp = sendDirectCmd(command->second);
     duration = convert_to_double(resp); // to double
     if (!duration.has_value()) duration = 0;
-        _client->set_non_blocking(true);
-
+    _client->set_non_blocking(true);
     return duration.value();
 }
 
@@ -226,7 +222,7 @@ double cnt_dispenser_vibration::getFrequency()
     auto resp = sendDirectCmd(command->second);
     std::optional<u_int> frequency = convert_to_double(resp); // to double
     if (!frequency.has_value()) frequency = 0;
-        _client->set_non_blocking(true);
+    _client->set_non_blocking(true);
 
     return frequency.value();
 }
