@@ -2,7 +2,7 @@
 
 cnt_hvac_gbs::cnt_hvac_gbs(const std::string& ip, const uint16_t port, const uint16_t timeout)
 {
-    std::cout << "creating CNT high voltage client" << std::endl;
+    std::cout << "creating CNT high voltage client" << "\n";
 
     _hv_server.ip = ip;
     _hv_server.port = port;
@@ -35,7 +35,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::disconnect()
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::connect()
 {
-    std::cout << "connecting controller to hv server" << std::endl;
+    std::cout << "connecting controller to hv server" << "\n";
     auto hv_server_addr = sockpp::tcp_connector::addr_t{ _hv_server.ip, _hv_server.port };
 
     _client = std::make_unique<sockpp::tcp_connector>(hv_server_addr);
@@ -51,13 +51,13 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_hvac_gbs::connect()
         hvReady = false;
         return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
-    std::cout << "Created a connection from " << _client->address() << std::endl;
-    std::cout << "Created a connection to " << _client->peer_address() << std::endl;
+    std::cout << "Created a connection from " << _client->address() << "\n";
+    std::cout << "Created a connection to " << _client->peer_address() << "\n";
     // Set a timeout for the responses
     if (!_client->read_timeout(std::chrono::seconds(5)))
     {
         std::cerr << "Error setting timeout on TCP stream: "
-            << _client->last_error_str() << std::endl;
+            << _client->last_error_str() << "\n";
         hvReady = false;
         return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
@@ -71,12 +71,12 @@ std::string cnt_hvac_gbs::sendDirectCmd(std::string cmd)
 
     if (_client.get() == nullptr)
         return "not connected";
-    std::cout << "sending hvac command " << cmd << std::endl;
+    std::cout << "sending hvac command " << cmd << "\n";
     cmd = cmd + "\r\n";
     if (_client->write(cmd) != ssize_t(std::string(cmd).length()))
     {
         std::cout << "Error writing to the TCP stream: "
-            << _client->last_error_str() << std::endl;
+            << _client->last_error_str() << "\n";
     }
     return waitForResponse();
 }
@@ -85,7 +85,7 @@ std::string cnt_hvac_gbs::sendDirectCmd(std::string cmd)
 
 std::string cnt_hvac_gbs::waitForResponse()
 {
-    std::cout << "awaiting server response" << std::endl;
+    // std::cout << "awaiting server response" << "\n";
     auto start = std::chrono::steady_clock::now();
     while (_client->is_connected())
     {
@@ -95,22 +95,22 @@ std::string cnt_hvac_gbs::waitForResponse()
         ssize_t n = _client->read_n(&Strholder, sizeof(Strholder));
         if (n > 0)
         {
-            std::cout << "n bytes received: " << n << std::endl;
+            std::cout << "n bytes received: " << n << "\n";
             incoming_data = Strholder;
             incoming_data.resize(n);
-            std::cout << "server replied : " << incoming_data << std::endl;
+            std::cout << "server replied : " << incoming_data << "\n";
             break;
         }
         else
         {
-            std::cout << "no server response, retry " << n << std::endl;
+            // std::cout << "no server response, retry " << n << "\n";
             incoming_data = "NA";
             long long timeout = _hv_server.timeout;
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count();
             if (duration >= timeout)
             {
                 std::cout << "no response within a timeout of " << duration << " seconds, "
-                    << "aborting.." << std::endl;
+                    << "aborting.." << "\n";
                 break;
             }
             continue;
@@ -123,7 +123,7 @@ std::string cnt_hvac_gbs::waitForResponse()
 
 enum_sub_sys_feedback cnt_hvac_gbs::start()
 {
-    std::cout << "start high voltage AC" << std::endl;
+    std::cout << "start high voltage AC" << "\n";
     auto response = process_cmd("START");
     if (response == "ok")
         return sub_success;
@@ -132,7 +132,7 @@ enum_sub_sys_feedback cnt_hvac_gbs::start()
 
 enum_sub_sys_feedback cnt_hvac_gbs::stop()
 {
-    std::cout << "stop high voltage AC" << std::endl;
+    std::cout << "stop high voltage AC" << "\n";
     auto response = process_cmd("STOP");
     if (response == "ok")
         return sub_success;
@@ -151,13 +151,13 @@ bool cnt_hvac_gbs::getStatus()
 
 enum_sub_sys_feedback cnt_hvac_gbs::pulse()
 {
-    std::cout << "sending pulse.." << std::endl;
+    std::cout << "sending pulse.." << "\n";
     return sub_error;
 }
 
 enum_sub_sys_feedback cnt_hvac_gbs::modulate()
 {
-    std::cout << "sending pulse.." << std::endl;
+    std::cout << "sending pulse.." << "\n";
     return sub_error;
 }
 

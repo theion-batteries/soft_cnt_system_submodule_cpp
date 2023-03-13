@@ -62,8 +62,8 @@ file(GLOB lib_SRCS
 "${PROJECT_SOURCE_DIR}/src/cnt_hvac_gbs.cpp"
 "${PROJECT_SOURCE_DIR}/src/cnt_linear_motion.cpp"
 "${PROJECT_SOURCE_DIR}/src/cnt_dispenser_vibration.cpp"
-
 )
+
 # to create a static lib
 add_subdirectory(tests)
 add_library(cntLib STATIC ${lib_SRCS}) 

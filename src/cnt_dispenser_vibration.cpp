@@ -5,7 +5,7 @@
 
 cnt_dispenser_vibration::cnt_dispenser_vibration(const std::string& ip, uint16_t port, const uint16_t timeout)
 {
-    std::cout << "creating dispenser  client" << std::endl;
+    std::cout << "creating dispenser  client" << "\n";
     _dispenser_server.ip = ip;
     _dispenser_server.port = port;
     _dispenser_server.timeout = timeout;
@@ -31,7 +31,7 @@ std::optional<u_int> cnt_dispenser_vibration::convert_to_double(const std::strin
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::connect()
 {
-    std::cout << "connecting to dispenser server" << std::endl;
+    std::cout << "connecting to dispenser server" << "\n";
     auto dispenser_server_addr = sockpp::tcp_connector::addr_t{ _dispenser_server.ip, _dispenser_server.port };
     _client = std::make_unique<sockpp::tcp_connector>(dispenser_server_addr);
     _client->set_non_blocking();
@@ -40,15 +40,15 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::connect()
     if (!_client) {
         std::cerr << "Error connecting to server at "
             << sockpp::inet_address(_dispenser_server.ip, _dispenser_server.port)
-            << "\n\t" << _client->last_error_str() << std::endl;
+            << "\n\t" << _client->last_error_str() << "\n";
         return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
-    std::cout << "Created a connection from " << _client->address() << std::endl;
-    std::cout << "Created a connection to " << _client->peer_address() << std::endl;
+    std::cout << "Created a connection from " << _client->address() << "\n";
+    std::cout << "Created a connection to " << _client->peer_address() << "\n";
     // Set a timeout for the responses
     if (!_client->read_timeout(std::chrono::seconds(5))) {
         std::cerr << "Error setting timeout on TCP stream: "
-            << _client->last_error_str() << std::endl;
+            << _client->last_error_str() << "\n";
         return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
     dispenserReady = true;
@@ -68,11 +68,11 @@ std::string cnt_dispenser_vibration::sendDirectCmd(std::string cmd)
 
     if (_client.get() == nullptr) return "not connected";
     cmd = cmd + "\r\n";
-    std::cout << "sending cnt dispenser command " << cmd << " size of cmd: " << cmd.size() << std::endl;
+    std::cout << "sending cnt dispenser command " << cmd << " size of cmd: " << cmd.size() << "\n";
 
     if (_client->write(cmd) != ssize_t(std::string(cmd).length())) {
         std::cout << "Error writing to the TCP stream: "
-            << _client->last_error_str() << std::endl;
+            << _client->last_error_str() << "\n";
     }
     return waitForResponse();
 }
@@ -80,7 +80,7 @@ std::string cnt_dispenser_vibration::sendDirectCmd(std::string cmd)
 
 std::string cnt_dispenser_vibration::waitForResponse()
 {
-    std::cout << "awaiting server response" << std::endl;
+    // std::cout << "awaiting server response" << "\n";
     auto start = std::chrono::steady_clock::now();
     while (_client->is_connected())
     {
@@ -88,21 +88,21 @@ std::string cnt_dispenser_vibration::waitForResponse()
         ssize_t n = _client->read_n(&Strholder, sizeof(Strholder));
         if (n > 0)
         {
-            std::cout << "n bytes received: " << n << std::endl;
+            std::cout << "n bytes received: " << n << "\n";
             incoming_data = Strholder;
             incoming_data.resize(n);
-            std::cout << "server replied : " << incoming_data << std::endl;
+            std::cout << "server replied : " << incoming_data << "\n";
             break;
         }
         else
         {
-            //  std::cout << "no server response, retry " << n << std::endl;
+            //  // std::cout << "no server response, retry " << n << "\n";
             incoming_data = "NA";
             long long timeout = _dispenser_server.timeout;
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count();
             if (duration >= timeout)
             {
-                std::cout << "no response within a timeout of " << duration << " seconds, " << "aborting.." << std::endl;
+                std::cout << "no response within a timeout of " << duration << " seconds, " << "aborting.." << "\n";
                 std::cerr << "The error is: " << _client->last_error_str() << "\n";
                 break;
             }
@@ -116,7 +116,7 @@ std::string cnt_dispenser_vibration::waitForResponse()
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::activate()
 {
-    std::cout << "turn on dispenser" << std::endl;
+    std::cout << "turn on dispenser" << "\n";
     auto command = dispenser_cmds.find("ON");
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << '\n';
@@ -145,7 +145,7 @@ std::string cnt_dispenser_vibration::get_help()
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::deactivate()
 {
-    std::cout << "turn off dispenser" << std::endl;
+    std::cout << "turn off dispenser" << "\n";
     auto command = dispenser_cmds.find("OFF");
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << '\n';
@@ -158,7 +158,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::deactivate()
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::vibrate()
 {
-    std::cout << "vibrate dispenser" << std::endl;
+    std::cout << "vibrate dispenser" << "\n";
     auto command = dispenser_cmds.find("VIBRATE");
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << '\n';
@@ -171,7 +171,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::vibrate()
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::setVibrateDuration(const u_int durationSecond)
 {
-    std::cout << "set dispenser Duration" << std::endl;
+    std::cout << "set dispenser Duration" << "\n";
     auto command = dispenser_cmds.find("SETDUR");
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << " args: " << durationSecond << '\n';
@@ -185,7 +185,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::setVibrateDuration
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_dispenser_vibration::setVibrateFreq(const u_int new_freq)
 {
-    std::cout << "set dispenser Frequency" << std::endl;
+    std::cout << "set dispenser Frequency" << "\n";
     auto command = dispenser_cmds.find("SETFREQ");
     if (command != dispenser_cmds.end()) {
         std::cout << "sending command: " << command->second << " args: " << new_freq << '\n';
@@ -201,7 +201,7 @@ double cnt_dispenser_vibration::getDuration()
 {
     _client->set_non_blocking(false);
     std::optional<u_int> duration = 0;
-    std::cout << "get dispenser Duration" << std::endl;
+    std::cout << "get dispenser Duration" << "\n";
     auto command = dispenser_cmds.find("GETDUR");
     std::cout << "sending command: " << command->second << '\n';
     auto resp = sendDirectCmd(command->second);
@@ -216,7 +216,7 @@ double cnt_dispenser_vibration::getFrequency()
 {
     _client->set_non_blocking(false);
 
-    std::cout << "get dispenser Frequency" << std::endl;
+    std::cout << "get dispenser Frequency" << "\n";
     auto command = dispenser_cmds.find("GETFREQ");
     std::cout << "sending command: " << command->second << '\n';
     auto resp = sendDirectCmd(command->second);
