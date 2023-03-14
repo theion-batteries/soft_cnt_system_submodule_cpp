@@ -10,9 +10,10 @@
 
 #include "cnt_linear_motion.h"
 
-cnt_linear_motion::cnt_linear_motion(const std::string& ip, const uint16_t port, const uint16_t timeout)
+cnt_linear_motion::cnt_linear_motion(const std::string &ip, const uint16_t port, const uint16_t timeout)
 {
-    std::cout << "creating dispenser  client" << "\n";
+    std::cout << "creating dispenser  client"
+              << "\n";
 
     _motion_axis_struct.ip = ip;
     _motion_axis_struct.port = port;
@@ -25,24 +26,26 @@ cnt_linear_motion::~cnt_linear_motion()
 
 std::string cnt_linear_motion::sendDirectCmd(std::string cmd)
 {
-    
- //   if (blocking) _client->set_non_blocking(false);
 
     if (_client == nullptr)
         return "not connected";
+    if (blocking)
+        _client->set_non_blocking(false);
+
     std::cout << "sending linear axis command " << cmd << "\n";
     cmd = cmd + "\r\n";
     if (_client->write(cmd) != ssize_t(std::string(cmd).length()))
     {
         std::cout << "Error writing to the TCP stream: "
-            << _client->last_error_str() << "\n";
+                  << _client->last_error_str() << "\n";
     }
     return waitForResponse();
 }
 
 std::string cnt_linear_motion::waitForResponse()
 {
-    std::cout << "awaiting server response" << "\n";
+    std::cout << "awaiting server response"
+              << "\n";
     auto start = std::chrono::steady_clock::now();
     while (_client->is_connected())
     {
@@ -69,12 +72,13 @@ std::string cnt_linear_motion::waitForResponse()
             if (duration >= timeout)
             {
                 std::cout << "no response within a timeout of " << duration << " seconds, "
-                    << "aborting.." << _client->last_error_str() << "\n";
+                          << "aborting.." << _client->last_error_str() << "\n";
                 break;
             }
             continue;
         }
     }
+    blocking = true;
     _client->set_non_blocking(true);
 
     return incoming_data;
@@ -109,8 +113,9 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_to(const double_t n
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::connect()
 {
-    std::cout << "connecting controller to axis server" << "\n";
-    auto axis_server_addr = sockpp::tcp_connector::addr_t{ _motion_axis_struct.ip, _motion_axis_struct.port };
+    std::cout << "connecting controller to axis server"
+              << "\n";
+    auto axis_server_addr = sockpp::tcp_connector::addr_t{_motion_axis_struct.ip, _motion_axis_struct.port};
 
     _client = std::make_unique<sockpp::tcp_connector>(axis_server_addr);
     _client->set_non_blocking();
@@ -120,8 +125,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::connect()
     if (!_client->is_connected())
     {
         std::cerr << "Error connecting to axis server at "
-            << sockpp::inet_address(_motion_axis_struct.ip, _motion_axis_struct.port)
-            << " -> " << _client->last_error_str();
+                  << sockpp::inet_address(_motion_axis_struct.ip, _motion_axis_struct.port)
+                  << " -> " << _client->last_error_str();
         axisReady = false;
         return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
@@ -131,7 +136,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::connect()
     if (!_client->read_timeout(std::chrono::seconds(5)))
     {
         std::cerr << "Error setting timeout on TCP stream: "
-            << _client->last_error_str() << "\n";
+                  << _client->last_error_str() << "\n";
         axisReady = false;
         return wgm_feedbacks::enum_sub_sys_feedback::sub_error;
     }
@@ -159,7 +164,8 @@ double cnt_linear_motion::get_position()
     _client->set_non_blocking(false);
 
     double axis_pos = 0;
-    std::cout << "get axis curent position" << "\n";
+    std::cout << "get axis curent position"
+              << "\n";
     auto command = axis_cmds.find("get_position");
     std::cout << "sending command: " << command->second << '\n';
     auto resp = sendDirectCmd(command->second);
@@ -173,7 +179,7 @@ double cnt_linear_motion::get_position()
         axis_last_position.push_front(axis_pos); // add to table
         std::cout << "value added to table " << axis_last_position.front() << "\n";
     }
-    catch (std::exception& e)
+    catch (std::exception &e)
     {
         std::cerr << "Exception caught in getting position " << __FILE__ << " " << __LINE__ << " " << e.what() << "\n";
     }
@@ -209,14 +215,16 @@ double cnt_linear_motion::get_speed()
     _client->set_non_blocking(false);
 
     double speed = 0;
-    std::cout << "get axis curent speed" << "\n";
+    std::cout << "get axis curent speed"
+              << "\n";
     auto command = axis_cmds.find("get_setting");
     std::cout << "sending command: " << command->second << '\n';
 
     auto resp = sendDirectCmd(command->second);
     if (!resp.find("ok"))
     {
-        std::cout << "missing ok, error" << "\n";
+        std::cout << "missing ok, error"
+                  << "\n";
         return 0;
     }
     //$110=800.000
@@ -232,7 +240,8 @@ double cnt_linear_motion::get_speed()
         }
         else
         {
-            std::cout << "Substring not found" << "\n";
+            std::cout << "Substring not found"
+                      << "\n";
             return std::string("0");
         }
     }();                          // Note the added semicolon here
@@ -249,7 +258,8 @@ double cnt_linear_motion::get_speed()
  */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::set_speed(double_t new_val)
 {
-    std::cout << "set  axis curent spped" << "\n";
+    std::cout << "set  axis curent spped"
+              << "\n";
     auto command = axis_cmds.find("set_speed");
     if (command != axis_cmds.end())
     {
@@ -425,14 +435,16 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::resume()
  */
 std::string cnt_linear_motion::get_settings()
 {
-    std::cout << "get axis curent speed" << "\n";
+    std::cout << "get axis curent speed"
+              << "\n";
     auto command = axis_cmds.find("get_setting");
     std::cout << "sending command: " << command->second << '\n';
 
     auto resp = sendDirectCmd(command->second);
     if (!resp.find("ok"))
     {
-        std::cout << "missing ok, error" << "\n";
+        std::cout << "missing ok, error"
+                  << "\n";
         return "NA";
     }
     return resp;
@@ -457,8 +469,8 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::unlock()
     return sub_error;
 }
 
-
 void cnt_linear_motion::setModeBlocking(bool setblockingMode)
 {
-    if (setblockingMode) blocking = true;
+    if (setblockingMode)
+        blocking = true;
 }
