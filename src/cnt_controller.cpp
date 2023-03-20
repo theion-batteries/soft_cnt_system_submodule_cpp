@@ -3,13 +3,13 @@
 
 cnt_controller::cnt_controller(/* args */)
 {
-    std::cout << "creating subsystem cnt aligning controller " << std::endl;
+    std::cout << "creating subsystem cnt aligning controller " << "\n";
 #ifdef CNT_CONFIG
-    std::cout << "loading config file: " << CNT_CONFIG << std::endl;
+    std::cout << "loading config file: " << CNT_CONFIG << "\n";
     std::ifstream filein(CNT_CONFIG);
     for (std::string line; std::getline(filein, line);)
     {
-        std::cout << line << std::endl;
+        std::cout << line << "\n";
     }
     config = YAML::LoadFile(CNT_CONFIG);
     _cnt_params.distance_to_center = config["distance_to_center"].as<double>();
@@ -44,12 +44,12 @@ cnt_controller::cnt_controller(/* args */)
 
 cnt_controller::cnt_controller(const std::string &ip, const uint16_t motion_port, const uint16_t dispenser_port, const uint16_t hvac_port)
 {
-    std::cout << "creating subsystem cnt aligning controller " << std::endl;
-    std::cout << "loading config file: " << CNT_CONFIG << std::endl;
+    std::cout << "creating subsystem cnt aligning controller " << "\n";
+    std::cout << "loading config file: " << CNT_CONFIG << "\n";
     std::ifstream filein(CNT_CONFIG);
     for (std::string line; std::getline(filein, line);)
     {
-        std::cout << line << std::endl;
+        std::cout << line << "\n";
     }
     config = YAML::LoadFile(CNT_CONFIG);
     _cnt_params.distance_to_center = config["distance_to_center"].as<double>();
@@ -297,11 +297,11 @@ double cnt_controller::cnt_motion_get_speed()
 
 void cnt_controller::reload_config_file()
 {
-    std::cout << "reloading config file: " << CNT_CONFIG << std::endl;
+    std::cout << "reloading config file: " << CNT_CONFIG << "\n";
     std::ifstream filein(CNT_CONFIG);
     for (std::string line; std::getline(filein, line);)
     {
-        std::cout << line << std::endl;
+        std::cout << line << "\n";
     }
     config = YAML::LoadFile(CNT_CONFIG);
     _cnt_params.distance_to_center = config["distance_to_center"].as<double>();
@@ -326,7 +326,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::open_config_file()
 wgm_feedbacks::enum_sub_sys_feedback cnt_controller::reset_config_file() // set config file params to default
 {
 
-    std::cout << "resetting config file: " << CNT_CONFIG << std::endl;
+    std::cout << "resetting config file: " << CNT_CONFIG << "\n";
     config = YAML::LoadFile(CNT_CONFIG);
 
     config["distance_to_center"] = _cnt_params.distance_to_center;
@@ -347,7 +347,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::reset_config_file() // set 
     std::ifstream filein(CNT_CONFIG);
     for (std::string line; std::getline(filein, line);)
     {
-        std::cout << line << std::endl;
+        std::cout << line << "\n";
     }
     return sub_success;
 }

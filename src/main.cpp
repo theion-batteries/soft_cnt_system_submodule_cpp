@@ -210,7 +210,7 @@ int main()
 			{
 				std::cout << "Enter command: ";
 				std::cin >> cmd;
-				std::cout << controller.sendDirectCmdHvac(cmd) << std::endl;
+				std::cout << controller.sendDirectCmdHvac(cmd) << "\n";
 			}
 			else
 				std::cout << "No connection to CNT High Voltage AC \n";
@@ -219,7 +219,7 @@ int main()
 		case CHANGE_IP:
 			std::cout << "Enter IP: ";
 			std::cin >> ip;
-			std::cout << "New IP: " << ip << std::endl;
+			std::cout << "New IP: " << ip << "\n";
 			break;
 
 		case RELOAD_CONFIG:
