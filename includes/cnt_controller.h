@@ -13,12 +13,12 @@ struct cnt_config_yaml_params
     double cnt_max_travel = 300;
     double cnt_max_speed = 800;
     std::string cnt_motion_server_ip = "192.168.0.203";
-    uint16_t cnt_motion_server_port = 8881;
+    uint16_t cnt_motion_server_port = 8882;
     std::string cnt_dispenser_server_ip = "192.168.0.203";
-    uint16_t cnt_dispenser_server_port = 8882;
+    uint16_t cnt_dispenser_server_port = 8881;
     std::string cnt_hv_server_ip = "192.168.0.203";
-    uint16_t cnt_hv_server_port = 8882;    
-    uint16_t timeout = 10;
+    uint16_t cnt_hv_server_port = 8883;    
+    uint16_t timeout = 20;
 };
 class cnt_controller
 {

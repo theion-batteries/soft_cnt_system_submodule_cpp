@@ -13,7 +13,8 @@ enum options
 	SEND_DISPENSER_CMD = 5,
 	SEND_HVAC_CMD = 6,
 	CHANGE_IP = 7,
-	RELOAD_CONFIG = 8
+	RELOAD_CONFIG = 8,
+	RUN_PROCESS = 9
 };
 
 std::unordered_map<enum options, std::string> subsystem{
@@ -116,8 +117,9 @@ void dispenser_cmd(cnt_controller &controller, std::string &cmd)
 		result = controller.get_dispenser_frequency();
 	else if (cmd.substr(0, 4) == "dur=")
 	{
-		 pos = string_to_double(cmd,4);
-		 if(pos.has_value()) result = controller.cnt_dispenser_setVibrateDuration((u_int)pos.value());
+		pos = string_to_double(cmd, 4);
+		if (pos.has_value())
+			result = controller.cnt_dispenser_setVibrateDuration((u_int)pos.value());
 	}
 	else if (cmd.substr(0, 5) == "freq=")
 	{
@@ -151,6 +153,35 @@ void processCmd(cnt_controller &controller, options option)
 	}
 }
 
+void run_process(cnt_controller &controller)
+{
+	auto result = controller.cnt_controller_connect();
+	if (result == sub_error)
+		std::cout << "Error in connecting to controler \n";
+	result = controller.cnt_dispenser_connect();
+	if (result == sub_error)
+		std::cout << "Error in connecting to controler \n";
+	cnt_linear_motion::setModeBlocking(true);
+	result = controller.cnt_motion_move_home();
+	if (result == sub_error)
+		std::cout << "Error in moving to home \n";
+	cnt_linear_motion::setModeBlocking(true);
+	
+	result = controller.cnt_motion_move_target_position();
+	if (result == sub_error)
+		std::cout << "Error in moving to target position \n"; 
+    cnt_dispenser_vibration::setModeBlocking(true);
+	result = controller.cnt_dispenser_activate();
+	if (result == sub_error)
+		std::cout << "Error in activating dispenser \n";
+
+    cnt_dispenser_vibration::setModeBlocking(true);
+	result = controller.cnt_dispenser_deactivate();
+	if (result == sub_error)
+		std::cout << "Error in deactivating dispenser \n";
+
+}
+
 int main()
 {
 	cnt_controller controller;
@@ -159,7 +190,9 @@ int main()
 	std::string cmd = "";
 	std::string ip = "";
 
-	while (choice != CLOSE)
+    run_process(controller);  
+
+/*	while (choice != CLOSE)
 	{
 		std::cout << "Please choose an option: \n";
 		std::cout << "0: CLOSE\n";
@@ -171,6 +204,7 @@ int main()
 		std::cout << "6: SEND HVAC CMD\n";
 		std::cout << "7: CHANGE_IP\n";
 		std::cout << "8: RELOAD_CONFIG\n";
+		std::cout<< "9: START CNT PROCESS \n";
 		std::cout << " Enter Choice: ";
 		std::cin >> choice;
 		switch (choice)
@@ -225,12 +259,14 @@ int main()
 		case RELOAD_CONFIG:
 			controller.reload_config_file();
 			break;
-
+		case RUN_PROCESS:
+            run_process(controller);  
+			break;
 		default:
 			std::cout << "Invalid option. Please choose again.\n";
 			break;
 		}
-	}
+	} */
 
 	return 0;
 }

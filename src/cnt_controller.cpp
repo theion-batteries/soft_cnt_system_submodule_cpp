@@ -102,11 +102,13 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_connect()
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_activate()
 {
+    cnt_dispenser_vibration::setModeBlocking(true);
     return dispenser->activate();
 }
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_dispenser_deactivate()
-{
+{ 
+    cnt_dispenser_vibration::setModeBlocking(true);
     return dispenser->deactivate();
 }
 
@@ -143,6 +145,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_connect()
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_home()
 {
+    cnt_linear_motion::setModeBlocking(true);
     return motion->move_home();
 }
 
@@ -153,6 +156,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_to_center(c
 
 wgm_feedbacks::enum_sub_sys_feedback cnt_controller::cnt_motion_move_to(const double_t new_pos)
 {
+    cnt_linear_motion::setModeBlocking(true);
     return motion->move_to(new_pos);
 }
 

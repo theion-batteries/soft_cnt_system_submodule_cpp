@@ -12,7 +12,7 @@
 
 cnt_linear_motion::cnt_linear_motion(const std::string &ip, const uint16_t port, const uint16_t timeout)
 {
-    std::cout << "creating dispenser  client"
+    std::cout << "creating linear motion  client"
               << "\n";
 
     _motion_axis_struct.ip = ip;
@@ -34,6 +34,8 @@ std::string cnt_linear_motion::sendDirectCmd(std::string cmd)
 
     std::cout << "sending linear axis command " << cmd << "\n";
     cmd = cmd + "\r\n";
+
+    std::cout << " command :" << cmd << " writing to " << _client->peer_address() << "\n";
     if (_client->write(cmd) != ssize_t(std::string(cmd).length()))
     {
         std::cout << "Error writing to the TCP stream: "
@@ -44,43 +46,45 @@ std::string cnt_linear_motion::sendDirectCmd(std::string cmd)
 
 std::string cnt_linear_motion::waitForResponse()
 {
-    std::cout << "awaiting server response"
-              << "\n";
+    std::cout << "awaiting server response" << std::endl;
     auto start = std::chrono::steady_clock::now();
-    while (_client->is_connected())
+    try
     {
-
-        char Strholder[5012];
-
-        ssize_t n = _client->read_n(&Strholder, sizeof(Strholder));
-        if (n > 0)
+        while (_client->is_connected())
         {
-            std::cout << "n bytes received: " << n << "\n";
-            incoming_data = Strholder;
-            incoming_data.resize(n);
-            std::cout << "server replied : " << incoming_data << "\n";
-            break;
-        }
-        else
-        {
-            incoming_data = "NA";
-            long long timeout = _motion_axis_struct.timeout;
-            auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count();
-            const long long minimum_time_to_print = 5;
-            // std::cout << "no server response, retry " << n << "\n";
 
-            if (duration >= timeout)
+            char Strholder[5012];
+
+            ssize_t n = _client->read_n(&Strholder, sizeof(Strholder));
+            if (n > 0)
             {
-                std::cout << "no response within a timeout of " << duration << " seconds, "
-                          << "aborting.." << _client->last_error_str() << "\n";
+                std::cout << "n bytes received: " << n << std::endl;
+                incoming_data = Strholder;
+                incoming_data.resize(n);
+                std::cout << "server replied : " << incoming_data << std::endl;
                 break;
             }
-            continue;
+            else
+            {
+                incoming_data = "NA";
+                long long timeout = _motion_axis_struct.timeout;
+                auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start).count();
+                if (duration >= timeout)
+                {
+                    std::cout << "no response within a timeout of " << duration << " seconds, "
+                              << "aborting.." << std::endl;
+                    break;
+                }
+                continue;
+            }
         }
+        blocking = false;
+        _client->set_non_blocking(true);
     }
-    blocking = true;
-    _client->set_non_blocking(true);
-
+    catch (std::exception &e)
+    {
+        std::cout << " Linear Motion " << e.what() << "\n";
+    }
     return incoming_data;
 }
 
@@ -163,7 +167,7 @@ double cnt_linear_motion::get_position()
 {
     _client->set_non_blocking(false);
 
-    double axis_pos = 0;
+    std::optional<double> axis_pos = 0;
     std::cout << "get axis curent position"
               << "\n";
     auto command = axis_cmds.find("get_position");
@@ -174,10 +178,15 @@ double cnt_linear_motion::get_position()
 
     try
     {
+
+        axis_pos = string_to_double(extracted);
         axis_pos = std::stod(extracted); // to double
-        std::cout << "filter val : " << axis_pos << "\n";
-        axis_last_position.push_front(axis_pos); // add to table
-        std::cout << "value added to table " << axis_last_position.front() << "\n";
+        if (axis_pos.value())
+        {
+            std::cout << "filter val : " << axis_pos.value() << "\n";
+            axis_last_position.push_front(axis_pos.value()); // add to table
+            std::cout << "value added to table " << axis_last_position.front() << "\n";
+        }
     }
     catch (std::exception &e)
     {
@@ -185,7 +194,7 @@ double cnt_linear_motion::get_position()
     }
     _client->set_non_blocking(true);
 
-    return axis_pos;
+    return axis_pos.value_or(0.0);
 }
 
 /**
@@ -200,8 +209,9 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_home()
         std::cout << "sending command: " << command->second << '\n';
         auto reply = sendDirectCmd(command->second);
         std::cout << "move home reply received " << reply << '\n';
-        if (reply == "ok")
+        if (reply.find("ok") != std::string::npos)
             return sub_success;
+
         return sub_error;
     }
     return sub_error;
@@ -268,7 +278,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::set_speed(double_t new_v
         auto cmd = (command->second) + args;
         // X-new_val
         auto reply = sendDirectCmd(cmd);
-        if (reply == "ok")
+        if (reply.find("ok") != std::string::npos)
             return sub_success;
         std::cout << "move down reply received " << reply << '\n';
         return sub_error;
@@ -282,21 +292,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::set_speed(double_t new_v
  */
 wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_to(double_t new_pos)
 {
-    std::cout << "moving up to " << new_pos << "\n";
-    auto command = axis_cmds.find("move");
-    if (command != axis_cmds.end())
-    {
-        std::cout << "sending command: " << command->second << " args: " << new_pos << '\n';
-        std::string args = std::to_string(new_pos);
-        auto cmd = (command->second) + args;
-        // X-new_pos
-        auto reply = sendDirectCmd(cmd);
-        if (reply == "ok")
-            return sub_success;
-        std::cout << "move up to " << reply << '\n';
-        return sub_error;
-    }
-    return sub_error;
+    return sub_success;
 }
 
 /**
@@ -313,10 +309,19 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_down_to(double_t ne
         std::string args = std::to_string(-new_pos);
         auto cmd = (command->second) + args;
         // X-Steps
+        blocking = true;
         auto reply = sendDirectCmd(cmd);
-        if (reply == "ok")
+        if (reply.find("ok") != std::string::npos)
+        {
+            std::cout << "move down reply received " << reply << '\n';
+            while (get_position() < abs(new_pos))
+            {
+                if (abs(get_position()) == abs(new_pos))
+                    break;
+                std::cout << abs(get_position()) << " " << abs(new_pos) << "\n";
+            }
             return sub_success;
-        std::cout << "move down reply received " << reply << '\n';
+        }
         return sub_error;
     }
     return sub_error;
@@ -337,7 +342,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_up_by(double_t step
         auto cmd = (command->second) + args;
         // X-Steps
         auto reply = sendDirectCmd(cmd);
-        if (reply == "ok")
+        if (reply.find("ok") != std::string::npos)
             return sub_success;
         std::cout << "move down reply received " << reply << '\n';
         return sub_error;
@@ -363,7 +368,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_down_by(double_t st
         // X-Steps
         auto reply = sendDirectCmd(cmd);
         std::cout << "move down reply received " << reply << '\n';
-        if (reply == "ok")
+        if (reply.find("ok") != std::string::npos)
             return sub_success;
         return sub_error;
     }
@@ -384,7 +389,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::move_center()
         auto cmd = command->second + args;
         auto reply = sendDirectCmd(cmd);
         std::cout << "move center reply received " << reply << '\n';
-        if (reply == "ok")
+        if (reply.find("ok") != std::string::npos)
             return sub_success;
         return sub_error;
     }
@@ -403,7 +408,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::pause()
         std::cout << "sending command: " << command->second << '\n';
         auto reply = sendDirectCmd(command->second);
         std::cout << "unlock reply received " << reply << '\n';
-        if (reply == "ok")
+        if (reply.find("ok") != std::string::npos)
             return sub_success;
         return sub_error;
     }
@@ -422,7 +427,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::resume()
         std::cout << "sending command: " << command->second << '\n';
         auto reply = sendDirectCmd(command->second);
         std::cout << "unlock reply received " << reply << '\n';
-        if (reply == "ok")
+        if (reply.find("ok") != std::string::npos)
             return sub_success;
         return sub_error;
     }
@@ -462,7 +467,7 @@ wgm_feedbacks::enum_sub_sys_feedback cnt_linear_motion::unlock()
         std::cout << "sending command: " << command->second << '\n';
         auto reply = sendDirectCmd(command->second);
         std::cout << "unlock reply received " << reply << '\n';
-        if (reply == "ok")
+        if (reply.find("ok") != std::string::npos)
             return sub_success;
         return sub_error;
     }

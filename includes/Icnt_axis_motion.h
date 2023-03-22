@@ -44,4 +44,18 @@ public:
     virtual wgm_feedbacks::enum_sub_sys_feedback move_center() = 0;
     virtual wgm_feedbacks::enum_sub_sys_feedback unlock() = 0;
 
+    std::optional<double> string_to_double(const std::string &response)
+  {
+	double pos = 0.0;
+	try
+	{
+		pos = std::stod(response);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "conversion error: " << e.what() << "\n";
+		return std::nullopt;
+	}
+	return pos;
+}
 };
